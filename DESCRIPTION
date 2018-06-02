@@ -13,5 +13,6 @@ Suggests:
 VignetteBuilder: knitr
 Imports: 
     magrittr,
-    dplyr
+    dplyr,
+    RPostgreSQL
 RoxygenNote: 6.0.1
