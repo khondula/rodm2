@@ -8,15 +8,18 @@ db_add_variable(variabletypecv, variablecode, variablenamecv,
   variabledefinition, nodatavalue = -9999)
 }
 \arguments{
-\item{variabletypecv}{}
+\item{variabletypecv}{variable type from controlled vocab}
 
-\item{variablecode}{}
+\item{variablecode}{short codename for variable}
 
-\item{variablenamecv}{}
+\item{variablenamecv}{variable name from controlled vocab}
 
-\item{variabledefinition}{}
+\item{variabledefinition}{longer definition}
 
-\item{nodatavalue}{}
+\item{nodatavalue}{no data value}
+}
+\value{
+TRUE if successful
 }
 \description{
 Insert a new variable

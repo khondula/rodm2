@@ -1,12 +1,12 @@
 #' Insert a new variable
 #'
-#' @param variabletypecv 
-#' @param variablecode 
-#' @param variablenamecv 
-#' @param variabledefinition 
-#' @param nodatavalue 
+#' @param variabletypecv variable type from controlled vocab
+#' @param variablecode short codename for variable
+#' @param variablenamecv variable name from controlled vocab
+#' @param variabledefinition longer definition
+#' @param nodatavalue no data value
 #'
-#' @return
+#' @return TRUE if successful
 #' @export
 #'
 #' @examples
@@ -15,9 +15,9 @@
 #' }
 
 db_add_variable <- function(variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue = -9999){
-  sql <- sprintf("INSERT INTO odm2.variables 
-                 (variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue) 
-                 VALUES 
+  sql <- sprintf("INSERT INTO odm2.variables
+                 (variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue)
+                 VALUES
                  ('%s', '%s', '%s', '%s', '%s')",
                  variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue)
   sql <- gsub("\n", "", sql)

@@ -18,7 +18,8 @@ TRUE if successful
 Add a new annotation
 }
 \examples{
-#' \dontrun{
-db_add_annotaion("samplingfeature annotation", "primray sites")
+\dontrun{
+db_add_annotaion("samplingfeature annotation", "primary sites")
 }
+
 }

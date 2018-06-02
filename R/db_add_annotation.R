@@ -7,10 +7,10 @@
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
-#' db_add_annotaion("samplingfeature annotation", "primray sites")
+#' \dontrun{
+#' db_add_annotaion("samplingfeature annotation", "primary sites")
 #' }
-
+#'
 db_add_annotation <- function(annotationtypecv,
                                   annotationtext){
   sql <- sprintf('INSERT INTO odm2.annotations (annotationtypecv, annotationtext) 
