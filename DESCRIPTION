@@ -1,0 +1,17 @@
+Package: rodm2
+Version: 0.0.0.9000
+Title: Use an ODM2 Database in R
+Description: Organize site, sample, and sensor data with R.
+Authors@R: person("Kelly", "Hondula", , "khondula@sesync.org", c("aut", "cre"))
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: 
+    magrittr,
+    dplyr
+RoxygenNote: 6.0.1
