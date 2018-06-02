@@ -1,10 +1,10 @@
 ---
-title: "Insert soil moisture measurements into PostgreSQL database"
-author: "Kelly Hondula"
+title: "Vignette Title"
+author: "Vignette Author"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Insert soil moisture measurements into PostgreSQL database}
+  %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
