@@ -2,6 +2,7 @@
 #' Put template sqlite database within a data folder
 #'
 #' @param dir Directory for the sqlite database file to be created in. Defaults to `data`
+#' @param filename Filename for sqlite database file. Defaults to `odm2`
 #'
 #' @export
 #'
@@ -9,10 +10,11 @@
 #' \dontrun{
 #' create_sqlite()
 #' }
-create_sqlite <- function(dir = "data"){
+create_sqlite <- function(dir = "data", filename = "odm2"){
   path <- file.path(dir)
   template_file <- system.file("odm2-template.sqlite", package = "rodm2")
   file.copy(template_file, path)
+  file.rename(file.path(dir, "odm2-template.sqlite"), file.path(dir, paste0(filename, ".sqlite")))
   invisible(template_file)
 }
 

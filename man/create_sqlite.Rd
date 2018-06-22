@@ -4,10 +4,12 @@
 \alias{create_sqlite}
 \title{Put template sqlite database within a data folder}
 \usage{
-create_sqlite(dir = "data")
+create_sqlite(dir = "data", filename = "odm2")
 }
 \arguments{
 \item{dir}{Directory for the sqlite database file to be created in. Defaults to `data`}
+
+\item{filename}{Filename for sqlite database file. Defaults to `odm2`}
 }
 \description{
 Put template sqlite database within a data folder
