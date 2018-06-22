@@ -11,7 +11,7 @@
 #' }
 create_sqlite <- function(dir = "data"){
   path <- file.path(dir)
-  template_file <- system.file("inst/odm2-template.sqlite", package = "rodm2")
+  template_file <- system.file("odm2-template.sqlite", package = "rodm2")
   file.copy(template_file, path)
   invisible(template_file)
 }
