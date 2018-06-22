@@ -79,7 +79,7 @@
 <div id="rodm2" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rodm2" class="anchor"></a>rodm2</h1></div>
-<p>The goal of <strong>rodm2</strong> is to make it easy to use the ODM2 data model in R. Organize your site, sample, and sensor data for watershed science projects all in one place.</p>
+<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R. Organize your site, sample, and sensor data for watershed science projects all in one place.</p>
 <p>This project is just getting started! Get in touch or open an <a href="https://github.com/khondula/rodm2/issues">issue</a> if you have a use case or if you’re interested in collaborating.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -87,24 +87,14 @@
 <p>You can install this package from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 <span class="kw">library</span>(devtools)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)
-<span class="co">#&gt; Downloading GitHub repo khondula/rodm2@master</span>
-<span class="co">#&gt; from URL https://api.github.com/repos/khondula/rodm2/zipball/master</span>
-<span class="co">#&gt; Installing rodm2</span>
-<span class="co">#&gt; '/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \</span>
-<span class="co">#&gt;   --no-environ --no-save --no-restore --quiet CMD INSTALL  \</span>
-<span class="co">#&gt;   '/private/var/folders/d7/5whj815j4n705g96f5pbwpj1mwqk25/T/Rtmp1c42Cf/devtools106b733bf2cc3/khondula-rodm2-54a920c'  \</span>
-<span class="co">#&gt;   --library='/Library/Frameworks/R.framework/Versions/3.5/Resources/library'  \</span>
-<span class="co">#&gt;   --install-tests</span>
-<span class="co">#&gt; </span></code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)</code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>Initialize an empty sqlite database with odm2 schema</p>
+<p>Initialize an empty sqlite database with odm2 schema. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-<span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"data"</span>)</code></pre></div>
-<p>or connect to an existing ODM2 database</p>
+<span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>()</code></pre></div>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
