@@ -47,8 +47,8 @@ get_site_names_like <- function(x, ...){
 check_samplingfeaturecodes <- function(new_codes){
   if(!exists("samplingfeatures")){stop("samplingfeatures data frame missing")}
 
-  data.frame(new_codes = new_codes,
-             in_db = new_codes %in%
+  data.frame(new_codes = unique(new_codes),
+             in_db = unique(new_codes) %in%
                samplingfeatures$samplingfeaturecode) %>%
     dplyr::filter(!in_db) %>% dplyr::arrange(new_codes)
 }

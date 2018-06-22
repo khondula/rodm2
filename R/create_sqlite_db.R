@@ -1,29 +1,73 @@
+
+#' Put template sqlite database within a data folder
+#'
+#' @param dir Directory for the sqlite database file to be created in. Defaults to `data`
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' create_sqlite()
+#' }
+create_sqlite <- function(dir = "data"){
+  path <- file.path(dir)
+  template_file <- system.file("inst/odm2-template.sqlite")
+  file.copy(template_file, path)
+  invisible(template_file)
+}
+
+
+
+
+
 # install.packages("RSQLite")
-library(RSQLite)
-library(readr)
-mydb <- dbConnect(RSQLite::SQLite(), "my-db.sqlite")
-
-sql_file <- "~/Documents/rodm2/ODM2/src/blank_schema_scripts/sqlite/ODM2_for_SQLite.sql"
-# put sql files for schema creation in inst folder
-
-# https://stackoverflow.com/questions/18914283/how-to-execute-more-than-one-rsqlite-statement-at-once-or-how-to-dump-a-whole-fi
+# library(RSQLite)
+# library(readr)
+# library(DBI)
+# mydb <- dbConnect(RSQLite::SQLite(), "my-db.sqlite")
 #
-# read in sql-statements and preformat them
-sqlFromFile <- function(file){
-  require(stringr)
-  sql <- readLines(file)
-  sql <- unlist(str_split(paste(sql,collapse=" "),";"))
-  sql <- sql[grep("^ *$", sql, invert=T)]
-  sql
-}
+# SQL(readLines(sql_file))
+#
+# sql_file <- "~/Documents/rodm2/ODM2/src/blank_schema_scripts/sqlite/ODM2_for_SQLite.sql"
+# # put sql files for schema creation in inst folder
+#
+# # https://stackoverflow.com/questions/18914283/how-to-execute-more-than-one-rsqlite-statement-at-once-or-how-to-dump-a-whole-fi
+# #
+# # read in sql-statements and preformat them
+# sqlFromFile <- function(file){
+#   require(stringr)
+#   sql <- readLines(file)
+#   sql <- unlist(str_split(paste(sql,collapse=" "),";"))
+#   sql <- sql[grep("^ *$", sql, invert=T)]
+#   sql
+# }
+#
+# # apply query function to each element
+# dbSendQueries <- function(con,sql){
+#   dummyfunction <- function(sql,con){
+#     dbSendQuery(con,sql)
+#   }
+#   lapply(sql, dummyfunction, con)
+# }
+#
+# # solution for example in question
+# dbSendQueries(mydb, sqlFromFile(sql_file))
+#
+# # populate controlled vocabulary tables
+#
+# # run in terminal...
+# system("python inst/cvload.py sqlite:///my-db.sqlite")
+# dbListTables(mydb)
+# cv_specimenType <- dbReadTable(mydb, "CV_SpecimenType")
+# # definitions are not coming through (does it matter?)
+# names(units) <- dbListFields(mydb, "units")[c(4, 3, 2)]
+#
+# dbListFields(mydb, "units")
+# dbWriteTable(mydb, "units",
+#              units,
+#              overwrite = FALSE,
+#              row.names = FALSE,
+#              append = TRUE)
 
-# apply query function to each element
-dbSendQueries <- function(con,sql){
-  dummyfunction <- function(sql,con){
-    dbSendQuery(con,sql)
-  }
-  lapply(sql, dummyfunction, con)
-}
+# save as 'blank' odm2 sqlite
 
-# solution for example in question
-dbSendQueries( mydb, sqlFromFile(sql_file) )
