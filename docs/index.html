@@ -93,7 +93,7 @@
 <span class="co">#&gt; Installing rodm2</span>
 <span class="co">#&gt; '/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \</span>
 <span class="co">#&gt;   --no-environ --no-save --no-restore --quiet CMD INSTALL  \</span>
-<span class="co">#&gt;   '/private/var/folders/d7/5whj815j4n705g96f5pbwpj1mwqk25/T/Rtmp7TOoFP/devtoolsf7b5553c84bf/khondula-rodm2-06e4c68'  \</span>
+<span class="co">#&gt;   '/private/var/folders/d7/5whj815j4n705g96f5pbwpj1mwqk25/T/Rtmp1c42Cf/devtools106b733bf2cc3/khondula-rodm2-54a920c'  \</span>
 <span class="co">#&gt;   --library='/Library/Frameworks/R.framework/Versions/3.5/Resources/library'  \</span>
 <span class="co">#&gt;   --install-tests</span>
 <span class="co">#&gt; </span></code></pre></div>
@@ -101,10 +101,10 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(rodm2)</span>
-<span class="co"># create a connection to a database and add odm2 schema</span>
-<span class="co"># initialize an empty sqlite database with odm2 schema</span>
-<span class="co"># or connect to an existing ODM2 database</span></code></pre></div>
+<p>Initialize an empty sqlite database with odm2 schema</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
+<span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"data"</span>)</code></pre></div>
+<p>or connect to an existing ODM2 database</p>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
