@@ -2,6 +2,10 @@ pandoc: 1.19.2.1
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
+  add-new-methods: add-new-methods.html
+  add-new-samples: add-new-samples.html
+  inserting-data: inserting-data.html
+  interactive-site-map: interactive-site-map.html
   introduction: introduction.html
   newsites: newsites.html
 
