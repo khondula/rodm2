@@ -1,10 +1,10 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Add new sites"
+author: "Kelly Hondula"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Add new sites}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,50 +16,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+In ODM2 lingo, sites are a type of sampling feature. They must have a unique UUID, short code name (max 50 characters), and be classified as one of the pre-defined [types of sampling features](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station". They can also have a longer name (max 255 characters), even longer description (max 5000 characters), and spatial/geometry and elevation information. 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+All actions must be performed at/on/to a sampling feature! 
 
-## Vignette Info
+## Add a site without any geographic info
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+## Add points from lat lon data
 
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+# db_insert_sites_latlon(new_sites)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Add points from a kmz (Google Earth) file
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+## Add relationships between sites
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+If sites are related to each other, make use of the `relatedfeatures` table by specifying parent-child or other types of relationships. 
 
-## More Examples
+This allows for making a network graph showing how sites are related to each other.  
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+## Add Site Group annotations
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+Add annotations about groups of sites. 

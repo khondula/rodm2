@@ -1,8 +1,10 @@
 
-#' Put template sqlite database within a data folder
+#' Make a new ODM2 sqlite database
 #'
 #' @param dir Directory for the sqlite database file to be created in. Defaults to `data`
 #' @param filename Filename for sqlite database file. Defaults to `odm2`
+#'
+#' @details This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
 #'
 #' @export
 #'

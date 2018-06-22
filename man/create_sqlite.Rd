@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_sqlite_db.R
 \name{create_sqlite}
 \alias{create_sqlite}
-\title{Put template sqlite database within a data folder}
+\title{Make a new ODM2 sqlite database}
 \usage{
 create_sqlite(dir = "data", filename = "odm2")
 }
@@ -12,7 +12,10 @@ create_sqlite(dir = "data", filename = "odm2")
 \item{filename}{Filename for sqlite database file. Defaults to `odm2`}
 }
 \description{
-Put template sqlite database within a data folder
+Make a new ODM2 sqlite database
+}
+\details{
+This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
 }
 \examples{
 \dontrun{
