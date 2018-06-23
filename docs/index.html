@@ -91,7 +91,13 @@
 <div id="rodm2" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rodm2" class="anchor"></a>rodm2</h1></div>
-<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R. Organize your site, sample, and sensor data for watershed science projects all in one place.</p>
+<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists.</p>
+<p>Organize site, sample, and sensor data all in one place! For example:</p>
+<ul>
+<li>time series hydrologic observations from a well or stream gage</li>
+<li>sediment sample properties from a soil core analyzed in a lab</li>
+<li>categorical observations manually recorded in the field</li>
+</ul>
 <p>This project is just getting started! Get in touch or open an <a href="https://github.com/khondula/rodm2/issues">issue</a> if you have a use case or if you’re interested in collaborating.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -101,9 +107,10 @@
 <span class="kw">library</span>(devtools)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)</code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a formal database.</p>
 <p>Initialize an empty sqlite database with odm2 schema. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
 <span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>()</code></pre></div>
@@ -111,7 +118,11 @@
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
-<p>This project is made possible with support from rOpenSci and SESYNC.</p>
+<p>This project is made possible through support from <a href="https://ropensci.org/">rOpenSci</a> and <a href="https://www.sesync.org/">SESYNC</a>.</p>
+<p>Read about the details and development of ODM2 in the open access paper in Environmental Modelling &amp; Software:</p>
+<blockquote>
+<p>Horsburgh, J. S., Aufdenkampe, A. K., Mayorga, E., Lehnert, K. A., Hsu, L., Song, L., Spackman Jones, A., Damiano, S. G., Tarboton, D. G., Valentine, D., Zaslavsky, I., Whitenack, T. (2016). <a href="http://dx.doi.org/10.1016/j.envsoft.2016.01.010">Observations Data Model 2: A community information model for spatially discrete Earth observations</a>, Environmental Modelling &amp; Software, 79, 55-74, <a href="http://dx.doi.org/10.1016/j.envsoft.2016.01.010" class="uri">http://dx.doi.org/10.1016/j.envsoft.2016.01.010</a></p>
+</blockquote>
 </div>
 </div>
   </div>

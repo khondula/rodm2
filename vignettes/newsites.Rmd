@@ -16,7 +16,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-In ODM2 lingo, sites are a type of sampling feature. They must have a unique UUID, short code name (max 50 characters), and be classified as one of the pre-defined [types of sampling features](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station". They can also have a longer name (max 255 characters), even longer description (max 5000 characters), and spatial/geometry and elevation information. 
+In ODM2 lingo, sites are a type of sampling feature. They _must_ have:
+
+* a unique short code name (max 50 characters),
+* a unique UUID (which can be generated with the [uuid](https://cran.r-project.org/web/packages/uuid/index.html) package), 
+* and be classified as one of the pre-defined [types of sampling features](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station". 
+
+They _can_ also have: 
+
+* a longer name (max 255 characters), 
+* even longer description (max 5000 characters), 
+* spatial/geometry information,
+* and elevation information. 
 
 All actions must be performed at/on/to a sampling feature! 
 

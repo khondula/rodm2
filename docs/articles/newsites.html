@@ -87,7 +87,7 @@
       <h1>Add new sites</h1>
                         <h4 class="author">Kelly Hondula</h4>
             
-            <h4 class="date">2018-06-22</h4>
+            <h4 class="date">2018-06-23</h4>
       
       
       <div class="hidden name"><code>newsites.Rmd</code></div>
@@ -96,7 +96,19 @@
 
     
     
-<p>In ODM2 lingo, sites are a type of sampling feature. They must have a unique UUID, short code name (max 50 characters), and be classified as one of the pre-defined <a href="http://vocabulary.odm2.org/samplingfeaturetype/">types of sampling features</a> such as “Site” or “Weather station”. They can also have a longer name (max 255 characters), even longer description (max 5000 characters), and spatial/geometry and elevation information.</p>
+<p>In ODM2 lingo, sites are a type of sampling feature. They <em>must</em> have:</p>
+<ul>
+<li>a unique short code name (max 50 characters),</li>
+<li>a unique UUID (which can be generated with the <a href="https://cran.r-project.org/web/packages/uuid/index.html">uuid</a> package),</li>
+<li>and be classified as one of the pre-defined <a href="http://vocabulary.odm2.org/samplingfeaturetype/">types of sampling features</a> such as “Site” or “Weather station”.</li>
+</ul>
+<p>They <em>can</em> also have:</p>
+<ul>
+<li>a longer name (max 255 characters),</li>
+<li>even longer description (max 5000 characters),</li>
+<li>spatial/geometry information,</li>
+<li>and elevation information.</li>
+</ul>
 <p>All actions must be performed at/on/to a sampling feature!</p>
 <div id="add-a-site-without-any-geographic-info" class="section level2">
 <h2 class="hasAnchor">
