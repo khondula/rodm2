@@ -25,12 +25,11 @@ db_describe_person <- function(db = db,
   
   # add check to see if person already exists in database
   # and ask to continue or update information
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
   
   # check type of database object
   if (class(db) == "SQLiteConnection"){
-    
-    if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-      stop("sorry, only sqlite and postgresql database connections are supported so far")}
     
     sql1 <- dbSendStatement(db, 
                             'INSERT into people 
@@ -51,6 +50,9 @@ db_describe_person <- function(db = db,
                               PersonLastName = PersonLastName,
                               AffiliationStartDate = AffiliationStartDate,
                               PrimaryEmail = PrimaryEmail))
+    
+    message(paste(PersonFirstName, PersonLastName, "has been entered into the People table."))
+    
   }
   
   if (class(db) == "PostgreSQLConnection"){
@@ -71,9 +73,9 @@ db_describe_person <- function(db = db,
                           PrimaryEmail = PrimaryEmail)
     
     dbGetQuery(db, sql)
+    message(paste(PersonFirstName, PersonLastName, "has been entered into the People table."))
     
   }
   
-  message(paste(PersonFirstName, PersonLastName, "has been entered into the People table."))
   
 }
