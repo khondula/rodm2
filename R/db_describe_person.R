@@ -29,6 +29,9 @@ db_describe_person <- function(db = db,
   # check type of database object
   if (class(db) == "SQLiteConnection"){
     
+    if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+      stop("sorry, only sqlite and postgresql database connections are supported so far")}
+    
     sql1 <- dbSendStatement(db, 
                             'INSERT into people 
                             (PersonFirstName, PersonLastName) 
@@ -70,9 +73,6 @@ db_describe_person <- function(db = db,
     dbGetQuery(db, sql)
     
   }
-  
-  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-    stop("sorry, only sqlite and postgresql database connections are supported so far")}
   
   message(paste(PersonFirstName, PersonLastName, "has been entered into the People table."))
   

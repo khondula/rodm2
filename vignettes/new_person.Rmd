@@ -22,7 +22,7 @@ In ODM2 lingo, **Actions** (and therefore **Results**) can be linked to **People
 
 Create one new entry in the People table using the function `db_describe_person`. You must supply the databse connection object, and required columns in the [People](http://odm2.github.io/ODM2/schemas/ODM2_Current/tables/ODM2Core_People.html) and [Affiliations](http://odm2.github.io/ODM2/schemas/ODM2_Current/tables/ODM2Core_Affiliations.html) tables: First Name, Last Name, Affiliation Start Date, and Primary Email. Be sure to format the date unambiguously, i.e. YYYY-MM-DD or YYYY/MM/DD. 
 
-```{r}
+```{r, include=FALSE}
 library(rodm2)
 library(RPostgreSQL)
 create_sqlite(dir = ".")
