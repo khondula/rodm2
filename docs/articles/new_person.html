@@ -104,11 +104,17 @@
 <h2 class="hasAnchor">
 <a href="#new-people" class="anchor"></a>New people</h2>
 <p>Create one new entry in the People table using the function <code>db_describe_person</code>. You must supply the databse connection object, and required columns in the <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/tables/ODM2Core_People.html">People</a> and <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/tables/ODM2Core_Affiliations.html">Affiliations</a> tables: First Name, Last Name, Affiliation Start Date, and Primary Email. Be sure to format the date unambiguously, i.e. YYYY-MM-DD or YYYY/MM/DD.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
+<span class="kw">library</span>(RPostgreSQL)
+<span class="co">#&gt; Loading required package: DBI</span>
+<span class="kw"><a href="../reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"."</span>)
+db &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/db_describe_person.html">db_describe_person</a></span>(<span class="dt">db =</span> db, 
                    <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>, 
                    <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>, 
                    <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>, 
-                   <span class="dt">PrimaryEmail =</span> <span class="st">"wendy@swamps.edu"</span>)</code></pre></div>
+                   <span class="dt">PrimaryEmail =</span> <span class="st">"wendy@swamps.edu"</span>)
+<span class="co">#&gt; Wendy Wetland has been entered into the People table.</span></code></pre></div>
 </div>
   </div>
 
