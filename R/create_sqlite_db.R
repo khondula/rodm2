@@ -10,6 +10,8 @@
 #'
 #' @examples
 #' create_sqlite(dir = tempdir())
+#' dblite <- dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+
 create_sqlite <- function(dir = "data", filename = "odm2"){
   path <- file.path(dir)
   template_file <- system.file("odm2-template.sqlite", package = "rodm2")

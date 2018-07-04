@@ -20,8 +20,7 @@ You can install this package from GitHub with:
 
 ``` r
 # install.packages("devtools")
-library(devtools)
-install_github("khondula/rodm2")
+devtools::install_github("khondula/rodm2")
 ```
 
 Usage
@@ -29,11 +28,22 @@ Usage
 
 `rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a formal database.
 
-Initialize an empty sqlite database with odm2 schema. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
+Initialize an empty sqlite database with odm2 schema your working directory. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
 
 ``` r
 library(rodm2)
-create_sqlite()
+create_sqlite(dir = ".")
+```
+
+To work with it in R, create a connection object
+
+``` r
+library(RSQLite)
+dblite <- dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+head(dbListTables(dblite))
+#> [1] "ActionAnnotations"             "ActionBy"                     
+#> [3] "ActionDirectives"              "ActionExtensionPropertyValues"
+#> [5] "Actions"                       "Affiliations"
 ```
 
 Acknowledgements
