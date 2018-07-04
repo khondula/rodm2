@@ -1,5 +1,5 @@
-# for adding isotope sample results
-
+# for adding GC sample results
+# need to generalize to more sample result types...
 db_insert_sample_results <- function(x){
 
 sql_blanks <- 'WITH newact AS (
@@ -117,28 +117,28 @@ sql_blanks <- 'WITH newact AS (
                new_sample_results$sample_code[x],
                # results
                uuid::UUIDgenerate(), resulttypecv,
-               variablecode1, # d18O
+               variablecode1, #
                unitsabbreviation,
                processlinglevelid, sampledmediumcv, valuecount,
                uuid::UUIDgenerate(), resulttypecv,
-               variablecode2, # dD
+               variablecode2, #
                unitsabbreviation,
                processlinglevelid, sampledmediumcv, valuecount,
-               # Measurement results - d180
+               # Measurement results - variable1
                variablecode1, censorcodecv, qualitycodecv,
                aggregationstatisticcv, timeaggregationinterval, timeaggregationintervalunitsid,
                variablecode1,
-               new_sample_results$`d 18O`[x],
+               new_sample_results$ch4_ppm[x],
                new_sample_results$collection_datetime[x], utcoffset,
-               # Measurement results - dD
+               # Measurement results - variable2
                variablecode2, censorcodecv, qualitycodecv,
                aggregationstatisticcv, timeaggregationinterval, timeaggregationintervalunitsid,
                variablecode2,
-               new_sample_results$`d D`[x],
+               new_sample_results$co2_ppm[x],
                new_sample_results$collection_datetime[x], utcoffset)
 
   sql <- gsub("\n", "", sql)
 
-  RPostregreSQL::dbGetQuery(db, sql)
+  RPostgreSQL::dbGetQuery(db, sql)
 
 }

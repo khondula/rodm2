@@ -29,7 +29,7 @@ get_site_names_like <- function(x, ...){
 #' Returns a data frame specifying whether each element of new_codes exists in samplingfeatures
 #'
 #' @param new_codes vector of names to compare with samplingfeaturecode vector
-
+#'
 #' @importFrom magrittr %>%
 #' @name %>%
 #' @rdname pipe
