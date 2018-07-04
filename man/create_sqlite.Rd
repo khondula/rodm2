@@ -7,9 +7,9 @@
 create_sqlite(dir = "data", filename = "odm2")
 }
 \arguments{
-\item{dir}{Directory for the sqlite database file to be created in. Defaults to `data`}
+\item{dir}{Name of existing directory for the sqlite database file to be created in. Defaults to `data`}
 
-\item{filename}{Filename for sqlite database file. Defaults to `odm2`}
+\item{filename}{Filename for sqlite database file. Defaults to `odm2`, creating odm2.sqlite}
 }
 \description{
 Make a new ODM2 sqlite database
