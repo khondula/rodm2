@@ -7,10 +7,16 @@
 #' @param PrimaryEmail The primary email address of the person
 #' @param db Database connection object (must be postgresql or sqlite)
 #'
-#' @return
+#' @return message that person was entered into database
 #' @export
 #'
 #' @examples
+#' create_sqlite(dir = ".")
+#' db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+#' db_describe_person(db = db, PersonFirstName = "Wendy", 
+#'     PersonLastName = "Wetland", 
+#'     AffiliationStartDate = "2018-01-01", 
+#'     PrimaryEmail = "wendy 'at' swamps.edu")
 db_describe_person <- function(db = db, 
                                PersonFirstName, 
                                PersonLastName,
@@ -30,17 +36,18 @@ db_describe_person <- function(db = db,
                             (:PersonFirstName, :PersonLastName)')
     dbBind(sql1, param = list(PersonFirstName = PersonFirstName, 
                               PersonLastName = PersonLastName))
-    
+    dbClearResult(res = sql1)
     sql2 <- dbSendStatement(db,
                             'INSERT into affiliations
                             (PersonID, AffiliationStartDate, PrimaryEmail)
                             VALUES (
-                            (SELECT PersonID FROM People WHERE PersonFirstName = :PersonFirstName),
+                            (SELECT PersonID FROM People WHERE PersonFirstName = :PersonFirstName AND PersonLastName = :PersonLastName),
                             :AffiliationStartDate,
                             :PrimaryEmail)')
     dbBind(sql2, param = list(PersonFirstName = PersonFirstName, 
                               PersonLastName = PersonLastName,
-                              AffiliationStartDate = AffiliationStartDate))
+                              AffiliationStartDate = AffiliationStartDate,
+                              PrimaryEmail = PrimaryEmail))
   }
   
   if (class(db) == "PostgreSQLConnection"){

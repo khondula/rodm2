@@ -27,7 +27,9 @@ They _can_ also have:
 * a longer name (max 255 characters), 
 * even longer description (max 5000 characters), 
 * spatial/geometry information,
-* and elevation information. 
+* elevation information,
+* annotations like a type of "Site group",
+* defined relationships to other sites. 
 
 All actions must be performed at/on/to a sampling feature! 
 
