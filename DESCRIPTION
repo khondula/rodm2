@@ -16,5 +16,6 @@ Imports:
     dplyr,
     RPostgreSQL,
     uuid,
-    RSQLite
+    RSQLite,
+    DBI
 RoxygenNote: 6.0.1

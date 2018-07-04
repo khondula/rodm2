@@ -18,7 +18,5 @@ Make a new ODM2 sqlite database
 This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
 }
 \examples{
-\dontrun{
-create_sqlite()
-}
+create_sqlite(dir = tempdir())
 }

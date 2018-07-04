@@ -30,7 +30,7 @@ db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 ```
 
 ```{r}
-db_describe_person(db = db, 
+db_describe_person(db = db, # connection to odm2 sqlite or postgres database
                    PersonFirstName = "Wendy", 
                    PersonLastName = "Wetland", 
                    AffiliationStartDate = "2018-01-01", 

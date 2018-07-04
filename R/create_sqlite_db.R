@@ -9,9 +9,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' create_sqlite()
-#' }
+#' create_sqlite(dir = tempdir())
 create_sqlite <- function(dir = "data", filename = "odm2"){
   path <- file.path(dir)
   template_file <- system.file("odm2-template.sqlite", package = "rodm2")

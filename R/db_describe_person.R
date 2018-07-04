@@ -31,22 +31,22 @@ db_describe_person <- function(db = db,
   # check type of database object
   if (class(db) == "SQLiteConnection"){
     
-    sql1 <- dbSendStatement(db, 
+    sql1 <- RSQLite::dbSendStatement(db, 
                             'INSERT into people 
                             (PersonFirstName, PersonLastName) 
                             VALUES 
                             (:PersonFirstName, :PersonLastName)')
-    dbBind(sql1, param = list(PersonFirstName = PersonFirstName, 
+    RSQLite::dbBind(sql1, param = list(PersonFirstName = PersonFirstName, 
                               PersonLastName = PersonLastName))
-    dbClearResult(res = sql1)
-    sql2 <- dbSendStatement(db,
+    RSQLite::dbClearResult(res = sql1)
+    sql2 <- RSQLite::dbSendStatement(db,
                             'INSERT into affiliations
                             (PersonID, AffiliationStartDate, PrimaryEmail)
                             VALUES (
                             (SELECT PersonID FROM People WHERE PersonFirstName = :PersonFirstName AND PersonLastName = :PersonLastName),
                             :AffiliationStartDate,
                             :PrimaryEmail)')
-    dbBind(sql2, param = list(PersonFirstName = PersonFirstName, 
+    RSQLite::dbBind(sql2, param = list(PersonFirstName = PersonFirstName, 
                               PersonLastName = PersonLastName,
                               AffiliationStartDate = AffiliationStartDate,
                               PrimaryEmail = PrimaryEmail))
@@ -57,7 +57,7 @@ db_describe_person <- function(db = db,
   
   if (class(db) == "PostgreSQLConnection"){
     
-    sql <- sqlInterpolate(db,
+    sql <- DBI::sqlInterpolate(db,
                           'WITH 
                           newpeople AS (
                           INSERT into odm2.people (PersonFirstName, PersonLastName)
@@ -72,7 +72,7 @@ db_describe_person <- function(db = db,
                           AffiliationStartDate = AffiliationStartDate,
                           PrimaryEmail = PrimaryEmail)
     
-    dbGetQuery(db, sql)
+    RPostgreSQL::dbGetQuery(db, sql)
     message(paste(PersonFirstName, PersonLastName, "has been entered into the People table."))
     
   }
