@@ -1,4 +1,4 @@
-#' Insert a new variable
+#' Describe a new variable
 #'
 #' @param variabletypecv variable type from controlled vocab
 #' @param variablecode short codename for variable
@@ -11,10 +11,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' db_add_variable()
+#' db_describe_variable()
 #' }
 
-db_add_variable <- function(variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue = -9999){
+db_describe_variable <- function(variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue = -9999){
   sql <- sprintf("INSERT INTO odm2.variables
                  (variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue)
                  VALUES

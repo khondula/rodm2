@@ -19,5 +19,5 @@ This function copies a template sqlite file with the ODM2 schema and controlled 
 }
 \examples{
 create_sqlite(dir = tempdir())
-dblite <- dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 }

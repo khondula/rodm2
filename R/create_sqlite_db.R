@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' create_sqlite(dir = tempdir())
-#' dblite <- dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+#' dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 
 create_sqlite <- function(dir = "data", filename = "odm2"){
   path <- file.path(dir)
