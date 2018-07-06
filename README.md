@@ -28,7 +28,7 @@ Usage
 
 `rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a formal database.
 
-Initialize an empty sqlite database with odm2 schema your working directory. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
+Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
 
 ``` r
 library(rodm2)

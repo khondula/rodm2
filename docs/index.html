@@ -113,7 +113,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a formal database.</p>
-<p>Initialize an empty sqlite database with odm2 schema your working directory. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
+<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
 <span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"."</span>)</code></pre></div>
 <p>To work with it in R, create a connection object</p>
