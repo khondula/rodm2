@@ -38,12 +38,21 @@ create_sqlite(dir = ".")
 To work with it in R, create a connection object
 
 ``` r
-library(RSQLite)
-dblite <- dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-head(dbListTables(dblite))
+dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+head(RSQLite::dbListTables(dblite))
 #> [1] "ActionAnnotations"             "ActionBy"                     
 #> [3] "ActionDirectives"              "ActionExtensionPropertyValues"
 #> [5] "Actions"                       "Affiliations"
+```
+
+Add information using `db_describe_%TABLE%` functions
+
+``` r
+rodm2::db_describe_person(db = dblite, PersonFirstName = "Wendy",
+     PersonLastName = "Wetland",
+     AffiliationStartDate = "2018-01-01",
+     PrimaryEmail = "wendy 'at' swamps.edu")
+#> Wendy Wetland has been entered into the People table.
 ```
 
 Acknowledgements
