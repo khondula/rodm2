@@ -4,9 +4,11 @@
 \alias{db_describe_annotation}
 \title{Add a new annotation text}
 \usage{
-db_describe_annotation(annotationtypecv, annotationtext)
+db_describe_annotation(db, annotationtypecv, annotationtext)
 }
 \arguments{
+\item{db}{database connection object}
+
 \item{annotationtypecv}{annotation type from controlled vocab}
 
 \item{annotationtext}{text string of annotation}
