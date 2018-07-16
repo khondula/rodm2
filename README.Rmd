@@ -50,7 +50,7 @@ To work with it in R, create a connection object
 dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 head(RSQLite::dbListTables(dblite))
 ```
-Add information using `db_describe_%TABLE%` functions
+Add information using `db_describe_%TABLE%` functions. 
 ```{r}
 rodm2::db_describe_person(db = dblite, PersonFirstName = "Wendy",
      PersonLastName = "Wetland",
@@ -58,6 +58,25 @@ rodm2::db_describe_person(db = dblite, PersonFirstName = "Wendy",
      PrimaryEmail = "wendy 'at' swamps.edu")
 ```
 
+There are currently "describe" functions for:
+
+* methods
+* people
+* variables
+* annotations
+* organizations (necessary for equipment)
+
+In progress:
+
+* describe sites
+* describe samples
+
+Data are uploaded using "insert" functions and specifying a "results_type" as one of:
+
+* measurement: in-situ point measurement (numeric) taken at a site
+* category: in-situ point measurement (text/categorical) taken at a site
+* sample_measurement: ex-situ measurement (numeric) of a sample taken at a site
+* time_series: time series data collected at a site using a sensor
 
 ## Acknowledgements
 

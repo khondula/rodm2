@@ -122,12 +122,32 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <span class="co">#&gt; [1] "ActionAnnotations"             "ActionBy"                     </span>
 <span class="co">#&gt; [3] "ActionDirectives"              "ActionExtensionPropertyValues"</span>
 <span class="co">#&gt; [5] "Actions"                       "Affiliations"</span></code></pre></div>
-<p>Add information using <code>db_describe_%TABLE%</code> functions</p>
+<p>Add information using <code>db_describe_%TABLE%</code> functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> dblite, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
      <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
      <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
      <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
 <span class="co">#&gt; Wendy Wetland has been entered into the People table.</span></code></pre></div>
+<p>There are currently “describe” functions for:</p>
+<ul>
+<li>methods</li>
+<li>people</li>
+<li>variables</li>
+<li>annotations</li>
+<li>organizations (necessary for equipment)</li>
+</ul>
+<p>In progress:</p>
+<ul>
+<li>describe sites</li>
+<li>describe samples</li>
+</ul>
+<p>Data are uploaded using “insert” functions and specifying a “results_type” as one of:</p>
+<ul>
+<li>measurement: in-situ point measurement (numeric) taken at a site</li>
+<li>category: in-situ point measurement (text/categorical) taken at a site</li>
+<li>sample_measurement: ex-situ measurement (numeric) of a sample taken at a site</li>
+<li>time_series: time series data collected at a site using a sensor</li>
+</ul>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">

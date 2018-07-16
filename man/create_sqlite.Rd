@@ -4,12 +4,14 @@
 \alias{create_sqlite}
 \title{Make a new ODM2 sqlite database}
 \usage{
-create_sqlite(dir = "data", filename = "odm2")
+create_sqlite(dir = "data", filename = "odm2", connect = FALSE)
 }
 \arguments{
 \item{dir}{Name of existing directory for the sqlite database file to be created in. Defaults to `data`}
 
 \item{filename}{Filename for sqlite database file. Defaults to `odm2`, creating odm2.sqlite}
+
+\item{connect}{whether or not to return the database connection object}
 }
 \description{
 Make a new ODM2 sqlite database
