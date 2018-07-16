@@ -117,12 +117,17 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
 <span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"."</span>)</code></pre></div>
 <p>To work with it in R, create a connection object</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RSQLite)
-dblite &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)
-<span class="kw">head</span>(<span class="kw">dbListTables</span>(dblite))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dblite &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)
+<span class="kw">head</span>(RSQLite<span class="op">::</span><span class="kw">dbListTables</span>(dblite))
 <span class="co">#&gt; [1] "ActionAnnotations"             "ActionBy"                     </span>
 <span class="co">#&gt; [3] "ActionDirectives"              "ActionExtensionPropertyValues"</span>
 <span class="co">#&gt; [5] "Actions"                       "Affiliations"</span></code></pre></div>
+<p>Add information using <code>db_describe_%TABLE%</code> functions</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> dblite, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
+     <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
+     <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
+     <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
+<span class="co">#&gt; Wendy Wetland has been entered into the People table.</span></code></pre></div>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
