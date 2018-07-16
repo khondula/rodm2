@@ -81,10 +81,10 @@ db_get_variables <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
   if (class(db) == "SQLiteConnection"){
-    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM methods")
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM variables")
   }
   if (class(db) == "PosgreSQLConnection"){
-    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.methods")
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.variables")
   }
   return(current_variables)
 }
