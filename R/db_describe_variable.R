@@ -77,7 +77,7 @@ db_describe_variable <- function(db,
 #'
 #' @examples
 #' #db_get_variables(db)
-db_get_methods <- function(db){
+db_get_variables <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
   if (class(db) == "SQLiteConnection"){
