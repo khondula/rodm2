@@ -4,6 +4,7 @@
 #' @param methodcode short codename for method
 #' @param methodtypecv method type from controlled vocabulary
 #' @param methoddescription longer description
+#' @param db database connection object
 #'
 #' @return TRUE if successful
 #' @export
@@ -12,12 +13,45 @@
 #' \dontrun{
 #' db_describe_method("new method", "new", "Field Activity", "doing stuf")
 #' }
-db_describe_method <- function(methodname, methodcode, methodtypecv, methoddescription){
-  sql <- sprintf("INSERT INTO odm2.methods
-                 (methodtypecv, methodcode, methodname, methoddescription)
+db_describe_method <- function(db,
+                               methodname,
+                               methodcode,
+                               methodtypecv,
+                               methoddescription){
+
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+
+  # check type of database object
+  if (class(db) == "SQLiteConnection"){
+
+    sql1 <- RSQLite::dbSendStatement(db,
+              'INSERT INTO methods
+              (methodtypecv, methodcode, methodname, methoddescription)
+              VALUES
+              (:methodtypecv, :methodcode, :methodname, :methoddescription)')
+    RSQLite::dbBind(sql1, param = list(methodtypecv = methodtypecv,
+                                       methodcode = methodcode,
+                                       methodname = methodname,
+                                       methoddescription = methoddescription))
+    RSQLite::dbClearResult(res = sql1)
+    message(paste(variablenamecv, "has been added to the Methods table."))
+
+  }
+
+  if (class(db) == "PostgreSQLConnection"){
+    sql <- DBI::sqlInterpolate("INSERT INTO odm2.methods
+                 (methodtypecv, methodcode,
+                  methodname, methoddescription)
                  VALUES
-                 ('%s', '%s', '%s', '%s')",
-                 methodtypecv, methodcode, methodname, methoddescription)
-  sql <- gsub("\n", "", sql)
-  RPostgreSQL::dbGetQuery(db, sql)
+                 (?methodtypecv, ?methodcode,
+                  ?methodname, ?methoddescription)",
+                methodtypecv = methodtypecv,
+                methodcode = methodcode,
+                methodname = methodname,
+                methoddescription = methoddescription)
+
+    RPostgreSQL::dbGetQuery(db, sql)
+    message(paste(methodname, "has been added to the Methods table."))
+  }
 }

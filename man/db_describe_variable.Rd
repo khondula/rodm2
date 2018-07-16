@@ -4,10 +4,12 @@
 \alias{db_describe_variable}
 \title{Describe a new variable}
 \usage{
-db_describe_variable(variabletypecv, variablecode, variablenamecv,
+db_describe_variable(db, variabletypecv, variablecode, variablenamecv,
   variabledefinition, nodatavalue = -9999)
 }
 \arguments{
+\item{db}{database connection object}
+
 \item{variabletypecv}{variable type from controlled vocab}
 
 \item{variablecode}{short codename for variable}

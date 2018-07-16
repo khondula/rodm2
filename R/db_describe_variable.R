@@ -5,6 +5,7 @@
 #' @param variablenamecv variable name from controlled vocab
 #' @param variabledefinition longer definition
 #' @param nodatavalue no data value
+#' @param db database connection object
 #'
 #' @return TRUE if successful
 #' @export
@@ -14,12 +15,55 @@
 #' db_describe_variable()
 #' }
 
-db_describe_variable <- function(variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue = -9999){
-  sql <- sprintf("INSERT INTO odm2.variables
-                 (variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue)
+db_describe_variable <- function(db,
+                                 variabletypecv,
+                                 variablecode,
+                                 variablenamecv,
+                                 variabledefinition,
+                                 nodatavalue = -9999){
+
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+
+  # check type of database object
+  if (class(db) == "SQLiteConnection"){
+
+    sql1 <- RSQLite::dbSendStatement(db,
+                                     'INSERT into variables
+                                    (variabletypecv, variablecode,
+                                    variablenamecv, variabledefinition,
+                                     nodatavalue)
+                                     VALUES
+                                     (:variabletypecv, :variablecode,
+                                     :variablenamecv, :variabledefinition,
+                                     :nodatavalue)')
+    RSQLite::dbBind(sql1, param = list(variabletypecv = variabletypecv,
+                                       variablecode = variablecode,
+                                       variablenamecv = variablenamecv,
+                                       variabledefinition = variabledefinition,
+                                       nodatavalue = nodatavalue))
+    RSQLite::dbClearResult(res = sql1)
+    message(paste(variablenamecv, "has been added to the Variables table."))
+
+  }
+
+  if (class(db) == "PostgreSQLConnection"){
+
+  sql <- DBI::sqlInterpolate("INSERT INTO odm2.variables
+                 (variabletypecv, variablecode,
+                  variablenamecv, variabledefinition,
+                  nodatavalue)
                  VALUES
-                 ('%s', '%s', '%s', '%s', '%s')",
-                 variabletypecv, variablecode, variablenamecv, variabledefinition, nodatavalue)
-  sql <- gsub("\n", "", sql)
+                 (?variabletypecv, ?variablecode,
+                  ?variablenamecv, ?variabledefinition,
+                  ?nodatavalue)",
+                  variabletypecv = variabletypecv,
+                  variablecode = variablecode,
+                  variablenamecv = variablenamecv,
+                  variabledefinition = variabledefinition,
+                  nodatavalue = nodatavalue)
+
   RPostgreSQL::dbGetQuery(db, sql)
+  message(paste(variablenamecv, "has been added to the Variables table."))
+  }
 }

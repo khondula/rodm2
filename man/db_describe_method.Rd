@@ -4,9 +4,11 @@
 \alias{db_describe_method}
 \title{Describe a new method}
 \usage{
-db_describe_method(methodname, methodcode, methodtypecv, methoddescription)
+db_describe_method(db, methodname, methodcode, methodtypecv, methoddescription)
 }
 \arguments{
+\item{db}{database connection object}
+
 \item{methodname}{full name of method}
 
 \item{methodcode}{short codename for method}
