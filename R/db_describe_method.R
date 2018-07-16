@@ -55,3 +55,24 @@ db_describe_method <- function(db,
     message(paste(methodname, "has been added to the Methods table."))
   }
 }
+
+
+#' Get list of methods currently in database
+#'
+#' @param db
+#'
+#' @return
+#' @export
+#'
+#' @examples
+db_get_methods <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  if (class(db) == "SQLiteConnection"){
+    current_methods <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM methods")
+  }
+  if (class(db) == "PosgreSQLConnection"){
+    current_methods <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.methods")
+  }
+  return(current_methods)
+}

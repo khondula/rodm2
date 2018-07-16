@@ -71,6 +71,8 @@ In progress:
 * describe sites
 * describe samples
 
+Each of the "describe" functions will have a corresponding function to list the current entities in that table (option verbose = TRUE provides more details than just the name). Updated version of the describe functions will compare new entity to existing ones in database. 
+
 Data are uploaded using "insert" functions and specifying a "results_type" as one of:
 
 * measurement: in-situ point measurement (numeric) taken at a site
