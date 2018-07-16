@@ -35,7 +35,7 @@ db_describe_method <- function(db,
                                        methodname = methodname,
                                        methoddescription = methoddescription))
     RSQLite::dbClearResult(res = sql1)
-    message(paste(variablenamecv, "has been added to the Methods table."))
+    message(paste(methodname, "has been added to the Methods table."))
 
   }
 
