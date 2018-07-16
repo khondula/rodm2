@@ -61,10 +61,11 @@ db_describe_method <- function(db,
 #'
 #' @param db
 #'
-#' @return
+#' @return the current values in the methodname column of the methods table
 #' @export
 #'
 #' @examples
+#' #db_get_methods(db)
 db_get_methods <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}

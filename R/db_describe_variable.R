@@ -67,3 +67,24 @@ db_describe_variable <- function(db,
   message(paste(variablenamecv, "has been added to the Variables table."))
   }
 }
+
+#' Get list of variables currently in database
+#'
+#' @param db
+#'
+#' @return the current values in the variablenamecv column
+#' @export
+#'
+#' @examples
+#' #db_get_variables(db)
+db_get_methods <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  if (class(db) == "SQLiteConnection"){
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM methods")
+  }
+  if (class(db) == "PosgreSQLConnection"){
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.methods")
+  }
+  return(current_variables)
+}
