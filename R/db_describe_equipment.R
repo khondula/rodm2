@@ -203,7 +203,7 @@ db_describe_equipment <- function(db,
                                   equipmentserialnumber = serial_no,
                                   personfirstname = owner_first,
                                   vendorname = vendor,
-                                  equipmentpurchasedate = purchase_date)
+                                  equipmentpurchasedate = as.Date(purchase_date))
       RPostgreSQL::dbGetQuery(db, sql6)
       message(paste0(owner_first,"'s ", model_name, " ",
                      equipment_type, " ", equip_name,
