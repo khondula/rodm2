@@ -126,7 +126,7 @@ db_describe_equipment <- function(db,
   }
   if (class(db) == "PostgreSQLConnection"){
     sql1 <- DBI::sqlInterpolate(db,
-                                'SELECT modelid FROM odm2.models WHERE modelname = ?modelname',
+                                'SELECT modelid FROM odm2.equipmentmodels WHERE modelname = ?modelname',
                                 modelname = model_name)
     modelid <- RPostgreSQL::dbGetQuery(db, sql1)
     # if model is new, check that manufacturer is supplied
