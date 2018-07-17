@@ -35,6 +35,12 @@ db_describe_equipment <- function(db,
                                   manufacturer = NULL,
                                   purchase_date = Sys.Date()){
 
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+
+  # check type of database object
+  if (class(db) == "SQLiteConnection"){
+
   sql1 <- RSQLite::dbSendStatement(db,
                                    "SELECT modelid FROM models WHERE modelname = :modelname")
   RSQLite::dbBind(sql1, param = list(modelname = model_name))
@@ -117,4 +123,90 @@ db_describe_equipment <- function(db,
   message(paste0(owner_first,"'s ", model_name, " ",
                  equipment_type, " ", equip_name,
                  " has been added to the Equipment table."))
+  }
+  if (class(db) == "PostgreSQLConnection"){
+    sql1 <- DBI::sqlInterpolate(db,
+                                'SELECT modelid FROM odm2.models WHERE modelname = ?modelname',
+                                modelname = model_name)
+    modelid <- RPostgreSQL::dbGetQuery(db, sql1)
+    # if model is new, check that manufacturer is supplied
+    if(nrow(modelid) <1){
+      if(is.null(manufacturer)){
+        stop("New equipment model. Please supply manufacturer name.")
+      }
+      # add manufacturer to organization table if not there already
+      sql2 <- DBI::sqlInterpolate(db,
+                                  "INSERT into odm2.organizations
+                                  (organizationtypecv, organizationcode, organizationname)
+                                  SELECT
+                                  'Manufacturer', ?organizationcode, ?organizationname
+                                  WHERE NOT EXISTS (SELECT organizationid FROM odm2.organizations
+                                  WHERE organizationname = ?manufacturer);",
+                                  organizationcode = manufacturer,
+                                  organizationname = manufacturer,
+                                  manufacturer = manufacturer)
+      RPostgreSQL::dbGetQuery(db, sql2)
+      # then add model to equipment models table
+      sql3 <- DBI::sqlInterpolate(db,
+                                  "INSERT into odm2.equipmentmodels
+                                  (modelmanufacturerid, modelname, isinstrument)
+                                  VALUES (
+                                  (SELECT organizationid FROM odm2.organizations
+                                  WHERE organizationname = ?manufacturer),
+                                  ?modelname, 'TRUE')",
+                                  manufacturer = manufacturer,
+                                  modelname = model_name)
+      RPostgreSQL::dbGetQuery(db, sql3)
+    }
+      # add vendor to organization table if not there already
+      sql4 <- DBI::sqlInterpolate(db,
+                                  "INSERT into odm2.organizations
+                                  (organizationtypecv, organizationcode, organizationname)
+                                  SELECT
+                                  'Vendor', ?organizationcode, ?organizationname
+                                  WHERE NOT EXISTS (SELECT organizationid FROM odm2.organizations
+                                  WHERE organizationname = ?vendor);",
+                                  organizationcode = vendor,
+                                  organizationname = vendor,
+                                  vendor = vendor)
+      RPostgreSQL::dbGetQuery(db, sql4)
+      # make sure owner is in people table
+      sql5 <- DBI::sqlInterpolate(db,
+                                  "SELECT personid FROM odm2.people WHERE personfirstname = ?personfirstname",
+                                  personfirstname = owner_first)
+      ownerid <- RPostgreSQL::dbGetQuery(db, sql5)
+      if(nrow(ownerid) < 1){
+        if(is.null(owner_last) | is.null(owner_email)){
+          stop("Owner is new person. Please supply last name and email.")
+        }
+        rodm2::db_describe_person(db, PersonFirstName = owner_first,
+                                  PersonLastName = owner_last, PrimaryEmail = owner_email)
+      }
+      # update equipment table
+      sql6 <- DBI::sqlInterpolate(db,
+                                  "INSERT into odm2.equipment
+                                  (equipmentcode, equipmentname, equipmenttypecv,
+                                  equipmentmodelid, equipmentserialnumber,
+                                  equipmentownerid, equipmentvendorid,
+                                  equipmentpurchasedate)
+                                  VALUES
+                                  (?equipmentcode, ?equipmentname, ?equipmenttype,
+                                  (SELECT equipmentmodelid FROM equipmentmodels WHERE modelname = ?modelname),
+                                  ?equipmentserialnumber,
+                                  (SELECT personid FROM people WHERE personfirstname = ?personfirstname),
+                                  (SELECT organizationid FROM organizations WHERE organizationname = ?vendorname),
+                                  ?equipmentpurchasedate)",
+                                  equipmentcode = equip_name,
+                                  equipmentname = equip_name,
+                                  equipmenttype = equipment_type,
+                                  modelname = model_name,
+                                  equipmentserialnumber = serial_no,
+                                  personfirstname = owner_first,
+                                  vendorname = vendor,
+                                  equipmentpurchasedate = purchase_date)
+      RPostgreSQL::dbGetQuery(db, sql6)
+      message(paste0(owner_first,"'s", model_name, equipment_type, equip_name,
+                     "has been added to the Equipment table."))
+
+  }
 }
