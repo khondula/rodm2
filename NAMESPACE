@@ -3,6 +3,7 @@
 export(check_samplingfeaturecodes)
 export(create_sqlite)
 export(db_describe_annotation)
+export(db_describe_equipment)
 export(db_describe_method)
 export(db_describe_organization)
 export(db_describe_person)
