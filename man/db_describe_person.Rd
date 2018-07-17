@@ -5,7 +5,7 @@
 \title{Describe a new person in the people and affiliations tables}
 \usage{
 db_describe_person(db = db, PersonFirstName, PersonLastName,
-  AffiliationStartDate = Sys.Date(), PrimaryEmail)
+  AffiliationStartDate = DATETIME("now"), PrimaryEmail)
 }
 \arguments{
 \item{db}{Database connection object (must be postgresql or sqlite)}

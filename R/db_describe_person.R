@@ -20,7 +20,7 @@
 db_describe_person <- function(db = db,
                                PersonFirstName,
                                PersonLastName,
-                               AffiliationStartDate = DATETIME('now'),
+                               AffiliationStartDate = Sys.Date(),
                                PrimaryEmail){
 
   # add check to see if person already exists in database
