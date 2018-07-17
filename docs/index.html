@@ -112,16 +112,42 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a formal database.</p>
-<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
+<p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html">here</a> for an overview of the data structure.</p>
+<p><strong>With a PostgreSQL database</strong></p>
+<p>A script for creating a PostgreSQL database with the ODM2 schema is <a href="https://github.com/ODM2/ODM2/blob/master/src/blank_schema_scripts/postgresql/ODM2_for_PostgreSQL.sql">here</a> and instructions for populating the controlled vocabularies tables using a script are <a href="https://github.com/ODM2/ODM2/tree/master/src/load_cvs">here</a>.</p>
+<p>You will need to create a database connection object, eg. using <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">DBI::dbConnect()</a></code> and your host and log-in credentials.</p>
+<p><strong>Without an external database</strong></p>
+<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R. By default, <code><a href="reference/create_sqlite.html">create_sqlite()</a></code> just creates the sqlite file but <code>connect = TRUE</code> will return the connection object as well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-<span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">dir =</span> <span class="st">"."</span>)</code></pre></div>
-<p>To work with it in R, create a connection object</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dblite &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)
-<span class="kw">head</span>(RSQLite<span class="op">::</span><span class="kw">dbListTables</span>(dblite))
+dblite &lt;-<span class="st"> </span><span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Or create a connection to an existing sqlite file using <code>dbConnect</code> and the name of the file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dblite &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)</code></pre></div>
+<p>There are 132 tables in the database. The “blank” database has the Units table populated as well as all of the controlled vocabularies (that start with <code>CV_</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(dblite))
 <span class="co">#&gt; [1] "ActionAnnotations"             "ActionBy"                     </span>
 <span class="co">#&gt; [3] "ActionDirectives"              "ActionExtensionPropertyValues"</span>
-<span class="co">#&gt; [5] "Actions"                       "Affiliations"</span></code></pre></div>
+<span class="co">#&gt; [5] "Actions"                       "Affiliations"</span>
+DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListFields">dbListFields</a></span>(dblite, <span class="st">"featureactions"</span>)
+<span class="co">#&gt; [1] "FeatureActionID"   "SamplingFeatureID" "ActionID"</span>
+<span class="kw">head</span>(DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbReadTable">dbReadTable</a></span>(dblite, <span class="st">"units"</span>))
+<span class="co">#&gt;   UnitsID           UnitsTypeCV UnitsAbbreviation       UnitsName</span>
+<span class="co">#&gt; 1       1         Absorbed dose                Gy            Gray</span>
+<span class="co">#&gt; 2       2         Absorbed dose               rad             RAD</span>
+<span class="co">#&gt; 3       3    Absorbed dose rate              Gy/s Gray per Second</span>
+<span class="co">#&gt; 4       4 Amount of Information               ban             Ban</span>
+<span class="co">#&gt; 5       5 Amount of Information               bit             Bit</span>
+<span class="co">#&gt; 6       6 Amount of Information                By            Byte</span>
+<span class="co">#&gt;   UnitsLink</span>
+<span class="co">#&gt; 1      &lt;NA&gt;</span>
+<span class="co">#&gt; 2      &lt;NA&gt;</span>
+<span class="co">#&gt; 3      &lt;NA&gt;</span>
+<span class="co">#&gt; 4      &lt;NA&gt;</span>
+<span class="co">#&gt; 5      &lt;NA&gt;</span>
+<span class="co">#&gt; 6      &lt;NA&gt;</span></code></pre></div>
+</div>
+<div id="describe-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#describe-functions" class="anchor"></a>“Describe”" functions</h2>
 <p>Add information using <code>db_describe_%TABLE%</code> functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> dblite, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
      <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
@@ -136,11 +162,15 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <li>annotations</li>
 <li>organizations (necessary for equipment)</li>
 </ul>
-<p>In progress:</p>
+</div>
+<div id="work-in-progress" class="section level2">
+<h2 class="hasAnchor">
+<a href="#work-in-progress" class="anchor"></a>Work In Progress:</h2>
 <ul>
 <li>describe sites</li>
 <li>describe samples</li>
 </ul>
+<p>Each of the “describe” functions will have a corresponding function to list the current entities in that table (option verbose = TRUE provides more details than just the name). Updated version of the describe functions will compare new entity to existing ones in database.</p>
 <p>Data are uploaded using “insert” functions and specifying a “results_type” as one of:</p>
 <ul>
 <li>measurement: in-situ point measurement (numeric) taken at a site</li>

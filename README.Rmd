@@ -35,22 +35,40 @@ devtools::install_github("khondula/rodm2")
 
 ## Usage
 
-`rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a formal database. 
+`rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure. 
 
-Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
+**With a PostgreSQL database**
+
+A script for creating a PostgreSQL database with the ODM2 schema is [here](https://github.com/ODM2/ODM2/blob/master/src/blank_schema_scripts/postgresql/ODM2_for_PostgreSQL.sql) and instructions for populating the controlled vocabularies tables using a script are [here](https://github.com/ODM2/ODM2/tree/master/src/load_cvs).
+
+You will need to create a database connection object, eg. using `DBI::dbConnect()` and your host and log-in credentials. 
+
+**Without an external database**
+
+Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R. By default, `create_sqlite()` just creates the sqlite file but `connect = TRUE` will return the connection object as well. 
 
 ```{r, eval=FALSE}
 library(rodm2)
-create_sqlite(dir = ".")
+dblite <- create_sqlite(connect = TRUE)
 ```
 
-To work with it in R, create a connection object
+Or create a connection to an existing sqlite file using `dbConnect` and the name of the file. 
 
 ```{r}
 dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-head(RSQLite::dbListTables(dblite))
 ```
+
+There are 132 tables in the database. The "blank" database has the Units table populated as well as all of the controlled vocabularies (that start with `CV_`). 
+```{r}
+head(DBI::dbListTables(dblite))
+DBI::dbListFields(dblite, "featureactions")
+head(DBI::dbReadTable(dblite, "units"))
+```
+
+## "Describe"" functions
+
 Add information using `db_describe_%TABLE%` functions. 
+
 ```{r}
 rodm2::db_describe_person(db = dblite, PersonFirstName = "Wendy",
      PersonLastName = "Wetland",
@@ -66,7 +84,7 @@ There are currently "describe" functions for:
 * annotations
 * organizations (necessary for equipment)
 
-In progress:
+## Work In Progress:
 
 * describe sites
 * describe samples

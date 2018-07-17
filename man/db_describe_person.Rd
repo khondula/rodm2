@@ -5,7 +5,7 @@
 \title{Describe a new person in the people and affiliations tables}
 \usage{
 db_describe_person(db = db, PersonFirstName, PersonLastName,
-  AffiliationStartDate, PrimaryEmail)
+  AffiliationStartDate = Sys.Date(), PrimaryEmail)
 }
 \arguments{
 \item{db}{Database connection object (must be postgresql or sqlite)}
@@ -14,7 +14,7 @@ db_describe_person(db = db, PersonFirstName, PersonLastName,
 
 \item{PersonLastName}{Last name of the person}
 
-\item{AffiliationStartDate}{The date (YYYY-MM-DD) on which the person became affiliated with the organization}
+\item{AffiliationStartDate}{The date (YYYY-MM-DD) on which the person became affiliated with the organization. Default is todays date}
 
 \item{PrimaryEmail}{The primary email address of the person}
 }
@@ -27,8 +27,8 @@ Describe a new person in the people and affiliations tables
 \examples{
 create_sqlite(dir = ".")
 db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-db_describe_person(db = db, PersonFirstName = "Wendy", 
-    PersonLastName = "Wetland", 
-    AffiliationStartDate = "2018-01-01", 
+db_describe_person(db = db, PersonFirstName = "Wendy",
+    PersonLastName = "Wetland",
+    AffiliationStartDate = "2018-01-01",
     PrimaryEmail = "wendy 'at' swamps.edu")
 }
