@@ -114,6 +114,7 @@ db_describe_equipment <- function(db,
                                       vendorname = vendor,
                                       equipmentpurchasedate = purchase_date))
   RSQLite::dbClearResult(sql6)
-  message(paste0(owner_first,"'s", model_name, equipment_type, equip_name,
-                 "has been added to the Equipment table."))
+  message(paste0(owner_first,"'s ", model_name, " ",
+                 equipment_type, " ", equip_name,
+                 " has been added to the Equipment table."))
 }
