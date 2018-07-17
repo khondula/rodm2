@@ -79,3 +79,25 @@ db_describe_person <- function(db = db,
 
 
 }
+
+#' Get list of people currently in database
+#'
+#' @param db
+#'
+#' @return the current first and last names in the people table
+#' @export
+#'
+#' @examples
+#' #db_get_methods(db)
+db_get_people <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  if (class(db) == "SQLiteConnection"){
+    current_ppl <- DBI::dbGetQuery(db, "SELECT personfirstname, personlastname FROM people")
+  }
+  if (class(db) == "PosgreSQLConnection"){
+    current_ppl <- DBI::dbGetQuery(db, "SELECT personfirstname, personlastname FROM odm2.people")
+  }
+  return(current_ppl)
+}
+
