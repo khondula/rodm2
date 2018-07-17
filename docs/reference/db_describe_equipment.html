@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • rodm2</title>
+<title>Add a piece of equipment to the equipment table — db_describe_equipment • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Add a piece of equipment to the equipment table — db_describe_equipment" />
+
+<meta property="og:description" content="Add a piece of equipment to the equipment table" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -117,126 +120,96 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Add a piece of equipment to the equipment table</h1>
+    
+    <div class="hidden name"><code>db_describe_equipment.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Add a piece of equipment to the equipment table</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="create_sqlite.html">create_sqlite()</a></code> </p>
-        </td>
-        <td><p>Make a new ODM2 sqlite database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_annotation.html">db_describe_annotation()</a></code> </p>
-        </td>
-        <td><p>Add a new annotation text</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_equipment.html">db_describe_equipment()</a></code> </p>
-        </td>
-        <td><p>Add a piece of equipment to the equipment table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_method.html">db_describe_method()</a></code> </p>
-        </td>
-        <td><p>Describe a new method</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_organization.html">db_describe_organization()</a></code> </p>
-        </td>
-        <td><p>Add a new entry to the Organizations table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_person.html">db_describe_person()</a></code> </p>
-        </td>
-        <td><p>Describe a new person in the people and affiliations tables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_describe_variable.html">db_describe_variable()</a></code> </p>
-        </td>
-        <td><p>Describe a new variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_get_methods.html">db_get_methods()</a></code> </p>
-        </td>
-        <td><p>Get list of methods currently in database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_get_people.html">db_get_people()</a></code> </p>
-        </td>
-        <td><p>Get list of people currently in database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_get_variables.html">db_get_variables()</a></code> </p>
-        </td>
-        <td><p>Get list of variables currently in database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_insert_measurements_sm.html">db_insert_measurements_sm()</a></code> </p>
-        </td>
-        <td><p>Insert new soil moisture measurements</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_insert_sample_relations.html">db_insert_sample_relations()</a></code> </p>
-        </td>
-        <td><p>Insert new sample relationships to the related features table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_insert_samples.html">db_insert_samples()</a></code> </p>
-        </td>
-        <td><p>Insert new samples from a new_samples dataframe</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_insert_sites_latlon.html">db_insert_sites_latlon()</a></code> </p>
-        </td>
-        <td><p>Insert new sites from a new_sites table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pipe.html">get_site_names_like()</a></code> <code><a href="pipe.html">check_samplingfeaturecodes()</a></code> </p>
-        </td>
-        <td><p>Search for site names with a pattern</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>db_describe_equipment</span>(<span class='no'>db</span>, <span class='no'>equip_name</span>, <span class='no'>serial_no</span>, <span class='no'>model_name</span>, <span class='no'>vendor</span>,
+  <span class='no'>owner_first</span>, <span class='kw'>equipment_type</span> <span class='kw'>=</span> <span class='st'>"Sensor"</span>, <span class='kw'>owner_last</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>owner_email</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>manufacturer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>purchase_date</span> <span class='kw'>=</span> <span class='fu'>Sys.Date</span>())</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>db</th>
+      <td><p>database connection</p></td>
+    </tr>
+    <tr>
+      <th>equip_name</th>
+      <td><p>a short code name of the instrument</p></td>
+    </tr>
+    <tr>
+      <th>serial_no</th>
+      <td><p>serial number of equipment</p></td>
+    </tr>
+    <tr>
+      <th>model_name</th>
+      <td><p>model name of equipment</p></td>
+    </tr>
+    <tr>
+      <th>vendor</th>
+      <td><p>organization that sold the product</p></td>
+    </tr>
+    <tr>
+      <th>owner_first</th>
+      <td><p>first name of person who owns equipment</p></td>
+    </tr>
+    <tr>
+      <th>equipment_type</th>
+      <td><p>type of equipment, defaults to sensor</p></td>
+    </tr>
+    <tr>
+      <th>owner_last</th>
+      <td><p>last name of person who owns equipment,
+required if the person is not in the people table already</p></td>
+    </tr>
+    <tr>
+      <th>owner_email</th>
+      <td><p>email of person who owns equipment,
+required if the person is not in the people table arelady</p></td>
+    </tr>
+    <tr>
+      <th>manufacturer</th>
+      <td><p>company that makes the model of the equipment,
+required if the model is not in the equipmentmodels table</p></td>
+    </tr>
+    <tr>
+      <th>purchase_date</th>
+      <td><p>date that the equipment was purchased,
+defaults to current date</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>TRUE if successful</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>db_describe_equipment</span>(<span class='no'>db</span>, <span class='st'>"unit1"</span>, <span class='st'>"001"</span>, <span class='st'>"model1"</span>,
+<span class='st'>"vendor name"</span>, <span class='st'>"Wendy"</span>, <span class='st'>"Sensor"</span>, <span class='st'>"Wetland"</span>, <span class='st'>"ww email"</span>, <span class='st'>"hobo"</span>)</div><div class='output co'>#&gt; <span class='message'>Wendy Wetland has been entered into the People table.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Closing open result set, pending rows</span></div><div class='output co'>#&gt; <span class='message'>Wendy's model1 Sensor unit1 has been added to the Equipment table.</span></div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 
