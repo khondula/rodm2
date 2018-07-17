@@ -42,7 +42,7 @@ db_describe_equipment <- function(db,
   if (class(db) == "SQLiteConnection"){
 
   sql1 <- RSQLite::dbSendStatement(db,
-                                   "SELECT modelid FROM models WHERE modelname = :modelname")
+                                   "SELECT equipmentmodelid FROM equipmentmodels WHERE modelname = :modelname")
   RSQLite::dbBind(sql1, param = list(modelname = model_name))
   modelid <- DBI::dbFetch(sql1)
   RSQLite::dbClearResult(sql1)
@@ -191,7 +191,7 @@ db_describe_equipment <- function(db,
                                   equipmentpurchasedate)
                                   VALUES
                                   (?equipmentcode, ?equipmentname, ?equipmenttype,
-                                  (SELECT equipmentmodelid FROM equipmentmodels WHERE modelname = ?modelname),
+                                  (SELECT equipmentmodelid FROM odm2.equipmentmodels WHERE modelname = ?modelname),
                                   ?equipmentserialnumber,
                                   (SELECT personid FROM people WHERE personfirstname = ?personfirstname),
                                   (SELECT organizationid FROM organizations WHERE organizationname = ?vendorname),
@@ -205,8 +205,8 @@ db_describe_equipment <- function(db,
                                   vendorname = vendor,
                                   equipmentpurchasedate = purchase_date)
       RPostgreSQL::dbGetQuery(db, sql6)
-      message(paste0(owner_first,"'s", model_name, equipment_type, equip_name,
-                     "has been added to the Equipment table."))
-
+      message(paste0(owner_first,"'s ", model_name, " ",
+                     equipment_type, " ", equip_name,
+                     " has been added to the Equipment table."))
   }
 }
