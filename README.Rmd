@@ -58,7 +58,16 @@ Or create a connection to an existing sqlite file using `dbConnect` and the name
 dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 ```
 
-There are 132 tables in the database. The "blank" database has the Units table populated as well as all of the controlled vocabularies (that start with `CV_`). 
+There are 132 tables in the database. The "blank" database has the Units table populated as well as all of the controlled vocabularies.
+
+See the terms for a given controlled vocabulary:
+
+```{r}
+get_cv_terms("methodtype")
+```
+
+Explore the database structure: 
+
 ```{r}
 head(DBI::dbListTables(dblite))
 DBI::dbListFields(dblite, "featureactions")
