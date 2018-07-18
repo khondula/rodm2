@@ -63,7 +63,7 @@ There are 132 tables in the database. The "blank" database has the Units table p
 See the terms for a given controlled vocabulary:
 
 ```{r}
-get_cv_terms("methodtype")
+rodm2::get_cv_terms("methodtype")
 ```
 
 Explore the database structure: 
