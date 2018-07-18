@@ -11,7 +11,7 @@ db_describe_equipment(db, equip_name, serial_no, model_name, vendor,
 \arguments{
 \item{db}{database connection}
 
-\item{equip_name}{a short code name of the instrument}
+\item{equip_name}{a unique short code name of the instrument}
 
 \item{serial_no}{serial number of equipment}
 

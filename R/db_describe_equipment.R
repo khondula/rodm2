@@ -1,7 +1,7 @@
 #' Add a piece of equipment to the equipment table
 #'
 #' @param db database connection
-#' @param equip_name a short code name of the instrument
+#' @param equip_name a unique short code name of the instrument
 #' @param serial_no serial number of equipment
 #' @param model_name model name of equipment
 #' @param vendor organization that sold the product
@@ -92,7 +92,7 @@ db_describe_equipment <- function(db,
   if(nrow(ownerid) < 1){
     # if not, check that last name and email argument is supplied
     if(is.null(owner_last) | is.null(owner_email)){
-      stop("Owner is new person. Please supply last name and email.")
+      stop("Owner is new person. Please supply owner_last and owner_email.")
     }
     rodm2::db_describe_person(db,PersonFirstName = owner_first,
                               PersonLastName = owner_last, PrimaryEmail = owner_email)
