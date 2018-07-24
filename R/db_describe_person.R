@@ -92,6 +92,7 @@ db_describe_person <- function(db = db,
 db_get_people <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_ppl <- c()
   if (class(db) == "SQLiteConnection"){
     current_ppl <- DBI::dbGetQuery(db, "SELECT personfirstname, personlastname FROM people")
   }

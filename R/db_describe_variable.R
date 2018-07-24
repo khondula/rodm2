@@ -80,6 +80,7 @@ db_describe_variable <- function(db,
 db_get_variables <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_variables <- c()
   if (class(db) == "SQLiteConnection"){
     current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM variables")
   }

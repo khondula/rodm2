@@ -69,6 +69,7 @@ db_describe_method <- function(db,
 db_get_methods <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_methods <- c()
   if (class(db) == "SQLiteConnection"){
     current_methods <- DBI::dbGetQuery(db, "SELECT methodname FROM methods")
   }
