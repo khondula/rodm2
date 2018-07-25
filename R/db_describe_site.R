@@ -1,23 +1,19 @@
 #' Describe a new site
 #'
-#' @param db database connection
-#' @param sitecode unique short code name for site
-#' @param site_geometry sf object with point coordinates of site
-#' @param sitetype term from sitetype controlled vocabulary
+#' @param db database connection object
+#' @param site_code unique short code name (required)
+#' @param site_name optional longer site name
+#' @param site_description optional longer site description
 #'
-#' @return message that site has been added
+#' @return message that site was added
 #' @export
 #'
 #' @examples
 #' # just add site name
-#' db <- create_sqlite(connect = TRUE)
-#' db_describe_site(db, sitecode = "new_site")
-#' # add a site with coordinate information
-#' db_describe_site(db, sitecode = "new_site2", geometry = site_sf, sitetype = 'Unknown')
-db_describe_site <- function(db,
-                             sitecode,
-                             site_geometry = NULL,
-                             sitetype = NULL){
+#' db <- rodm2::create_sqlite(connect = TRUE)
+#' db_describe_site(db, site_code = "new_site")
+db_describe_site <- function(db, site_code, site_name = NULL, site_description = NULL){
+
   # if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
   #   stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
@@ -27,40 +23,89 @@ db_describe_site <- function(db,
   # check type of database object
   if (class(db) == "SQLiteConnection"){
     sql1 <- RSQLite::dbSendStatement(db,
-        'INSERT or IGNORE INTO samplingfeatures
-        (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
-        VALUES
-        (:samplingfeatureuuid, :samplingfeaturetypecv, :samplingfeaturecode)')
+                                     'INSERT or IGNORE INTO samplingfeatures
+                                     (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
+                                     VALUES
+                                     (:samplingfeatureuuid, :samplingfeaturetypecv, :samplingfeaturecode)')
     RSQLite::dbBind(sql1, param = list(samplingfeatureuuid = uuid::UUIDgenerate(),
-                                      samplingfeaturetypecv = 'Site',
-                                      samplingfeaturecode = sitecode))
+                                       samplingfeaturetypecv = 'Site',
+                                       samplingfeaturecode = site_code))
     RSQLite::dbClearResult(res = sql1)
-    message(paste("Site", sitecode, "has been entered into the samplingfeatures table."))
+    if(!is.null(site_name)){
+      sql2 <- RSQLite::dbSendStatement(db,
+                                       'UPDATE samplingfeatures
+                                       SET samplingfeaturename = :sitename
+                                       WHERE samplingfeaturecode = :samplingfeaturecode')
+      RSQLite::dbBind(sql2, param = list(sitename = site_name,
+                                         samplingfeaturecode = site_code))
+      RSQLite::dbClearResult(res = sql2)
+    }
+    if(!is.null(site_description)){
+      sql3 <- RSQLite::dbSendStatement(db,
+                                       'UPDATE samplingfeatures
+                                       SET samplingfeaturedescription = :sitedescription
+                                       WHERE samplingfeaturecode = :samplingfeaturecode')
+      RSQLite::dbBind(sql3, param = list(sitedescription = site_description,
+                                         samplingfeaturecode = site_code))
+      RSQLite::dbClearResult(res = sql3)
+    }
+    message(paste("Site", site_code, "has been entered into the samplingfeatures table."))
   }
+}
 
-  if(!is.null(sitetype) | !is.null(site_geometry)){
-    if (!c("sf") %in% class(site_geometry)) {
-      stop("Please supply site_geometry as an sf object, eg. using sf::st_as_sf().")}
-    if (is.na(st_crs(site_geometry))) {
+#' Describe a new site with geometry
+#'
+#' @param db database connection
+#' @param site_code unique short code name for site or maybe column of sf with site code
+#' @param site_geometry sf object with point coordinates of site
+#' @param sitetype term from sitetype controlled vocabulary
+#' @param ... additional parameters to db_describe_site (site_name, site_description)
+#'
+#' @return message that site has been added
+#' @export
+#'
+#' @examples
+#' # add a site with coordinate information
+#' db <- rodm2::create_sqlite(connect = TRUE)
+#' pt1 <- sf::st_sfc(sf::st_point(c(-76.503394, 38.976546)),crs = sf::st_crs(4326))
+#' site_sf <- sf::st_sf(data.frame(site_code = "my_site", geom = pt1))
+#' db_describe_site_geom(db, site_code = "my_code", site_geometry = site_sf, sitetype = 'Unknown')
+db_describe_site_geom <- function(db,
+                                  site_code,
+                                  site_geometry,
+                                  sitetype, ...){
+  # if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+  #   stop("sorry, only sqlite and postgresql database connections are supported so far")}
+
+  if (!class(db) %in% c("SQLiteConnection")) {
+    stop("sorry, only sqlite database connections are supported so far")}
+
+  # check type of database object
+  if (class(db) == "SQLiteConnection"){
+
+    # if () {
+    #   stop("Please supply site_geometry as an sf object, eg. using sf::st_as_sf().")}
+    if (is.na(sf::st_crs(site_geometry))) {
       stop("Missing coordinate reference system. Please set crs of site_geometry.")}
+
+
+    rodm2::db_describe_site(db, site_code = site_code, ...)
 
     sql2 <- RSQLite::dbSendStatement(db,
                 "UPDATE samplingfeatures SET featuregeometry = :featuregeometry
                 WHERE samplingfeaturecode = :sitecode")
-    RSQLite::dbBind(sql2, param = list(featuregeometry = st_as_text(site_geometry$geometry),
-                                      sitecode = sitecode))
+    RSQLite::dbBind(sql2, param = list(featuregeometry = sf::st_as_text(site_geometry$geometry),
+                                      sitecode = site_code))
     RSQLite::dbClearResult(res = sql2)
 
     sql3 <- RSQLite::dbSendStatement(db,
                                     'INSERT or IGNORE INTO spatialreferences
-                                    (srscode, srsname, srsdescription)
+                                    (srscode, srsname)
                                     VALUES
                                     (:srscode,
-                                    :srsname,
-                                    :srsdescription)')
+                                    :srsname)')
     RSQLite::dbBind(sql3, param = list(srscode = as.character(sf::st_crs(site_geometry)[1]),
-                                      srsname = paste('EPSG:', sf::st_crs(site_geometry)[1]),
-                                      srsdescription = srsdescription))
+                                      srsname = paste('EPSG:', sf::st_crs(site_geometry)[1])))
     RSQLite::dbClearResult(res = sql3)
 
     sql4 <- RSQLite::dbSendStatement(db,
@@ -78,11 +123,11 @@ db_describe_site <- function(db,
                                      (SELECT spatialreferenceid
                                      FROM spatialreferences
                                      WHERE srscode = :srscode))')
-    RSQLite::dbBind(sql4, param = list(sitecode = sitecode,
+    RSQLite::dbBind(sql4, param = list(sitecode = site_code,
                                       sitetypecv = sitetype,
-                                      latitude = st_coordinates(site_geometry)[,"Y"],
-                                      longitude = st_coordinates(site_geometry)[,"X"],
-                                      srscode = as.character(st_crs(site_geometry)[1])))
+                                      latitude = sf::st_coordinates(site_geometry)[,"Y"],
+                                      longitude = sf::st_coordinates(site_geometry)[,"X"],
+                                      srscode = as.character(sf::st_crs(site_geometry)[1])))
     RSQLite::dbClearResult(res = sql4)
   }
 

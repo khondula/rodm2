@@ -19,5 +19,6 @@ Imports:
     RSQLite,
     DBI,
     fs,
-    crayon
+    crayon,
+    sf
 RoxygenNote: 6.0.1
