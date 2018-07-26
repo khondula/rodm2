@@ -28,7 +28,7 @@ This project is just getting started! Get in touch or open an [issue](https://gi
 
 You can install this package from GitHub with:
 
-```{r, message=FALSE}
+```{r, message=FALSE, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("khondula/rodm2")
 ```
@@ -47,14 +47,14 @@ You will need to create a database connection object, eg. using `DBI::dbConnect(
 
 Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R. By default, `create_sqlite()` just creates the sqlite file but `connect = TRUE` will return the connection object as well. 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(rodm2)
 dblite <- create_sqlite(connect = TRUE)
 ```
 
 Or create a connection to an existing sqlite file using `dbConnect` and the name of the file. 
 
-```{r}
+```{r, eval=FALSE}
 dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 ```
 

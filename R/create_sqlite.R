@@ -2,7 +2,7 @@
 #' Make a new ODM2 sqlite database
 #'
 #' @param dir Name of existing directory for the sqlite database file to be created in. Defaults to current directory
-#' @param filename Filename for sqlite database file. Defaults to odm2, creating odm2.sqlite
+#' @param filename Filename for sqlite database file. Defaults to `odm2`, creating odm2.sqlite
 #' @param connect whether or not to return the database connection object
 #'
 #' @details This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
@@ -10,9 +10,9 @@
 #' @export
 #'
 #' @examples
-#' rodm2::create_sqlite(dir = tempdir())
+#' create_sqlite(dir = tempdir())
 #' dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-#'
+
 create_sqlite <- function(dir = ".", filename = "odm2", connect = FALSE){
   path <- file.path(dir)
   template_file <- system.file("odm2-template.sqlite", package = "rodm2")
@@ -22,7 +22,7 @@ create_sqlite <- function(dir = ".", filename = "odm2", connect = FALSE){
   if(connect){
     return(DBI::dbConnect(RSQLite::SQLite(),
                           dbname = file.path(dir, paste0(filename, ".sqlite"))))
-  }
+}
 }
 
 

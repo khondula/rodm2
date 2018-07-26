@@ -5,7 +5,7 @@
 \title{Describe a new variable}
 \usage{
 db_describe_variable(db, variabletypecv, variablecode, variablenamecv,
-  variabledefinition, nodatavalue = -9999)
+  variabledefinition = NULL, nodatavalue = -9999)
 }
 \arguments{
 \item{db}{database connection object}
@@ -16,7 +16,7 @@ db_describe_variable(db, variabletypecv, variablecode, variablenamecv,
 
 \item{variablenamecv}{variable name from controlled vocab}
 
-\item{variabledefinition}{longer definition}
+\item{variabledefinition}{optional longer definition}
 
 \item{nodatavalue}{no data value}
 }

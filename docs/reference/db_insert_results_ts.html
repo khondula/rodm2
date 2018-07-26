@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a new entry to the Organizations table — db_describe_organization • rodm2</title>
+<title>Insert time series data values to ODM2 database — db_insert_results_ts • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Add a new entry to the Organizations table — db_describe_organization" />
+<meta property="og:title" content="Insert time series data values to ODM2 database — db_insert_results_ts" />
 
-<meta property="og:description" content="Add a new entry to the Organizations table" />
+<meta property="og:description" content="Insert time series data values to ODM2 database" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,50 +122,99 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a new entry to the Organizations table</h1>
+    <h1>Insert time series data values to ODM2 database</h1>
     
-    <div class="hidden name"><code>db_describe_organization.Rd</code></div>
+    <div class="hidden name"><code>db_insert_results_ts.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Add a new entry to the Organizations table</p>
+    <p>Insert time series data values to ODM2 database</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_organization</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='no'>OrganizationTypeCV</span>, <span class='no'>OrganizationCode</span>,
-  <span class='no'>OrganizationName</span>)</pre>
+    <pre class="usage"><span class='fu'>db_insert_results_ts</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>method</span>, <span class='no'>site_code</span>, <span class='no'>variables</span>,
+  <span class='no'>sampledmedium</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>, <span class='kw'>actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>equipment</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>aggregationstatisticcv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>zlocationunits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>db</th>
-      <td><p>database connection object to sqlite or postgresql database with odm2 schema</p></td>
+      <td><p>database connection</p></td>
     </tr>
     <tr>
-      <th>OrganizationTypeCV</th>
-      <td><p>Controlled vocab term defining the type of organization (e.g., government agency, university, etc.)</p></td>
+      <th>datavalues</th>
+      <td><p>data frame with columns "Timestamp" with
+POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></td>
     </tr>
     <tr>
-      <th>OrganizationCode</th>
-      <td><p>A text code identifying the Organization (e.g., USGS)</p></td>
+      <th>method</th>
+      <td><p>code for method used to collect data</p></td>
     </tr>
     <tr>
-      <th>OrganizationName</th>
-      <td><p>The full text name of the organization</p></td>
+      <th>site_code</th>
+      <td><p>sampling feature code at which data were collected</p></td>
+    </tr>
+    <tr>
+      <th>variables</th>
+      <td><p>a named list defining units for variable names in datavalues data frame
+with format list("variablen1ame" = "units1name", "variable2name" = "units2name")</p></td>
+    </tr>
+    <tr>
+      <th>sampledmedium</th>
+      <td><p>term from controlled vocabulary for medium sampled eg. Air, Water, Soil</p></td>
+    </tr>
+    <tr>
+      <th>processinglevel</th>
+      <td><p>code for processing level. will be added to processinglevels table if new.
+defaults to "Raw data'.</p></td>
+    </tr>
+    <tr>
+      <th>actionby</th>
+      <td><p>(optional) the person who performed the action</p></td>
+    </tr>
+    <tr>
+      <th>equipment</th>
+      <td><p>(optional) the equipment used to collect the data</p></td>
+    </tr>
+    <tr>
+      <th>aggregationstatisticcv</th>
+      <td><p>term from controlled vocabulary</p></td>
+    </tr>
+    <tr>
+      <th>zlocation</th>
+      <td><p>(optional) z location offset</p></td>
+    </tr>
+    <tr>
+      <th>zlocationunits</th>
+      <td><p>(optional but required if zlocation is set) name of units of z location offset</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>parameters to pass to various db_describe_ functions</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>message that your entry has been added</p>
+    <p>true if successful</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>create_sqlite</span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>)
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/DBI/topics/dbConnect'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/RSQLite/topics/SQLite'>SQLite</a></span>(), <span class='st'>"odm2.sqlite"</span>)
-<span class='fu'>db_describe_organization</span>(<span class='no'>db</span>, <span class='st'>"Manufacturer"</span>, <span class='st'>"Onset"</span>, <span class='st'>"Onset"</span>)</div><div class='output co'>#&gt; <span class='message'>Manufacturer Onset has been entered into the Organizations table.</span></div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'>create_sqlite</span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>tsrv</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='st'>"2018-06-27 13:55:00"</span>,
+<span class='st'>"Wind direction"</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='st'>"Wind speed"</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='st'>"Wind gust speed"</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='fu'>db_insert_results_ts</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>tsrv</span>,
+<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"SonicAnemometer"</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>,
+<span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"Wind direction"</span> <span class='kw'>=</span> <span class='st'>"Degree"</span>,
+<span class='st'>"Wind speed"</span> <span class='kw'>=</span> <span class='st'>"Meter per Second"</span>, <span class='st'>"Wind gust speed"</span> <span class='kw'>=</span> <span class='st'>"Meter per Second"</span>),
+<span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
+<span class='kw'>sampledmedium</span> <span class='kw'>=</span> <span class='st'>"Air"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

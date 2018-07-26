@@ -4,7 +4,8 @@
 \alias{db_describe_method}
 \title{Describe a new method}
 \usage{
-db_describe_method(db, methodname, methodcode, methodtypecv, methoddescription)
+db_describe_method(db, methodname, methodcode, methodtypecv,
+  methoddescription = NULL)
 }
 \arguments{
 \item{db}{database connection object}
@@ -15,7 +16,7 @@ db_describe_method(db, methodname, methodcode, methodtypecv, methoddescription)
 
 \item{methodtypecv}{method type from controlled vocabulary}
 
-\item{methoddescription}{longer description}
+\item{methoddescription}{optional longer description}
 }
 \value{
 TRUE if successful
