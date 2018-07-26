@@ -27,7 +27,7 @@ db_describe_method <- function(db,
 
     sql1 <- RSQLite::dbSendStatement(db,
               'INSERT INTO methods
-              (methodtypecv, methodcode, methodname, methoddescription)
+              (methodtypecv, methodcode, methodname)
               VALUES
               (:methodtypecv, :methodcode, :methodname)')
     RSQLite::dbBind(sql1, param = list(methodtypecv = methodtypecv,
@@ -48,7 +48,7 @@ db_describe_method <- function(db,
   if (class(db) == "PostgreSQLConnection"){
     sql <- DBI::sqlInterpolate("INSERT INTO odm2.methods
                  (methodtypecv, methodcode,
-                  methodname, methoddescription)
+                  methodname)
                  VALUES
                  (?methodtypecv, ?methodcode,
                   ?methodname)",
