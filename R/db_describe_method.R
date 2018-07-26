@@ -3,7 +3,7 @@
 #' @param methodname full name of method
 #' @param methodcode short codename for method
 #' @param methodtypecv method type from controlled vocabulary
-#' @param methoddescription longer description
+#' @param methoddescription optional longer description
 #' @param db database connection object
 #'
 #' @return TRUE if successful
@@ -17,7 +17,7 @@ db_describe_method <- function(db,
                                methodname,
                                methodcode,
                                methodtypecv,
-                               methoddescription){
+                               methoddescription = NULL){
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
@@ -29,12 +29,18 @@ db_describe_method <- function(db,
               'INSERT INTO methods
               (methodtypecv, methodcode, methodname, methoddescription)
               VALUES
-              (:methodtypecv, :methodcode, :methodname, :methoddescription)')
+              (:methodtypecv, :methodcode, :methodname)')
     RSQLite::dbBind(sql1, param = list(methodtypecv = methodtypecv,
                                        methodcode = methodcode,
-                                       methodname = methodname,
-                                       methoddescription = methoddescription))
+                                       methodname = methodname))
     RSQLite::dbClearResult(res = sql1)
+
+    if(!is.null(methoddescription)){
+      sql2 <- RSQLite::dbSendStatement(db, "UPDATE methods SET methoddescription = :methoddescription WHERE methodcode = :methodcode")
+      RSQLite::dbBind(sql2, params = list(methoddescription = methoddescription,
+                                          methodcode = methodcode))
+      RSQLite::dbClearResult(res = sql2)
+    }
     message(paste(methodname, "has been added to the Methods table."))
 
   }
@@ -45,13 +51,22 @@ db_describe_method <- function(db,
                   methodname, methoddescription)
                  VALUES
                  (?methodtypecv, ?methodcode,
-                  ?methodname, ?methoddescription)",
+                  ?methodname)",
                 methodtypecv = methodtypecv,
                 methodcode = methodcode,
-                methodname = methodname,
-                methoddescription = methoddescription)
+                methodname = methodname)
 
     RPostgreSQL::dbGetQuery(db, sql)
+
+    if(!is.null(methoddescription)){
+      sql2 <- DBI::sqlInterpolate(db, "UPDATE odm2.methods
+                                  SET methoddescription = ?methoddescription
+                                  WHERE methodcode = :methodcode",
+                                  methoddescription = methoddescription,
+                                          methodcode = methodcode)
+      RPostgreSQL::dbGetQuery(db, sql2)
+    }
+
     message(paste(methodname, "has been added to the Methods table."))
   }
 }
