@@ -90,11 +90,13 @@ db_insert_results_ts <- function(db,
 
     sql1 <- RSQLite::dbSendQuery(db, sql1)
     RSQLite::dbBind(sql1, params = list(method = method,
-                                        begindatetime = format(datavalues[["Timestamp"]][1],
+                                        begindatetime = format(as.POSIXct(datavalues[["Timestamp"]][1]),
                                                                "%Y-%m-%d %H:%M:%S"),
-                                        begindatetimeutcoffset = as.integer(format(datavalues[["Timestamp"]][1],
+                                        begindatetimeutcoffset = as.integer(format(as.POSIXct(
+                                          datavalues[["Timestamp"]][1]),
                                                                                    "%z")),
-                                        enddatetime = format(datavalues[["Timestamp"]][nrow(datavalues)],
+                                        enddatetime = format(as.POSIXct(
+                                          datavalues[["Timestamp"]][nrow(datavalues)]),
                                                              "%Y-%m-%d %H:%M:%S")))
     RSQLite::dbClearResult(res = sql1)
     newactionid <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
@@ -130,7 +132,7 @@ db_insert_results_ts <- function(db,
     RSQLite::dbBind(sql3, params = list(newactionid = newactionid,
                                         site_code = site_code))
     RSQLite::dbClearResult(res = sql3)
-    newfaid <- as.integer(dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
+    newfaid <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
 
     # add result! new result for each
     newresultids <- c()
@@ -156,7 +158,7 @@ db_insert_results_ts <- function(db,
                                           valuecount = nrow(datavalues)
       ))
       RSQLite::dbClearResult(res = sql4)
-      newresultids <- append(newresultids, as.integer(dbGetQuery(db, "SELECT LAST_INSERT_ROWID()")))
+      newresultids <- append(newresultids, as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()")))
     }
     names(newresultids) <- names(variables)
 
@@ -181,8 +183,8 @@ db_insert_results_ts <- function(db,
       datavalues_var <- datavalues[, c("Timestamp", i)]
       # make data frame to append
       names(datavalues_var) <- c("valuedatetime", "datavalue")
-      datavalues_var$valuedatetimeutcoffset = as.integer(format(datavalues_var$valuedatetime, "%z"))
-      datavalues_var$valuedatetime <- format(datavalues_var$valuedatetime, "%Y-%m-%d %H:%M:%S")
+      datavalues_var$valuedatetimeutcoffset = as.integer(format(as.POSIXct(datavalues_var$valuedatetime), "%z"))
+      datavalues_var$valuedatetime <- format(as.POSIXct(datavalues_var$valuedatetime), "%Y-%m-%d %H:%M:%S")
       datavalues_var$resultid <- as.integer(newresultids[[i]])
       datavalues_var$censorcodecv = "Unknown"
       datavalues_var$qualitycodecv = "Unknown" # allow for column to be specified...

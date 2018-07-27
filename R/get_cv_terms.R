@@ -19,5 +19,5 @@ get_cv_terms <- function(cvtype){
   cv_message <- paste(crayon::cyan(cvtype, "controlled vocabulary terms:"), cv_sub)
   writeLines(cv_message)
   file.remove(file.path(tmp, "odm2.sqlite"))
-  invisible(cv)
+  invisible(cv$Name)
 }

@@ -1,10 +1,10 @@
 ---
-title: "Insert soil moisture measurements into PostgreSQL database"
+title: "Insert time series results"
 author: "Kelly Hondula"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Insert soil moisture measurements into PostgreSQL database}
+  %\VignetteIndexEntry{Insert time series results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,50 +16,75 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+Load rodm2 and create an empty sqlite database. Use the `connect = TRUE` argument to return the connection object to use. For an existing database, create a connection object. 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+library(rodm2)
+db <- rodm2::create_sqlite(connect = TRUE)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+This example will use a data frame of "time series result observations" with 2 observations of 3 variables. For now, this data frame must have:
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+* datetime must be in a column called "Timestamp" and formatted as YYYY-MM-DD H:M:S
+* column names but terms from the variable name controlled vocabulary. Use a tibble so that the column names can be the exact terms with spaces.
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r}
+tsrv <- tibble::tibble(Timestamp = c("2018-06-27 13:40:00","2018-06-27 13:55:00"),
+                   "Wind direction" = c(180, 170),
+                   "Wind speed" = c(1.5, 1.0), 
+                   "Wind gust speed" = c(0.7, 2.5))
+head(tsrv)
 ```
 
-Also a quote using `>`:
+To see a list of any controlled vocabulary terms, use the `get_cv_terms()` function. 
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r, }
+get_cv_terms("aggregationstatistic")
+```
+The output of this function can also be stored as a vector. 
+
+```{r, eval = FALSE}
+all_vars <- get_cv_terms("variablename")
+names(tsrv)[-1] %in% all_vars
+```
+
+A list that matches the variables (i.e. column names) to their units iq required. Make sure the units are selected from existing unit names in the units table. A new database created with `create_sqlite()` comes populated with 1203 units. 
+
+```{r}
+vars_list <- list("Wind direction" = "Degree",
+                  "Wind speed" = "Meter per Second",
+                  "Wind gust speed" = "Meter per Second")
+```
+
+The required arguments to `db_insert_results_ts()` are
+
+* database connection
+* data frame with Timestamp and [Variable Name] columns
+* list of ("variables" = "units") for each variable to be uploaded
+* method code
+* site code
+* sampled medium (from medium controlled vocabulary e.g. Air, Soil, etc.)
+
+If the variable(s), method, or site code do not already exist in the database, they will be added. 
+
+```{r}
+db_insert_results_ts(db = db, 
+                     datavalues = tsrv,
+                     variables = vars_list,
+                     method = "SonicAnemometer",
+                     site_code = "BB2",
+                     sampledmedium = "Air")
+
+```
+
+Optional arguments: 
+
+* processing level (otherwise "Raw data")
+* actionby - First name of person who performed the action. If they do not exist in the database already, arguments to the `db_describe_person()` function must also be supplied: PersonLastName and PrimaryEmail.  
+* equipment - code of the equipment used to collect the data. If not already in database, all required arguments to `db_describe_equipment()` must be supplied (there are many). 
+
+
+```{r}
+DBI::dbReadTable(db, "timeseriesresultvalues")
+```
+
