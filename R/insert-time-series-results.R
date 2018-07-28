@@ -116,7 +116,7 @@ db_insert_results_ts <- function(db,
       RSQLite::dbClearResult(res = sql2)
     }
 
-    if(!is.null(equipment)){
+    if(!is.null(equipment_name)){
       # db describe equipment function
       if(!(equipment_name %in% rodm2::db_get_equipment(db))){
         rodm2::db_describe_person(db, equip_name = equipment_name, ...)
@@ -125,9 +125,7 @@ db_insert_results_ts <- function(db,
       sql2b <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
                                        VALUES
                                        (:newactionid,
-                                       (SELECT equipmentid
-FROM equipment
-WHERE equipmentcode = :equipmentcode))')
+                                       (SELECT equipmentid FROM equipment WHERE equipmentcode = :equipmentcode))')
       RSQLite::dbBind(sql2b, params = list(newactionid = newactionid,
                                            equipmentcode = equipment_name))
       RSQLite::dbClearResult(res = sql2b)
