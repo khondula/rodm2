@@ -6,7 +6,7 @@
 \usage{
 db_insert_results_ts(db, datavalues, method, site_code, variables,
   sampledmedium, processinglevel = "Raw data", actionby = NULL,
-  equipment = NULL, aggregationstatisticcv = NULL, zlocation = NULL,
+  equipment_name = NULL, aggregationstatisticcv = NULL, zlocation = NULL,
   zlocationunits = NULL, ...)
 }
 \arguments{
@@ -29,7 +29,7 @@ defaults to "Raw data'.}
 
 \item{actionby}{(optional) the person who performed the action}
 
-\item{equipment}{(optional) the equipment used to collect the data}
+\item{equipment_name}{(optional) the equipment used to collect the data}
 
 \item{aggregationstatisticcv}{term from controlled vocabulary}
 

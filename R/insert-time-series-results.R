@@ -12,7 +12,7 @@
 #' @param processinglevel code for processing level. will be added to processinglevels table if new.
 #'   defaults to "Raw data'.
 #' @param actionby (optional) the person who performed the action
-#' @param equipment (optional) the equipment used to collect the data
+#' @param equipment_name (optional) the equipment used to collect the data
 #' @param aggregationstatisticcv term from controlled vocabulary
 #' @param zlocation (optional) z location offset
 #' @param zlocationunits (optional but required if zlocation is set) name of units of z location offset
@@ -41,7 +41,7 @@ db_insert_results_ts <- function(db,
                                  sampledmedium,
                                  processinglevel = "Raw data",
                                  actionby = NULL,
-                                 equipment = NULL,
+                                 equipment_name = NULL,
                                  aggregationstatisticcv = NULL,
                                  zlocation = NULL,
                                  zlocationunits = NULL, ...){
@@ -113,11 +113,24 @@ db_insert_results_ts <- function(db,
                                        "TRUE")')
       RSQLite::dbBind(sql2, params = list(newactionid = newactionid,
                                           actionby = actionby))
+      RSQLite::dbClearResult(res = sql2)
     }
 
     if(!is.null(equipment)){
-      # db get equipment function
-      # describe equipment
+      # db describe equipment function
+      if(!(equipment_name %in% rodm2::db_get_equipment(db))){
+        rodm2::db_describe_person(db, equip_name = equipment_name, ...)
+      }
+      # add to equipment used
+      sql2b <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
+                                       VALUES
+                                       (:newactionid,
+                                       (SELECT equipmentid
+FROM equipment
+WHERE equipmentcode = :equipmentcode))')
+      RSQLite::dbBind(sql2b, params = list(newactionid = newactionid,
+                                           equipmentcode = equipment_name))
+      RSQLite::dbClearResult(res = sql2b)
     }
 
 

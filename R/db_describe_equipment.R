@@ -210,3 +210,25 @@ db_describe_equipment <- function(db,
                      " has been added to the Equipment table."))
   }
 }
+
+#' Get list of equipment currently in database
+#'
+#' @param db
+#'
+#' @return the current values in the equipmentcode column of the equipment table
+#' @export
+#'
+#' @examples
+#' #db_get_methods(db)
+db_get_equipment <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_equipment <- c()
+  if (class(db) == "SQLiteConnection"){
+    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM equipment")
+  }
+  if (class(db) == "PosgreSQLConnection"){
+    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM odm2.equipment")
+  }
+  return(current_equipment)
+}
