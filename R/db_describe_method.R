@@ -46,11 +46,11 @@ db_describe_method <- function(db,
   }
 
   if (class(db) == "PostgreSQLConnection"){
-    sql <- DBI::sqlInterpolate("INSERT INTO odm2.methods
-                 (methodtypecv, methodcode,
+    sql <- DBI::sqlInterpolate(db, "INSERT INTO odm2.methods
+                  (methodtypecv, methodcode,
                   methodname)
-                 VALUES
-                 (?methodtypecv, ?methodcode,
+                  VALUES
+                  (?methodtypecv, ?methodcode,
                   ?methodname)",
                 methodtypecv = methodtypecv,
                 methodcode = methodcode,
@@ -86,10 +86,10 @@ db_get_methods <- function(db){
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
   current_methods <- c()
   if (class(db) == "SQLiteConnection"){
-    current_methods <- DBI::dbGetQuery(db, "SELECT methodname FROM methods")
+    current_methods <- DBI::dbGetQuery(db, "SELECT methodcode FROM methods")$methodcode
   }
-  if (class(db) == "PosgreSQLConnection"){
-    current_methods <- DBI::dbGetQuery(db, "SELECT methodname FROM odm2.methods")
+  if (class(db) == "PostgreSQLConnection"){
+    current_methods <- DBI::dbGetQuery(db, "SELECT methodcode FROM odm2.methods")$methodcode
   }
   return(current_methods)
 }
