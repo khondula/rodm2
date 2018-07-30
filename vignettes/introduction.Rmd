@@ -29,7 +29,7 @@ db <- rodm2::create_sqlite(connect = TRUE)
 
 This example will use a data frame of "time series result observations" with 2 observations of 3 variables. For now, this data frame must have:
 
-* datetime must be in a column called "Timestamp" and formatted as YYYY-MM-DD H:M:S
+* datetime must be in a column called "Timestamp" and formatted as YYYY-MM-DD HH:MM:SS
 * column names but terms from the variable name controlled vocabulary. Use a tibble so that the column names can be the exact terms with spaces.
 
 ```{r}
@@ -49,7 +49,7 @@ grep("Wind", varnames, value = TRUE)
 
 ## Variables and units
 
-A list that matches the variables (i.e. column names) to their units iq required. Make sure the units are selected from existing unit names in the units table. A new database created with `create_sqlite()` comes populated with 1203 units. 
+A list that matches the variables (i.e. column names) to their units id required. Make sure the units are selected from existing unit names in the units table. (A new database created with `create_sqlite()` comes populated with 1203 units). 
 
 ```{r}
 vars_list <- list("Wind direction" = "Degree",
