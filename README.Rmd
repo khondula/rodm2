@@ -37,15 +37,17 @@ devtools::install_github("khondula/rodm2")
 
 Organize a dataframe of time series values into a new ODM2 sqlite database:
 
-The data to upload must have a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
+The data to upload must have at least 2 timepoints, a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
 
 ```{r, echo = FALSE}
-ts_data <- tibble::tibble(Timestamp = "2018-06-27 13:55:00",
-                   "Wind direction" = 180, "Wind speed" = 1, "Wind gust speed" = 2)
+ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+                   "Wind direction" = c(180,170),
+                   "Wind speed" = c(1, 1.5), 
+                   "Wind gust speed" = c(2, 2.5))
 knitr::kable(ts_data)
 ```
 
-```{r, eval = FALSE}
+```{r}
 library(rodm2)
 dblite <- create_sqlite(connect = TRUE)
 ```
@@ -66,8 +68,7 @@ db_insert_results_ts(db = dblite, # database connection
                      method = "SonicAnemometer", 
                      site_code = "Site1", 
                      variables = vars_list, 
-                     sampledmedium = "Air", 
-                     actionby = "Wendy", equipment_name = "Sensor01" # optional metadata
+                     sampledmedium = "Air"
                      )
 ```
 

@@ -101,17 +101,48 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>Organize a dataframe of time series values into a new ODM2 sqlite database:</p>
+<p>The data to upload must have at least 2 timepoints, a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).</p>
+<table class="table table">
+<thead><tr class="header">
+<th align="left">Timestamp</th>
+<th align="right">Wind direction</th>
+<th align="right">Wind speed</th>
+<th align="right">Wind gust speed</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2018-06-27 13:45:00</td>
+<td align="right">180</td>
+<td align="right">1.0</td>
+<td align="right">2.0</td>
+</tr>
+<tr class="even">
+<td align="left">2018-06-27 13:55:00</td>
+<td align="right">170</td>
+<td align="right">1.5</td>
+<td align="right">2.5</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(<span class="dt">db =</span> dblite, <span class="co"># database connection</span>
+dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Create a list that matches the column names to units:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">"Wind direction"</span> =<span class="st"> "Degree"</span>,
+                <span class="st">"Wind speed"</span> =<span class="st"> "Meter per Second"</span>,
+                <span class="st">"Wind gust speed"</span> =<span class="st"> "Meter per Second"</span>)</code></pre></div>
+<p>Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(<span class="dt">db =</span> dblite, <span class="co"># database connection</span>
                      <span class="dt">datavalues =</span> ts_data, <span class="co"># dataframe with Timestamp column</span>
-                     <span class="dt">method =</span> <span class="st">"methodcode"</span>, 
-                     <span class="dt">site_code =</span> <span class="st">"site_id"</span>, 
-                     <span class="dt">variables =</span> <span class="kw">list</span>(<span class="st">"Variable1 Name"</span> =<span class="st"> "Units"</span>, <span class="co"># variables and units</span>
-                                      <span class="st">"Variable2 Name"</span> =<span class="st"> "Units"</span>), 
-                     <span class="dt">sampledmedium =</span> <span class="st">"Air"</span>, 
-                     <span class="dt">actionby =</span> <span class="st">"Wendy"</span>, <span class="dt">equipment_name =</span> <span class="st">"SensorID"</span> <span class="co"># optional metadata</span>
-                     )</code></pre></div>
+                     <span class="dt">method =</span> <span class="st">"SonicAnemometer"</span>, 
+                     <span class="dt">site_code =</span> <span class="st">"Site1"</span>, 
+                     <span class="dt">variables =</span> vars_list, 
+                     <span class="dt">sampledmedium =</span> <span class="st">"Air"</span>
+                     )
+<span class="co">#&gt; SonicAnemometer has been added to the Methods table.</span>
+<span class="co">#&gt; Wind direction has been added to the Variables table.</span>
+<span class="co">#&gt; Wind speed has been added to the Variables table.</span>
+<span class="co">#&gt; Wind gust speed has been added to the Variables table.</span>
+<span class="co">#&gt; Site Site1 has been entered into the samplingfeatures table.</span></code></pre></div>
 </div>
 <div id="more-details" class="section level2">
 <h2 class="hasAnchor">
