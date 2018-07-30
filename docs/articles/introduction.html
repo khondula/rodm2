@@ -99,7 +99,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <a href="#prepare-data" class="anchor"></a>Prepare data</h2>
 <p>This example will use a data frame of “time series result observations” with 2 observations of 3 variables. For now, this data frame must have:</p>
 <ul>
-<li>datetime must be in a column called “Timestamp” and formatted as YYYY-MM-DD H:M:S</li>
+<li>datetime must be in a column called “Timestamp” and formatted as YYYY-MM-DD HH:MM:SS</li>
 <li>column names but terms from the variable name controlled vocabulary. Use a tibble so that the column names can be the exact terms with spaces.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tsrv &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tibble/topics/tibble">tibble</a></span>(<span class="dt">Timestamp =</span> <span class="kw">c</span>(<span class="st">"2018-06-27 13:40:00"</span>,<span class="st">"2018-06-27 13:55:00"</span>),
@@ -123,7 +123,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <div id="variables-and-units" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variables-and-units" class="anchor"></a>Variables and units</h2>
-<p>A list that matches the variables (i.e. column names) to their units iq required. Make sure the units are selected from existing unit names in the units table. A new database created with <code><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite()</a></code> comes populated with 1203 units.</p>
+<p>A list that matches the variables (i.e. column names) to their units id required. Make sure the units are selected from existing unit names in the units table. (A new database created with <code><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite()</a></code> comes populated with 1203 units that can be accessed with `get_cv_terms(“units”).).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">"Wind direction"</span> =<span class="st"> "Degree"</span>,
                   <span class="st">"Wind speed"</span> =<span class="st"> "Meter per Second"</span>,
                   <span class="st">"Wind gust speed"</span> =<span class="st"> "Meter per Second"</span>)</code></pre></div>
