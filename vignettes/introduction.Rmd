@@ -16,12 +16,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-Load rodm2 and create an empty sqlite database. Use the `connect = TRUE` argument to return the connection object to use. For an existing database, create a connection object. 
+## Connect
+
+Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database using `create_sqlite(connect = TRUE)`. 
 
 ```{r}
 library(rodm2)
 db <- rodm2::create_sqlite(connect = TRUE)
 ```
+
+## Prepare data
 
 This example will use a data frame of "time series result observations" with 2 observations of 3 variables. For now, this data frame must have:
 
@@ -39,14 +43,11 @@ head(tsrv)
 To see a list of any controlled vocabulary terms, use the `get_cv_terms()` function. 
 
 ```{r, }
-get_cv_terms("aggregationstatistic")
+varnames <- get_cv_terms("variablename") 
+grep("Wind", varnames, value = TRUE)
 ```
-The output of this function can also be stored as a vector. 
 
-```{r, eval = FALSE}
-all_vars <- get_cv_terms("variablename")
-names(tsrv)[-1] %in% all_vars
-```
+## Variables and units
 
 A list that matches the variables (i.e. column names) to their units iq required. Make sure the units are selected from existing unit names in the units table. A new database created with `create_sqlite()` comes populated with 1203 units. 
 
@@ -55,6 +56,8 @@ vars_list <- list("Wind direction" = "Degree",
                   "Wind speed" = "Meter per Second",
                   "Wind gust speed" = "Meter per Second")
 ```
+
+## Insert
 
 The required arguments to `db_insert_results_ts()` are
 
@@ -81,8 +84,9 @@ Optional arguments:
 
 * processing level (otherwise "Raw data")
 * actionby - First name of person who performed the action. If they do not exist in the database already, arguments to the `db_describe_person()` function must also be supplied: PersonLastName and PrimaryEmail.  
-* equipment - code of the equipment used to collect the data. If not already in database, all required arguments to `db_describe_equipment()` must be supplied (there are many). 
+* equipment - code of the equipment used to collect the data. If not already in database, all required arguments to `db_describe_equipment()` must be supplied (at least serial_no, model_name, vendor, owner_first). If the equipment model is new, the manufacturer must also be supplied. If the owner of the equipment is not already in the people table, owner_last and owner_email must also be supplied. 
 
+## Get values
 
 ```{r}
 DBI::dbReadTable(db, "timeseriesresultvalues")
