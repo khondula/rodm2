@@ -54,14 +54,15 @@ db_insert_results_ts <- function(db,
   # check for method and add if not in there
   if(!(method %in% rodm2::db_get_methods(db))){
     rodm2::db_describe_method(db, methodname = method, methodcode = method,
-                              methodtypecv = "Instrument deployment")
+                              methodtypecv = 'Instrument deployment')
   }
 
-    # check that all variables are in variables table
-    vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)$VariableNameCV)
-    for(newvar in vars_to_add){
-      rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
-    }
+
+  # check that all variables are in variables table
+  vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)[[1]])
+  for(newvar in vars_to_add){
+    rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
+  }
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
@@ -70,7 +71,7 @@ db_insert_results_ts <- function(db,
     if(!site_code %in%
        DBI::dbGetQuery(db, "SELECT samplingfeaturecode
                        FROM samplingfeatures
-                       WHERE samplingfeaturetypecv = 'Site'")){
+                       WHERE samplingfeaturetypecv = 'Site'")$samplingfeaturecode){
       rodm2::db_describe_site(db, site_code)
   }
 
@@ -126,7 +127,7 @@ db_insert_results_ts <- function(db,
     if(!is.null(equipment_name)){
       # db describe equipment function
       if(!(equipment_name %in% rodm2::db_get_equipment(db))){
-        rodm2::db_describe_person(db, equip_name = equipment_name, ...)
+        rodm2::db_describe_equipment(db, equip_name = equipment_name, ...)
       }
       # add to equipment used
       sql2b <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
@@ -162,14 +163,14 @@ db_insert_results_ts <- function(db,
                                        sampledmediumcv, valuecount)
                                        VALUES
                                        (:uuid, :newfaid, :resulttypecv,
-                                       (SELECT variableid FROM variables WHERE variablecode = :variablecode),
+                                       (SELECT variableid FROM variables WHERE variablenamecv = :variablenamecv),
                                        (SELECT unitsid FROM units WHERE unitsname = :units),
                                        (SELECT processinglevelid FROM processinglevels WHERE processinglevelcode = :processinglevel),
                                        :sampledmedium, :valuecount)')
       RSQLite::dbBind(sql4, params = list(uuid = uuid::UUIDgenerate(),
                                           newfaid = newfaid,
                                           resulttypecv = 'Time series coverage',
-                                          variablecode = i,
+                                          variablenamecv = i,
                                           units = variables[[i]],
                                           processinglevel = processinglevel,
                                           sampledmedium = sampledmedium,
@@ -227,137 +228,159 @@ db_insert_results_ts <- function(db,
     if(!site_code %in%
        DBI::dbGetQuery(db, "SELECT samplingfeaturecode
                        FROM odm2.samplingfeatures
-                       WHERE samplingfeaturetypecv = 'Site'")){
+                       WHERE samplingfeaturetypecv = 'Site'")$samplingfeature){
       rodm2::db_describe_site(db, site_code)
   }
 
     if(!processinglevel %in%
-      DBI::dbGetQuery(db, "SELECT processinglevelcode from odm2.processinglevels")){
-      sql <- "INSERT into odm2.processinglevels (processinglevelcode) VALUES (?processinglevel)"
+       DBI::dbGetQuery(db, "SELECT definition from odm2.processinglevels")$definition){
+      sql <- "INSERT into odm2.processinglevels (processinglevelcode, defintion)
+      VALUES (?processinglevel, ?processinglevel)"
       sql <- DBI::sqlInterpolate(db, sql, processinglevel = processinglevel)
       RPostgreSQL::dbGetQuery(db, sql)
     }
-  #
-  #   sql1 <- 'INSERT into actions
-  #   (actiontypecv, methodid, begindatetime, begindatetimeutcoffset, enddatetime)
-  #   VALUES
-  #   ("Instrument deployment",
-  #   (SELECT methodid from methods WHERE methodcode = :method),
-  #   DATETIME(:begindatetime), :begindatetimeutcoffset, DATETIME(:enddatetime))'
-  #
-  #   sql1 <- RSQLite::dbSendQuery(db, sql1)
-  #   RSQLite::dbBind(sql1, params = list(method = method,
-  #                                       begindatetime = format(as.POSIXct(datavalues[["Timestamp"]][1]),
-  #                                                              "%Y-%m-%d %H:%M:%S"),
-  #                                       begindatetimeutcoffset = as.integer(format(as.POSIXct(
-  #                                         datavalues[["Timestamp"]][1]),
-  #                                         "%z")),
-  #                                       enddatetime = format(as.POSIXct(
-  #                                         datavalues[["Timestamp"]][nrow(datavalues)]),
-  #                                         "%Y-%m-%d %H:%M:%S")))
-  #   RSQLite::dbClearResult(res = sql1)
-  #   newactionid <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
-  #
+
+    sql <- DBI::sqlInterpolate(db,
+                               'WITH newact AS (
+                               INSERT into odm2.actions
+                               (actiontypecv, methodid, begindatetime,
+                               begindatetimeutcoffset, enddatetime)
+                               VALUES
+                               (?actiontype,
+                               (SELECT methodid FROM odm2.methods WHERE methodcode = ?method),
+                               ?begindatetime,
+                               ?begindatetimeutcoffset,
+                               ?enddatetime)
+                               RETURNING actionid)
+
+                               INSERT into odm2.featureactions
+                               (actionid, samplingfeatureid)
+                               VALUES
+                               ((SELECT newact.actionid FROM newact),
+                               (SELECT samplingfeatureid FROM odm2.samplingfeatures
+                               WHERE samplingfeaturecode = ?site_code))
+                               RETURNING actionid, featureactionid',
+
+                               actiontype = "Instrument deployment",
+                               method = method,
+                               begindatetime = format(as.POSIXct(
+                                 datavalues[["Timestamp"]][1]), "%Y-%m-%d %H:%M:%S"),
+                               begindatetimeutcoffset = as.integer(format(as.POSIXct(
+                                 datavalues[["Timestamp"]][1]), "%z")),
+                               enddatetime = format(as.POSIXct(
+                                 datavalues[["Timestamp"]][nrow(datavalues)]),
+                                 "%Y-%m-%d %H:%M:%S"),
+                               site_code = site_code
+       )
+
+    new_fa <- RPostgreSQL::dbGetQuery(db, sql)
+    newactionid <- new_fa$actionid
+    newfaid <- new_fa$featureactionid
+
     if(!is.null(actionby)){
-      #check for condition within sql statement?
       if(!(actionby %in% rodm2::db_get_people(db))){
         rodm2::db_describe_person(db, PersonFirstName = actionby, ...)
       }
-      sql2 <- RSQLite::dbSendStatement(db,
-                                       'INSERT into odm2.actionby
-                                       (actionid, affiliationid, isactionlead)
-                                       VALUES
-                                       (?newactionid,
-                                       (SELECT affiliationid FROM affiliations
-                                       WHERE personid =
-                                       (SELECT personid FROM people WHERE personfirstname = ?actionby)),
-                                       "TRUE")',
-                                       newactionid = newactionid,
-                                       actionby = actionby)
+      sql2 <- DBI::sqlInterpolate(db,
+                                  'INSERT into odm2.actionby
+                                  (actionid, affiliationid, isactionlead)
+                                  VALUES
+                                  (?newactionid,
+                                  (SELECT affiliationid FROM odm2.affiliations
+                                  WHERE personid =
+                                  (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
+                                  ?isactionlead)',
+                                  newactionid = newactionid,
+                                  actionby = actionby,
+                                  isactionlead = "TRUE")
+      RPostgreSQL::dbGetQuery(db, sql2)
+    }
+
+    if(!is.null(equipment_name)){
+      # db describe equipment function
+      if(!(equipment_name %in% rodm2::db_get_equipment(db))){
+        rodm2::db_describe_equipment(db, equip_name = equipment_name, ...)
+      }
+      # add to equipment used
+      sql2b <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
+                                   VALUES
+                                   (?newactionid,
+                                   (SELECT equipmentid
+                                   FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
+                                   newactionid = newactionid,
+                                   equipmentcode = equipment_name)
+      RPostgreSQL::dbGetQuery(db, sql2b)
+    }
+
+    # add result! new result for each
+    newresultids <- c()
+    # newresultids <- vector(mode = "integer", length = length(variables))
+    for(i in names(variables)){
+      sql <- DBI::sqlInterpolate(db,
+                                 'INSERT into odm2.results
+                                 (resultuuid, featureactionid, resulttypecv,
+                                 variableid, unitsid, processinglevelid,
+                                 sampledmediumcv, valuecount)
+                                 VALUES
+                                 (?uuid, ?newfaid, ?resulttypecv,
+                                 (SELECT variableid
+                                 FROM odm2.variables
+                                 WHERE variablenamecv = ?variablenamecv),
+                                 (SELECT unitsid FROM odm2.units WHERE unitsname = ?units),
+                                 (SELECT processinglevelid
+                                 FROM odm2.processinglevels
+                                 WHERE definition = ?processinglevel),
+                                 ?sampledmedium,
+                                 ?valuecount
+                                 )
+                                 RETURNING resultid',
+                                 uuid = uuid::UUIDgenerate(),
+                                 newfaid = newfaid,
+                                 resulttypecv = 'Time series coverage',
+                                 variablenamecv = i,
+                                 units = variables[[i]],
+                                 processinglevel = processinglevel,
+                                 sampledmedium = sampledmedium,
+                                 valuecount = nrow(datavalues))
+
+      newresult <- RPostgreSQL::dbGetQuery(db, sql)
+      newresultids <- append(newresultids, as.integer(newresult))
+    }
+
+    # for each of the new results, insert into time series results
+    for(i in unname(newresultids)){
+      sql5 <- 'INSERT into odm2.timeseriesresults
+      (resultid, aggregationstatisticcv)
+      VALUES (?resultid, ?aggstatcv)'
+      sql5 <- DBI::sqlInterpolate(db, sql5,
+                                  resultid = i,
+                                  aggstatcv = ifelse(is.null(aggregationstatisticcv),
+                                                     "Unknown", aggregationstatisticcv))
+      RPostgreSQL::dbGetQuery(db, sql5)
+
+      if(!is.null(zlocation)){
+        sql <- DBI::sqlInterpolate(db,
+                                   'UPDATE odm2.timeseriesresults
+                                   SET zlocation = ?zlocation,
+                                   zlocationunitsid = (SELECT unitsid FROM odm2.units WHERE unitsname = ?zlocationunits)
+                                   WHERE resultid = ?resultid)',
+                                   zlocation = zlocation, zlocationunits = zlocationunits, resultid = i)
+      }
       RPostgreSQL::dbGetQuery(db, sql)
     }
-  #
-  #   if(!is.null(equipment_name)){
-  #     # db describe equipment function
-  #     if(!(equipment_name %in% rodm2::db_get_equipment(db))){
-  #       rodm2::db_describe_person(db, equip_name = equipment_name, ...)
-  #     }
-  #     # add to equipment used
-  #     sql2b <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
-  #                                       VALUES
-  #                                       (:newactionid,
-  #                                       (SELECT equipmentid FROM equipment WHERE equipmentcode = :equipmentcode))')
-  #     RSQLite::dbBind(sql2b, params = list(newactionid = newactionid,
-  #                                          equipmentcode = equipment_name))
-  #     RSQLite::dbClearResult(res = sql2b)
-  #   }
-  #
-  #
-  #   # insert new feature action
-  #   sql3 <- RSQLite::dbSendStatement(db, 'INSERT into featureactions
-  #                                    (actionid, samplingfeatureid)
-  #                                    VALUES
-  #                                    (:newactionid,
-  #                                    (SELECT samplingfeatureid
-  #                                    FROM samplingfeatures
-  #                                    WHERE samplingfeaturecode = :site_code))')
-  #   RSQLite::dbBind(sql3, params = list(newactionid = newactionid,
-  #                                       site_code = site_code))
-  #   RSQLite::dbClearResult(res = sql3)
-  #   newfaid <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
-  #
-  #   # add result! new result for each
-  #   newresultids <- c()
-  #   # newresultids <- vector(mode = "integer", length = length(variables))
-  #   for(i in names(variables)){
-  #     sql4 <- RSQLite::dbSendStatement(db, 'INSERT into results
-  #                                      (resultuuid, featureactionid, resulttypecv,
-  #                                      variableid, unitsid, processinglevelid,
-  #                                      sampledmediumcv, valuecount)
-  #                                      VALUES
-  #                                      (:uuid, :newfaid, :resulttypecv,
-  #                                      (SELECT variableid FROM variables WHERE variablecode = :variablecode),
-  #                                      (SELECT unitsid FROM units WHERE unitsname = :units),
-  #                                      (SELECT processinglevelid FROM processinglevels WHERE processinglevelcode = :processinglevel),
-  #                                      :sampledmedium, :valuecount)')
-  #     RSQLite::dbBind(sql4, params = list(uuid = uuid::UUIDgenerate(),
-  #                                         newfaid = newfaid,
-  #                                         resulttypecv = 'Time series coverage',
-  #                                         variablecode = i,
-  #                                         units = variables[[i]],
-  #                                         processinglevel = processinglevel,
-  #                                         sampledmedium = sampledmedium,
-  #                                         valuecount = nrow(datavalues)
-  #     ))
-  #     RSQLite::dbClearResult(res = sql4)
-  #     newresultids <- append(newresultids, as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()")))
-  #   }
-  #   names(newresultids) <- names(variables)
-  #
-  #   # for each of the new results, insert into time series results
-  #   for(i in unname(newresultids)){
-  #     sql5 <- 'INSERT into timeseriesresults
-  #     (resultid, aggregationstatisticcv, zlocation, zlocationunitsid)
-  #     VALUES (:resultid, :aggstatcv, :zlocation,
-  #     (SELECT unitsid FROM units WHERE unitsname = :zlocationunits))'
-  #     sql5 <- RSQLite::dbSendStatement(db, sql5)
-  #     RSQLite::dbBind(sql5, params = list(resultid = i,
-  #                                         aggstatcv = ifelse(is.null(aggregationstatisticcv),
-  #                                                            "Unknown", aggregationstatisticcv),
-  #                                         zlocation = ifelse(is.null(zlocation), "", zlocation),
-  #                                         zlocationunits = ifelse(is.null(zlocationunits), "", zlocationunits)))
-  #     RSQLite::dbClearResult(res = sql5)
-  #   }
-  #
-  #   # then insert into timeseriesresultvalues
+
+    # then insert into timeseriesresultvalues
+    names(newresultids) <- names(variables)
+
     for(i in names(newresultids)){
       # subset data values
       datavalues_var <- datavalues[, c("Timestamp", i)]
+      # add time aggregation interval
       timeagg_seconds <-purrr::map_dbl(lubridate::int_diff(datavalues$Timestamp),
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
-      timeaggunitsid <- RSQLite::dbGetQuery(db,
-                                            "select unitsid from units where unitsname = 'Minute'")
+      timeaggunitsid <- RPostgreSQL::dbGetQuery(db,
+                                                "select unitsid from odm2.units where unitsname = 'Minute'")
       # make data frame to append
       datavalues_var <- datavalues_var %>%
         dplyr::select(Timestamp, i) %>%
@@ -371,7 +394,10 @@ db_insert_results_ts <- function(db,
                       timeaggregationinterval = timeagg_mins,
                       timeaggregationintervalunitsid = as.integer(timeaggunitsid))
       # append
-      RPostgreSQL::dbAppendTable(db, "timeseriesresultvalues", datavalues_var)
+      DBI::dbWriteTable(db, c("odm2", "timeseriesresultvalues"),
+                        datavalues_var, row.names = FALSE,
+                        overwrite = FALSE,
+                        append = TRUE)
     }
   }
 
