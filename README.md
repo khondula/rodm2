@@ -26,6 +26,48 @@ devtools::install_github("khondula/rodm2")
 Usage
 -----
 
+Organize a dataframe of time series values into a new ODM2 sqlite database:
+
+The data to upload must have at least 2 timepoints, a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
+
+| Timestamp           |  Wind direction|  Wind speed|  Wind gust speed|
+|:--------------------|---------------:|-----------:|----------------:|
+| 2018-06-27 13:45:00 |             180|         1.0|              2.0|
+| 2018-06-27 13:55:00 |             170|         1.5|              2.5|
+
+``` r
+library(rodm2)
+dblite <- create_sqlite(connect = TRUE)
+```
+
+Create a list that matches the column names to units:
+
+``` r
+vars_list <- list("Wind direction" = "Degree",
+                "Wind speed" = "Meter per Second",
+                "Wind gust speed" = "Meter per Second")
+```
+
+Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data.
+
+``` r
+db_insert_results_ts(db = dblite, # database connection
+                     datavalues = ts_data, # dataframe with Timestamp column
+                     method = "SonicAnemometer", 
+                     site_code = "Site1", 
+                     variables = vars_list, 
+                     sampledmedium = "Air"
+                     )
+#> SonicAnemometer has been added to the Methods table.
+#> Wind direction has been added to the Variables table.
+#> Wind speed has been added to the Variables table.
+#> Wind gust speed has been added to the Variables table.
+#> Site Site1 has been entered into the samplingfeatures table.
+```
+
+More details
+------------
+
 `rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure.
 
 **With a PostgreSQL database**
@@ -49,7 +91,16 @@ Or create a connection to an existing sqlite file using `dbConnect` and the name
 dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 ```
 
-There are 132 tables in the database. The "blank" database has the Units table populated as well as all of the controlled vocabularies (that start with `CV_`).
+There are 132 tables in the database. The "blank" database has the Units table populated as well as all of the controlled vocabularies.
+
+See the terms for a given controlled vocabulary:
+
+``` r
+rodm2::get_cv_terms("methodtype")
+#> methodtype controlled vocabulary terms: "Cruise", "Data retrieval", "Derivation", "Equipment deployment", "Equipment maintenance", "Equipment programming", "Equipment retrieval", "Estimation", "Expedition", "Field activity", "Generic non-observation", "Instrument Continuing Calibration Verification", "Instrument calibration", "Instrument deployment", "Instrument retrieval", "Observation", "Simulation", "Site visit", "Specimen analysis", "Specimen collection", "Specimen fractionation", "Specimen preparation", "Specimen preservation", "Submersible launch", "Unknown")
+```
+
+Explore the database structure:
 
 ``` r
 head(DBI::dbListTables(dblite))
@@ -96,20 +147,18 @@ There are currently "describe" functions for:
 -   annotations
 -   organizations (necessary for equipment)
 
-Work In Progress:
------------------
+'Insert' functions
+------------------
 
--   describe sites
--   describe samples
+Data are uploaded using "insert" functions for specific types of results, eg. `db_insert_results_ts()` for a data frame of time series results.
 
-Each of the "describe" functions will have a corresponding function to list the current entities in that table (option verbose = TRUE provides more details than just the name). Updated version of the describe functions will compare new entity to existing ones in database.
+-   time\_series: time series data collected at a site using a sensor
 
-Data are uploaded using "insert" functions and specifying a "results\_type" as one of:
+In progress:
 
 -   measurement: in-situ point measurement (numeric) taken at a site
 -   category: in-situ point measurement (text/categorical) taken at a site
 -   sample\_measurement: ex-situ measurement (numeric) of a sample taken at a site
--   time\_series: time series data collected at a site using a sensor
 
 Acknowledgements
 ----------------
