@@ -96,7 +96,7 @@ db_get_people <- function(db){
   if (class(db) == "SQLiteConnection"){
     current_ppl <- DBI::dbGetQuery(db, "SELECT personfirstname, personlastname FROM people")$personfirstname
   }
-  if (class(db) == "PosgreSQLConnection"){
+  if (class(db) == "PostgreSQLConnection"){
     current_ppl <- DBI::dbGetQuery(db, "SELECT personfirstname, personlastname FROM odm2.people")$personfirstname
   }
   return(current_ppl)
