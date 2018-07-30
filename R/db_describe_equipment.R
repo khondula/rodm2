@@ -225,10 +225,10 @@ db_get_equipment <- function(db){
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
   current_equipment <- c()
   if (class(db) == "SQLiteConnection"){
-    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM equipment")
+    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM equipment")[[1]]
   }
-  if (class(db) == "PosgreSQLConnection"){
-    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM odm2.equipment")
+  if (class(db) == "PostgreSQLConnection"){
+    current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM odm2.equipment")[[1]]
   }
   return(current_equipment)
 }
