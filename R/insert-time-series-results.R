@@ -6,8 +6,8 @@
 #'    POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names
 #' @param method code for method used to collect data
 #' @param site_code sampling feature code at which data were collected
-#' @param variables a named list defining units for variable names in datavalues data frame
-#'    with format list("variablen1ame" = "units1name", "variable2name" = "units2name")
+#' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
+#'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
 #' @param sampledmedium term from controlled vocabulary for medium sampled eg. Air, Water, Soil
 #' @param processinglevel code for processing level. will be added to processinglevels table if new.
 #'   defaults to "Raw data'.
@@ -25,11 +25,11 @@
 #' \dontrun{
 #' db <- rodm2::create_sqlite(connect = TRUE)
 #' tsrv <- data.frame(Timestamp = "2018-06-27 13:55:00",
-#' "Wind direction" = 180, "Wind speed" = 1, "Wind gust speed" = 2)
+#' "Wind_direction" = 180, "Wind_speed" = 1, "gust_speed" = 2)
 #' db_insert_results_ts(db = db, datavalues = tsrv,
 #' method = "SonicAnemometer", site_code = "BB2",
-#' variables = list("Wind direction" = "Degree",
-#' "Wind speed" = "Meter per Second", "Wind gust speed" = "Meter per Second"),
+#' variables = list("Wind direction" = list("Wind_direction", Degree",),
+#' "Wind speed" = list("Wind_speed", Meter per Second"), "Wind gust speed" = list("gust_speed, "Meter per Second")),
 #' processinglevel = "Raw data",
 #' sampledmedium = "Air")
 #' }
@@ -212,7 +212,12 @@ db_insert_results_ts <- function(db,
       if(is.null(variables[[i]][["qualitycodecol"]])){
         qualitycodecv <- "Unknown"
       }
-      # datavalues_var <- datavalues[, c("Timestamp", var_colname)]
+      censorcodecv <- dplyr::select(datavalues, variables[[i]][["censorcodecol"]])
+
+      if(is.null(variables[[i]][["censorcodecol"]])){
+        censorcodecv <- "Unknown"
+      }
+
       timeagg_seconds <-purrr::map_dbl(lubridate::int_diff(datavalues$Timestamp),
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
@@ -226,7 +231,7 @@ db_insert_results_ts <- function(db,
         dplyr::mutate(valuedatetimeutcoffset = as.integer(format(as.POSIXct(valuedatetime), "%z")),
                       valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
                       resultid = as.integer(newresultids[[i]]),
-                      censorcodecv = "Unknown",
+                      censorcodecv = censorcodecv[[1]],
                       qualitycodecv = qualitycodecv[[1]],
                       timeaggregationinterval = timeagg_mins,
                       timeaggregationintervalunitsid = as.integer(timeaggunitsid))
@@ -327,7 +332,12 @@ db_insert_results_ts <- function(db,
 
     # add result! new result for each
     newresultids <- c()
-    # newresultids <- vector(mode = "integer", length = length(variables))
+    for(i in names(variables)){
+      if(!"column" %in% names(variables[[i]])){
+        variables[[i]][["column"]] <- i
+      }
+    }
+
     for(i in names(variables)){
       sql <- DBI::sqlInterpolate(db,
                                  'INSERT into odm2.results
@@ -351,7 +361,7 @@ db_insert_results_ts <- function(db,
                                  newfaid = newfaid,
                                  resulttypecv = 'Time series coverage',
                                  variablenamecv = i,
-                                 units = variables[[i]],
+                                 units = variables[[i]][["units"]],
                                  processinglevel = processinglevel,
                                  sampledmedium = sampledmedium,
                                  valuecount = nrow(datavalues))
@@ -387,23 +397,34 @@ db_insert_results_ts <- function(db,
 
     for(i in names(newresultids)){
       # subset data values
-      datavalues_var <- datavalues[, c("Timestamp", i)]
-      # add time aggregation interval
+      var_colname <- variables[[i]][["column"]]
+      qualitycodecv <- dplyr::select(datavalues, variables[[i]][["qualitycodecol"]])
+
+      if(is.null(variables[[i]][["qualitycodecol"]])){
+        qualitycodecv <- "Unknown"
+      }
+
+      censorcodecv <- dplyr::select(datavalues, variables[[i]][["censorcodecol"]])
+
+      if(is.null(variables[[i]][["censorcodecol"]])){
+        censorcodecv <- "Unknown"
+      }
+
       timeagg_seconds <-purrr::map_dbl(lubridate::int_diff(datavalues$Timestamp),
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
-      timeaggunitsid <- RPostgreSQL::dbGetQuery(db,
-                                                "select unitsid from odm2.units where unitsname = 'Minute'")
+      timeaggunitsid <- RSQLite::dbGetQuery(db,
+                                            "select unitsid from units where unitsname = 'Minute'")
       # make data frame to append
       datavalues_var <- datavalues_var %>%
-        dplyr::select(Timestamp, i) %>%
+        dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
-                      datavalue = i) %>%
+                      datavalue = var_colname) %>%
         dplyr::mutate(valuedatetimeutcoffset = as.integer(format(as.POSIXct(valuedatetime), "%z")),
                       valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
                       resultid = as.integer(newresultids[[i]]),
-                      censorcodecv = "Unknown",
-                      qualitycodecv = "Unknown",
+                      censorcodecv = censorcodecv[[1]],
+                      qualitycodecv = qualitycodecv[[1]],
                       timeaggregationinterval = timeagg_mins,
                       timeaggregationintervalunitsid = as.integer(timeaggunitsid))
       # append
