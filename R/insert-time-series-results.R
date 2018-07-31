@@ -154,6 +154,13 @@ db_insert_results_ts <- function(db,
     newfaid <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
 
     # add result! new result for each
+    # for variables list, if no 'column', make col = name
+    for(i in names(variables)){
+      if(!"column" %in% names(variables[[i]])){
+        variables[[i]][["column"]] <- i
+      }
+    }
+
     newresultids <- c()
     # newresultids <- vector(mode = "integer", length = length(variables))
     for(i in names(variables)){
@@ -171,7 +178,7 @@ db_insert_results_ts <- function(db,
                                           newfaid = newfaid,
                                           resulttypecv = 'Time series coverage',
                                           variablenamecv = i,
-                                          units = variables[[i]],
+                                          units = variables[[i]][["units"]],
                                           processinglevel = processinglevel,
                                           sampledmedium = sampledmedium,
                                           valuecount = nrow(datavalues)
@@ -199,7 +206,13 @@ db_insert_results_ts <- function(db,
     # then insert into timeseriesresultvalues
     for(i in names(newresultids)){
       # subset data values
-      datavalues_var <- datavalues[, c("Timestamp", i)]
+      var_colname <- variables[[i]][["column"]]
+      qualitycodecv <- dplyr::select(datavalues, variables[[i]][["qualitycodecol"]])
+
+      if(is.null(variables[[i]][["qualitycodecol"]])){
+        qualitycodecv <- "Unknown"
+      }
+      # datavalues_var <- datavalues[, c("Timestamp", var_colname)]
       timeagg_seconds <-purrr::map_dbl(lubridate::int_diff(datavalues$Timestamp),
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
@@ -207,16 +220,16 @@ db_insert_results_ts <- function(db,
                                             "select unitsid from units where unitsname = 'Minute'")
       # make data frame to append
       datavalues_var <- datavalues_var %>%
-        dplyr::select(Timestamp, i) %>%
+        dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
-               datavalue = i) %>%
+                      datavalue = var_colname) %>%
         dplyr::mutate(valuedatetimeutcoffset = as.integer(format(as.POSIXct(valuedatetime), "%z")),
-               valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
-               resultid = as.integer(newresultids[[i]]),
-               censorcodecv = "Unknown",
-               qualitycodecv = "Unknown",
-               timeaggregationinterval = timeagg_mins,
-               timeaggregationintervalunitsid = as.integer(timeaggunitsid))
+                      valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
+                      resultid = as.integer(newresultids[[i]]),
+                      censorcodecv = "Unknown",
+                      qualitycodecv = qualitycodecv[[1]],
+                      timeaggregationinterval = timeagg_mins,
+                      timeaggregationintervalunitsid = as.integer(timeaggunitsid))
       # append
       RSQLite::dbAppendTable(db, "timeseriesresultvalues", datavalues_var)
     }
