@@ -226,7 +226,7 @@ db_insert_results_ts <- function(db,
       timeaggunitsid <- RSQLite::dbGetQuery(db,
                                             "select unitsid from units where unitsname = 'Minute'")
       # make data frame to append
-      datavalues_var <- datavalues_var %>%
+      datavalues_var <- datavalues %>%
         dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
                       datavalue = var_colname) %>%
@@ -418,7 +418,7 @@ db_insert_results_ts <- function(db,
       timeaggunitsid <- RPostgreSQL::dbGetQuery(db,
                                             "select unitsid from odm2.units where unitsname = 'Minute'")
       # make data frame to append
-      datavalues_var <- datavalues_var %>%
+      datavalues_var <- datavalues %>%
         dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
                       datavalue = var_colname) %>%
