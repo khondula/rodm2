@@ -92,6 +92,9 @@
     <li>
       <a href="../articles/newsites.html">Add new sites</a>
     </li>
+    <li>
+      <a href="../articles/view-time-series-results.html">View time series results</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -148,8 +151,8 @@ POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable name
     </tr>
     <tr>
       <th>variables</th>
-      <td><p>a named list defining units for variable names in datavalues data frame
-with format list("variablen1ame" = "units1name", "variable2name" = "units2name")</p></td>
+      <td><p>a named list of lists defining variable names, units, and columns in datavalues data frame
+with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))</p></td>
     </tr>
     <tr>
       <th>sampledmedium</th>
@@ -191,18 +194,6 @@ defaults to "Raw data'.</p></td>
     <p>true if successful</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'>create_sqlite</span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>tsrv</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='st'>"2018-06-27 13:55:00"</span>,
-<span class='st'>"Wind direction"</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='st'>"Wind speed"</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='st'>"Wind gust speed"</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='fu'>db_insert_results_ts</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>tsrv</span>,
-<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"SonicAnemometer"</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>,
-<span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"Wind direction"</span> <span class='kw'>=</span> <span class='st'>"Degree"</span>,
-<span class='st'>"Wind speed"</span> <span class='kw'>=</span> <span class='st'>"Meter per Second"</span>, <span class='st'>"Wind gust speed"</span> <span class='kw'>=</span> <span class='st'>"Meter per Second"</span>),
-<span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
-<span class='kw'>sampledmedium</span> <span class='kw'>=</span> <span class='st'>"Air"</span>)
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -210,9 +201,7 @@ defaults to "Raw data'.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

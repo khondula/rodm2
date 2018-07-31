@@ -41,9 +41,9 @@ The data to upload must have at least 2 timepoints, a "Timestamp column" formatt
 
 ```{r, echo = FALSE}
 ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
-                   "Wind direction" = c(180,170),
-                   "Wind speed" = c(1, 1.5), 
-                   "Wind gust speed" = c(2, 2.5))
+                   "wd" = c(180,170),
+                   "ws" = c(1, 1.5), 
+                   "gustspeed" = c(2, 2.5))
 knitr::kable(ts_data)
 ```
 
@@ -52,13 +52,17 @@ library(rodm2)
 dblite <- create_sqlite(connect = TRUE)
 ```
 
-Create a list that matches the column names to units:
+Create a list that matches the variables to column names and units:
 
 ```{r}
-vars_list <- list("Wind direction" = "Degree",
-                "Wind speed" = "Meter per Second",
-                "Wind gust speed" = "Meter per Second")
+vars_list <- list(
+  'Wind direction' = list(column = 'wd', units = 'Degree'),
+  'Wind speed' = list(column = 'ws', units = 'Meter per Second'),
+  'Wind gust speed' = list(column = 'gustspeed', units = 'Meter per Second')
+)
 ```
+
+If there are columns in the data that correspond to censor codes or data quality codes, also supply those column names as 'qualitycodecol' and/or 'censorcodecol' in the list for each variable.
 
 Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data. 
 

@@ -33,11 +33,11 @@ This example will use a data frame of "time series result observations" with 2 o
 * column names but terms from the variable name controlled vocabulary. Use a tibble so that the column names can be the exact terms with spaces.
 
 ```{r}
-tsrv <- tibble::tibble(Timestamp = c("2018-06-27 13:40:00","2018-06-27 13:55:00"),
-                   "Wind direction" = c(180, 170),
-                   "Wind speed" = c(1.5, 1.0), 
-                   "Wind gust speed" = c(0.7, 2.5))
-head(tsrv)
+ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+                   "wd" = c(180,170),
+                   "ws" = c(1, 1.5), 
+                   "gustspeed" = c(2, 2.5))
+head(ts_data)
 ```
 
 To see a list of any controlled vocabulary terms, use the `get_cv_terms()` function. 
@@ -49,12 +49,14 @@ grep("Wind", varnames, value = TRUE)
 
 ## Variables and units
 
-A list that matches the variables (i.e. column names) to their units id required. Make sure the units are selected from existing unit names in the units table. (A new database created with `create_sqlite()` comes populated with 1203 units that can be accessed with `get_cv_terms("units").). 
+A list that matches the variables (i.e. column names) to their units id required. Make sure the units are selected from existing unit names in the units table. (A new database created with `create_sqlite()` comes populated with 1203 units that can be accessed with `get_cv_terms("units")`.) 
 
 ```{r}
-vars_list <- list("Wind direction" = "Degree",
-                  "Wind speed" = "Meter per Second",
-                  "Wind gust speed" = "Meter per Second")
+vars_list <- list(
+  'Wind direction' = list(column = 'wd', units = 'Degree'),
+  'Wind speed' = list(column = 'ws', units = 'Meter per Second'),
+  'Wind gust speed' = list(column = 'gustspeed', units = 'Meter per Second')
+)
 ```
 
 ## Insert
@@ -72,7 +74,7 @@ If the variable(s), method, or site code do not already exist in the database, t
 
 ```{r}
 db_insert_results_ts(db = db, 
-                     datavalues = tsrv,
+                     datavalues = ts_data,
                      variables = vars_list,
                      method = "SonicAnemometer",
                      site_code = "BB2",

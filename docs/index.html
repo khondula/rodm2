@@ -60,6 +60,9 @@
     <li>
       <a href="articles/newsites.html">Add new sites</a>
     </li>
+    <li>
+      <a href="articles/view-time-series-results.html">View time series results</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -105,9 +108,9 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <table class="table table">
 <thead><tr class="header">
 <th align="left">Timestamp</th>
-<th align="right">Wind direction</th>
-<th align="right">Wind speed</th>
-<th align="right">Wind gust speed</th>
+<th align="right">wd</th>
+<th align="right">ws</th>
+<th align="right">gustspeed</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -126,10 +129,13 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
 dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Create a list that matches the column names to units:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">"Wind direction"</span> =<span class="st"> "Degree"</span>,
-                <span class="st">"Wind speed"</span> =<span class="st"> "Meter per Second"</span>,
-                <span class="st">"Wind gust speed"</span> =<span class="st"> "Meter per Second"</span>)</code></pre></div>
+<p>Create a list that matches the variables to column names and units:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw">list</span>(
+  <span class="st">'Wind direction'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">column =</span> <span class="st">'wd'</span>, <span class="dt">units =</span> <span class="st">'Degree'</span>),
+  <span class="st">'Wind speed'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">column =</span> <span class="st">'ws'</span>, <span class="dt">units =</span> <span class="st">'Meter per Second'</span>),
+  <span class="st">'Wind gust speed'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">column =</span> <span class="st">'gustspeed'</span>, <span class="dt">units =</span> <span class="st">'Meter per Second'</span>)
+)</code></pre></div>
+<p>If there are columns in the data that correspond to censor codes or data quality codes, also supply those column names as ‘qualitycodecol’ and/or ‘censorcodecol’ in the list for each variable.</p>
 <p>Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(<span class="dt">db =</span> dblite, <span class="co"># database connection</span>
                      <span class="dt">datavalues =</span> ts_data, <span class="co"># dataframe with Timestamp column</span>

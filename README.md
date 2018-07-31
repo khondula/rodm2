@@ -30,23 +30,27 @@ Organize a dataframe of time series values into a new ODM2 sqlite database:
 
 The data to upload must have at least 2 timepoints, a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
 
-| Timestamp           |  Wind direction|  Wind speed|  Wind gust speed|
-|:--------------------|---------------:|-----------:|----------------:|
-| 2018-06-27 13:45:00 |             180|         1.0|              2.0|
-| 2018-06-27 13:55:00 |             170|         1.5|              2.5|
+| Timestamp           |   wd|   ws|  gustspeed|
+|:--------------------|----:|----:|----------:|
+| 2018-06-27 13:45:00 |  180|  1.0|        2.0|
+| 2018-06-27 13:55:00 |  170|  1.5|        2.5|
 
 ``` r
 library(rodm2)
 dblite <- create_sqlite(connect = TRUE)
 ```
 
-Create a list that matches the column names to units:
+Create a list that matches the variables to column names and units:
 
 ``` r
-vars_list <- list("Wind direction" = "Degree",
-                "Wind speed" = "Meter per Second",
-                "Wind gust speed" = "Meter per Second")
+vars_list <- list(
+  'Wind direction' = list(column = 'wd', units = 'Degree'),
+  'Wind speed' = list(column = 'ws', units = 'Meter per Second'),
+  'Wind gust speed' = list(column = 'gustspeed', units = 'Meter per Second')
+)
 ```
+
+If there are columns in the data that correspond to censor codes or data quality codes, also supply those column names as 'qualitycodecol' and/or 'censorcodecol' in the list for each variable.
 
 Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data.
 
