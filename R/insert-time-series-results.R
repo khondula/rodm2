@@ -28,11 +28,13 @@
 #' "Wind_direction" = 180, "Wind_speed" = 1, "gust_speed" = 2)
 #' db_insert_results_ts(db = db, datavalues = tsrv,
 #' method = "SonicAnemometer", site_code = "BB2",
-#' variables = list("Wind direction" = list("Wind_direction", Degree",),
-#' "Wind speed" = list("Wind_speed", Meter per Second"), "Wind gust speed" = list("gust_speed, "Meter per Second")),
+#' variables = list("Wind direction" = list("Wind_direction", Degree"),
+#'     "Wind speed" = list("Wind_speed", Meter per Second"),
+#'     "Wind gust speed" = list("gust_speed, "Meter per Second")),
 #' processinglevel = "Raw data",
 #' sampledmedium = "Air")
 #' }
+#'
 db_insert_results_ts <- function(db,
                                  datavalues,
                                  method,
@@ -413,8 +415,8 @@ db_insert_results_ts <- function(db,
       timeagg_seconds <-purrr::map_dbl(lubridate::int_diff(datavalues$Timestamp),
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
-      timeaggunitsid <- RSQLite::dbGetQuery(db,
-                                            "select unitsid from units where unitsname = 'Minute'")
+      timeaggunitsid <- RPostgreSQL::dbGetQuery(db,
+                                            "select unitsid from odm2.units where unitsname = 'Minute'")
       # make data frame to append
       datavalues_var <- datavalues_var %>%
         dplyr::select(Timestamp, var_colname) %>%
