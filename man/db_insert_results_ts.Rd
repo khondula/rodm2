@@ -19,8 +19,8 @@ POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable name
 
 \item{site_code}{sampling feature code at which data were collected}
 
-\item{variables}{a named list defining units for variable names in datavalues data frame
-with format list("variablen1ame" = "units1name", "variable2name" = "units2name")}
+\item{variables}{a named list of lists defining variable names, units, and columns in datavalues data frame
+with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))}
 
 \item{sampledmedium}{term from controlled vocabulary for medium sampled eg. Air, Water, Soil}
 
@@ -44,17 +44,4 @@ true if successful
 }
 \description{
 Insert time series data values to ODM2 database
-}
-\examples{
-\dontrun{
-db <- rodm2::create_sqlite(connect = TRUE)
-tsrv <- data.frame(Timestamp = "2018-06-27 13:55:00",
-"Wind direction" = 180, "Wind speed" = 1, "Wind gust speed" = 2)
-db_insert_results_ts(db = db, datavalues = tsrv,
-method = "SonicAnemometer", site_code = "BB2",
-variables = list("Wind direction" = "Degree",
-"Wind speed" = "Meter per Second", "Wind gust speed" = "Meter per Second"),
-processinglevel = "Raw data",
-sampledmedium = "Air")
-}
 }
