@@ -2,8 +2,9 @@
 #'
 #' Uses agrep to search the samplingfeaturecode column of the samplingfeature table
 #'
-#' @param method2order method to order colors (\code{"hsv"} or \code{"cluster"})
 #' @param ... extra parameters to pass to agrep
+#' @param x
+#' @param db database connection
 #'
 #' @importFrom magrittr %>%
 #' @name %>%
@@ -18,7 +19,14 @@
 #' }
 #' @export
 
-get_site_names_like <- function(x, ...){
+get_site_names_like <- function(x, db, ...){
+  samplingfeatures <- c()
+  if (class(db) == "SQLiteConnection"){
+    samplingfeatures <- RSQLite::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures")
+  }
+  if (class(db) == "PostgreSQLConnection"){
+    samplingfeatures <- RPostgreSQL::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures")
+  }
   agrep(pattern = x,
         samplingfeatures$samplingfeaturecode,
         ignore.case = TRUE, value = TRUE, ...)
@@ -29,6 +37,7 @@ get_site_names_like <- function(x, ...){
 #' Returns a data frame specifying whether each element of new_codes exists in samplingfeatures
 #'
 #' @param new_codes vector of names to compare with samplingfeaturecode vector
+#' @param db database connection (defaults to db)
 #'
 #' @importFrom magrittr %>%
 #' @name %>%
@@ -44,10 +53,16 @@ get_site_names_like <- function(x, ...){
 #'
 #' @export
 
-check_samplingfeaturecodes <- function(new_codes){
-  if(!exists("samplingfeatures")){stop("samplingfeatures data frame missing")}
+check_samplingfeaturecodes <- function(new_codes, db = db){
+  samplingfeatures <- c()
+  if (class(db) == "SQLiteConnection"){
+    samplingfeatures <- RSQLite::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures")
+  }
+  if (class(db) == "PostgreSQLConnection"){
+    samplingfeatures <- RPostgreSQL::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures")
+  }
 
-  data.frame(new_codes = unique(new_codes),
+    data.frame(new_codes = unique(new_codes),
              in_db = unique(new_codes) %in%
                samplingfeatures$samplingfeaturecode) %>%
     dplyr::filter(!in_db) %>% dplyr::arrange(new_codes)
