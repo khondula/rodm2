@@ -3,20 +3,21 @@
 \name{\%>\%}
 \alias{\%>\%}
 \alias{get_site_names_like}
-\alias{\%>\%}
 \alias{check_samplingfeaturecodes}
 \title{Search for site names with a pattern}
 \usage{
-get_site_names_like(x, ...)
+get_site_names_like(x, db, ...)
 
-check_samplingfeaturecodes(new_codes)
+check_samplingfeaturecodes(new_codes, db = db)
 }
 \arguments{
+\item{db}{database connection}
+
 \item{...}{extra parameters to pass to agrep}
 
 \item{new_codes}{vector of names to compare with samplingfeaturecode vector}
 
-\item{method2order}{method to order colors (\code{"hsv"} or \code{"cluster"})}
+\item{db}{database connection (defaults to db)}
 }
 \value{
 matching elements if the samplingfeaturecode vector

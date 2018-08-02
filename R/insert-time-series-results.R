@@ -18,22 +18,39 @@
 #' @param zlocationunits (optional but required if zlocation is set) name of units of z location offset
 #' @param ... parameters to pass to various db_describe_ functions
 #'
+#' @details
+#' Timezone: The values in the "Timestamp" column must have time in the format YYYY-MM-DD HH:MM:SS,
+#' but they can be character data or POSIXct. If they are character data, the time zone
+#' will be your computer's local time, i.e. whatever is returned from Sys.time().
+#' To specify a different time zone, such as if you are uploading data that was collected
+#' before or after daylight savings time or you are using UTC, make sure that the dates
+#' in the Timestamp column are of POSIXct format with a timezone specified.
+#' You can check the timezone of an object using the function lubridate::tz().
+#' In the database, datetime values are stored in one column and timezones are stored in
+#' a separate column (as "UTC offset"). In the upload function, the UTC offset is an intger
+#' determined by using format(as.POSIXct(x), "%z").
+#'
 #' @return true if successful
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' db <- rodm2::create_sqlite(connect = TRUE)
-#' tsrv <- data.frame(Timestamp = "2018-06-27 13:55:00",
-#' "Wind_direction" = 180, "Wind_speed" = 1, "gust_speed" = 2)
-#' db_insert_results_ts(db = db, datavalues = tsrv,
-#' method = "SonicAnemometer", site_code = "BB2",
-#' variables = list("Wind direction" = list("Wind_direction", Degree"),
-#'     "Wind speed" = list("Wind_speed", Meter per Second"),
-#'     "Wind gust speed" = list("gust_speed, "Meter per Second")),
-#' processinglevel = "Raw data",
-#' sampledmedium = "Air")
-#' }
+#'
+#' tsrv <-data.frame(
+#'   Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+#'   "wd" = c(180,170),
+#'   "ws" = c(1, 1.5),
+#'   "gustspeed" = c(2, 2.5))
+#'
+#' db_insert_results_ts(
+#'   db = db,
+#'   datavalues = tsrv,
+#'   method = "SonicAnemometer",
+#'   site_code = "BB2",
+#'    variables = list("Wind direction" = list("wd", "Degree"),
+#'                     "Wind speed" = list("ws", "Meter per Second"),
+#'                      "Wind gust speed" = list("gustspeed", "Meter per Second")),
+#'   sampledmedium = "Air")
 #'
 db_insert_results_ts <- function(db,
                                  datavalues,
@@ -70,25 +87,58 @@ db_insert_results_ts <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     # make sure site is in sampling features table
-    if(!site_code %in%
-       DBI::dbGetQuery(db, "SELECT samplingfeaturecode
-                       FROM samplingfeatures
-                       WHERE samplingfeaturetypecv = 'Site'")$samplingfeaturecode){
+    if(!site_code %in% rodm2::db_get_sites(db)){
       rodm2::db_describe_site(db, site_code)
   }
 
-    if(!processinglevel %in%
-       DBI::dbGetQuery(db, "SELECT processinglevelcode from processinglevels")){
-      sql <- "insert into processinglevels (processinglevelcode) VALUES (:processinglevel)"
-      sql <- RSQLite::dbSendQuery(db, sql)
-      RSQLite::dbBind(sql, params = list(processinglevel = processinglevel))
-      RSQLite::dbClearResult(res = sql)
-    }
+    # make sure processing level is in processinglevel table
+    sql <- "INSERT or IGNORE into processinglevels (processinglevelcode) VALUES (:processinglevel)"
+    sql <- RSQLite::dbSendQuery(db, sql)
+    RSQLite::dbBind(sql, params = list(processinglevel = processinglevel))
+    RSQLite::dbClearResult(res = sql)
 
     # check that all variables are in variables table
-    vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)$VariableNameCV)
-    for(newvar in vars_to_add){
-      rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
+    # vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)$VariableNameCV)
+    # for(newvar in vars_to_add){
+    #   rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
+    # }
+    # check that all variables are in variables table
+    for(newvar in names(variables)){
+      sql <- "INSERT OR IGNORE into variables
+      (variabletypecv, variablecode, variablenamecv, nodatavalue)
+      VALUES
+      (:variabletypecv, :variablecode, :variablenamecv, :nodatavalue)"
+      sql <- RSQLite::dbSendQuery(db, sql)
+      RSQLite::dbBind(sql, params = list(variabletypecv = "Unknown",
+                                         variablecode = newvar,
+                                         variablenamecv = newvar,
+                                         nodatavalue = '-9999'))
+      RSQLite::dbClearResult(res = sql)
+
+      if(!is.null(variables[[newvar]]$nodatavalue)){
+        sql <- RSQLite::dbSendQuery(db,
+                                    "UPDATE variables SET nodatavalue = :nodatavalue
+                                    WHERE variablecode = :variablecode")
+        RSQLite::dbBind(sql, params = list(nodatavalue = variables[[newvar]]$nodatavalue,
+                                           variablecode = newvar))
+        RSQLite::dbClearResult(res = sql)
+      }
+      if(!is.null(variables[[newvar]]$variabletypecv)){
+        sql <- RSQLite::dbSendQuery(db,
+                                    "UPDATE variables SET variabletypecv = :variabletypecv
+                                    WHERE variablecode = :variablecode")
+        RSQLite::dbBind(sql, params = list(variabletypecv = variables[[newvar]]$variabletypecv,
+                                           variablecode = newvar))
+        RSQLite::dbClearResult(res = sql)
+      }
+      if(!is.null(variables[[newvar]]$variabledefinition)){
+        sql <- RSQLite::dbSendQuery(db,
+                                    "UPDATE variables SET variabledefinition = :variabledefinition
+                                    WHERE variablecode = :variablecode")
+        RSQLite::dbBind(sql, params = list(variabledefinition = variables[[newvar]]$variabledefinition,
+                                           variablecode = newvar))
+        RSQLite::dbClearResult(res = sql)
+      }
     }
 
     sql1 <- 'INSERT into actions
@@ -245,10 +295,7 @@ db_insert_results_ts <- function(db,
 
   if (class(db) == "PostgreSQLConnection"){
     # make sure site is in sampling features table
-    if(!site_code %in%
-       DBI::dbGetQuery(db, "SELECT samplingfeaturecode
-                       FROM odm2.samplingfeatures
-                       WHERE samplingfeaturetypecv = 'Site'")$samplingfeature){
+    if(!site_code %in% db_get_sites(db)){
       rodm2::db_describe_site(db, site_code)
   }
 

@@ -6,7 +6,8 @@
 \usage{
 db_describe_equipment(db, equip_name, serial_no, model_name, vendor,
   owner_first, equipment_type = "Sensor", owner_last = NULL,
-  owner_email = NULL, manufacturer = NULL, purchase_date = Sys.Date())
+  owner_email = NULL, manufacturer = NULL,
+  purchase_date = Sys.Date())
 }
 \arguments{
 \item{db}{database connection}

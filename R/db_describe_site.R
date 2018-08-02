@@ -134,3 +134,28 @@ db_describe_site_geom <- function(db,
 
 }
 
+#' Get list of site codes currently in database
+#'
+#' @param db
+#'
+#' @return the current values in the samplingfeaturecode column
+#' @export
+#'
+#' @examples
+#' #db_get_sites(db)
+db_get_sites <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_sites <- c()
+  if (class(db) == "SQLiteConnection"){
+    current_sites <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures
+                                     WHERE samplingfeaturetypecv = 'Site'")[[1]]
+  }
+  if (class(db) == "PostgreSQLConnection"){
+    current_sites <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures
+                                     WHERE samplingfeaturetypecv = 'Site'")[[1]]
+  }
+  return(current_sites)
+}
+
+

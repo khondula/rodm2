@@ -33,11 +33,11 @@ You can install this package from GitHub with:
 devtools::install_github("khondula/rodm2")
 ```
 
-## Usage
+## Usage Example
 
-Organize a dataframe of time series values into a new ODM2 sqlite database:
+Organize a dataframe of time series values into a new or existing ODM2 sqlite database:
 
-The data to upload must have at least 2 timepoints, a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
+The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
 
 ```{r, echo = FALSE}
 ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
@@ -47,12 +47,14 @@ ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55
 knitr::kable(ts_data)
 ```
 
+Load up the package and create a new ODM2 database or connection object to an existing ODM2 database.
+
 ```{r}
 library(rodm2)
 dblite <- create_sqlite(connect = TRUE)
 ```
 
-Create a list that matches the variables to column names and units:
+Each column in the data to upload should contain data about one variable with the same units. Create a list that specifies for each variable the column names and units:
 
 ```{r}
 vars_list <- list(
@@ -76,9 +78,7 @@ db_insert_results_ts(db = dblite, # database connection
                      )
 ```
 
-
-
-
+You can also specify who collected the data with `actionby` and a specific piece of equipment used with `equip_name`. Methods, variables, and site codes not already existing in the database will be added to the appropriate tables. 
 
 ## More details 
 
@@ -121,7 +121,7 @@ DBI::dbListFields(dblite, "featureactions")
 head(DBI::dbReadTable(dblite, "units"))
 ```
 
-## "Describe"" functions
+## "Describe" functions
 
 Add information using `db_describe_%TABLE%` functions. 
 
@@ -139,6 +139,8 @@ There are currently "describe" functions for:
 * variables
 * annotations
 * organizations (necessary for equipment)
+* sites
+* site geometries
 
 ## 'Insert' functions
 

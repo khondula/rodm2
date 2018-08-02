@@ -4,7 +4,8 @@
 \alias{db_describe_site}
 \title{Describe a new site}
 \usage{
-db_describe_site(db, site_code, site_name = NULL, site_description = NULL)
+db_describe_site(db, site_code, site_name = NULL,
+  site_description = NULL)
 }
 \arguments{
 \item{db}{database connection object}
