@@ -58,22 +58,22 @@ a separate column (as "UTC offset"). In the upload function, the UTC offset is a
 determined by using format(as.POSIXct(x), "%z").
 }
 \examples{
-db <- rodm2::create_sqlite(connect = TRUE)
+#db <- rodm2::create_sqlite(connect = TRUE)
 
-tsrv <-data.frame(
-  Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
-  "wd" = c(180,170),
-  "ws" = c(1, 1.5),
-  "gustspeed" = c(2, 2.5))
+#tsrv <-data.frame(
+ # Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+  #"wd" = c(180,170),
+ # "ws" = c(1, 1.5),
+ # "gustspeed" = c(2, 2.5))
 
-db_insert_results_ts(
-  db = db,
-  datavalues = tsrv,
-  method = "SonicAnemometer",
-  site_code = "BB2",
-   variables = list("Wind direction" = list("wd", "Degree"),
-                    "Wind speed" = list("ws", "Meter per Second"),
-                     "Wind gust speed" = list("gustspeed", "Meter per Second")),
-  sampledmedium = "Air")
+#db_insert_results_ts(
+ # db = db,
+ # datavalues = tsrv,
+ # method = "SonicAnemometer",
+ # site_code = "BB2",
+ #  variables = list("Wind direction" = list("wd", "Degree"),
+ #                   "Wind speed" = list("ws", "Meter per Second"),
+ #                    "Wind gust speed" = list("gustspeed", "Meter per Second")),
+ # sampledmedium = "Air")
 
 }

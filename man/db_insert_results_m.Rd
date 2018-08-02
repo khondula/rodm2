@@ -15,7 +15,7 @@ db_insert_results_m(db, datavalues, method, site_code_col = "site",
 \item{db}{database connection}
 
 \item{datavalues}{data frame with columns "Timestamp" with
-POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
+YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
 \item{method}{code for method used to collect data}
 
@@ -29,7 +29,11 @@ with format list("variablen1ame" = list(units = 'unitsname', column = 'colname',
 \item{processinglevel}{code for processing level. will be added to processinglevels table if new.
 defaults to "Raw data'.}
 
-\item{methodtypecv}{}
+\item{aggregationstatistic}{defaults to unknown}
+
+\item{time_aggregation_interval}{defaults to unknown}
+
+\item{methodtypecv}{defaults to instrument deployment}
 
 \item{actionby}{(optional) the person who performed the action}
 
