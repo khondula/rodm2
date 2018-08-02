@@ -152,9 +152,9 @@ db_insert_results_ts <- function(db,
     RSQLite::dbBind(sql1, params = list(method = method,
                                         begindatetime = format(as.POSIXct(datavalues[["Timestamp"]][1]),
                                                                "%Y-%m-%d %H:%M:%S"),
-                                        begindatetimeutcoffset = as.integer(format(as.POSIXct(
+                                        begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
                                           datavalues[["Timestamp"]][1]),
-                                                                                   "%z")),
+                                                                                   "%z"),1,3)),
                                         enddatetime = format(as.POSIXct(
                                           datavalues[["Timestamp"]][nrow(datavalues)]),
                                                              "%Y-%m-%d %H:%M:%S")))
@@ -280,7 +280,7 @@ db_insert_results_ts <- function(db,
         dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
                       datavalue = var_colname) %>%
-        dplyr::mutate(valuedatetimeutcoffset = as.integer(format(as.POSIXct(valuedatetime), "%z")),
+        dplyr::mutate(valuedatetimeutcoffset = as.integer(substr(format(as.POSIXct(valuedatetime), "%z"),1,3)),
                       valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
                       resultid = as.integer(newresultids[[i]]),
                       censorcodecv = censorcodecv[[1]],
@@ -333,8 +333,8 @@ db_insert_results_ts <- function(db,
                                method = method,
                                begindatetime = format(as.POSIXct(
                                  datavalues[["Timestamp"]][1]), "%Y-%m-%d %H:%M:%S"),
-                               begindatetimeutcoffset = as.integer(format(as.POSIXct(
-                                 datavalues[["Timestamp"]][1]), "%z")),
+                               begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
+                                 datavalues[["Timestamp"]][1]), "%z"),1,3)),
                                enddatetime = format(as.POSIXct(
                                  datavalues[["Timestamp"]][nrow(datavalues)]),
                                  "%Y-%m-%d %H:%M:%S"),
@@ -470,7 +470,7 @@ db_insert_results_ts <- function(db,
         dplyr::select(Timestamp, var_colname) %>%
         dplyr::rename(valuedatetime = Timestamp,
                       datavalue = var_colname) %>%
-        dplyr::mutate(valuedatetimeutcoffset = as.integer(format(as.POSIXct(valuedatetime), "%z")),
+        dplyr::mutate(valuedatetimeutcoffset = as.integer(substr(format(as.POSIXct(valuedatetime), "%z"),1,3)),
                       valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
                       resultid = as.integer(newresultids[[i]]),
                       censorcodecv = censorcodecv[[1]],
