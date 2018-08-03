@@ -1,8 +1,8 @@
 ---
-title: "Insert time series results"
+title: "Insert measurement results"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Insert time series results}
+  %\VignetteIndexEntry{Insert measurement results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+Measurement results are one value per variable collected at one site using a specific method. This example shows how to upload data from a dataframe where each row is point data about a set variables collected at a site. The data are associated with one "action" because the same instrument measured all 3 variables. Each variable's data is a different "result" with different units. 
 
 ## Connect
 
@@ -25,14 +27,15 @@ db <- rodm2::create_sqlite(connect = TRUE)
 
 ## Prepare data
 
-The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
+The data to upload should have data for one or more variables, where data in each row was collected at one site using the same instrument. It needs a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and a column with site codes. For example:
 
 ```{r}
-ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+measurement_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
                    "wd" = c(180,170),
                    "ws" = c(1, 1.5), 
-                   "gustspeed" = c(2, 2.5))
-head(ts_data)
+                   "gustspeed" = c(2, 2.5),
+                   "site" = c("BB1", "BB2"))
+head(measurement_data)
 ```
 
 
@@ -61,21 +64,22 @@ The values in the "Timestamp" column must have time in the format YYYY-MM-DD HH:
 
 ## Insert
 
-The required arguments to `db_insert_results_ts()` are
+The required arguments to `db_insert_results_m()` are
 
 * database connection
-* data frame with Timestamp and [Variable Name] columns
+* data frame with Timestamp, site, and [Variable Name] columns
 * list of ("variables" = "units") for each variable to be uploaded
 * method code
-* site code
+* name of column with site codes
 * sampled medium (from medium controlled vocabulary e.g. Air, Soil, etc.)
 
 If the variable(s), method, or site code do not already exist in the database, they will be added. 
 
 ```{r}
-db_insert_results_ts(db = db, 
-                     datavalues = ts_data,
+db_insert_results_m(db = db, 
+                     datavalues = measurement_data,
                      variables = vars_list,
+                    site_code_col = "site",
                      method = "SonicAnemometer",
                      site_code = "BB2",
                      sampledmedium = "Air")
@@ -90,7 +94,19 @@ Optional arguments:
 
 ## Get values
 
-```{r}
-DBI::dbReadTable(db, "timeseriesresultvalues")
+```{sql, connection = db, output.var = "db_out"}
+SELECT datavalue, res.resultid, var.variablenamecv, units.unitsname, valuedatetime, sf.samplingfeaturecode
+FROM measurementresultvalues mrv
+INNER JOIN results res ON mrv.resultid = res.resultid
+INNER JOIN variables var ON res.variableid = var.variableid
+INNER JOIN featureactions fa ON res.featureactionid = fa.featureactionid
+INNER JOIN samplingfeatures sf ON sf.samplingfeatureid = fa.samplingfeatureid
+INNER JOIN actions acts ON acts.actionid = fa.actionid
+INNER JOIN units units ON units.unitsid = res.unitsid
+INNER JOIN methods meth ON meth.methodid = acts.methodid
+```
+
+```{r, echo = FALSE, results='asis'}
+knitr::kable(db_out)
 ```
 
