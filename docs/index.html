@@ -52,6 +52,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/insert-measurements.html">Insert measurement results</a>
+    </li>
+    <li>
       <a href="articles/introduction.html">Insert time series results</a>
     </li>
     <li>
@@ -59,9 +62,6 @@
     </li>
     <li>
       <a href="articles/newsites.html">Add new sites</a>
-    </li>
-    <li>
-      <a href="articles/view-time-series-results.html">View time series results</a>
     </li>
   </ul>
 </li>
@@ -100,11 +100,11 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)</code></pre></div>
 </div>
-<div id="usage" class="section level2">
+<div id="usage-example" class="section level2">
 <h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<p>Organize a dataframe of time series values into a new ODM2 sqlite database:</p>
-<p>The data to upload must have at least 2 timepoints, a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).</p>
+<a href="#usage-example" class="anchor"></a>Usage Example</h2>
+<p>Organize a dataframe of time series values into a new or existing ODM2 sqlite database:</p>
+<p>The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS. For example:</p>
 <table class="table table">
 <thead><tr class="header">
 <th align="left">Timestamp</th>
@@ -127,9 +127,10 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 </tr>
 </tbody>
 </table>
+<p>Load up the package and create a new ODM2 database or connection object to an existing ODM2 database.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Create a list that matches the variables to column names and units:</p>
+dblite &lt;-<span class="st"> </span><span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Each column in the data to upload should contain data about one variable with the same units. Create a list that specifies for each variable the column names and units:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw">list</span>(
   <span class="st">'Wind direction'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">column =</span> <span class="st">'wd'</span>, <span class="dt">units =</span> <span class="st">'Degree'</span>),
   <span class="st">'Wind speed'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">column =</span> <span class="st">'ws'</span>, <span class="dt">units =</span> <span class="st">'Meter per Second'</span>),
@@ -149,6 +150,7 @@ dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocum
 <span class="co">#&gt; Wind speed has been added to the Variables table.</span>
 <span class="co">#&gt; Wind gust speed has been added to the Variables table.</span>
 <span class="co">#&gt; Site Site1 has been entered into the samplingfeatures table.</span></code></pre></div>
+<p>You can also specify who collected the data with <code>actionby</code> and a specific piece of equipment used with <code>equip_name</code>. Methods, variables, and site codes not already existing in the database will be added to the appropriate tables.</p>
 </div>
 <div id="more-details" class="section level2">
 <h2 class="hasAnchor">
@@ -158,9 +160,9 @@ dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocum
 <p>A script for creating a PostgreSQL database with the ODM2 schema is <a href="https://github.com/ODM2/ODM2/blob/master/src/blank_schema_scripts/postgresql/ODM2_for_PostgreSQL.sql">here</a> and instructions for populating the controlled vocabularies tables using a script are <a href="https://github.com/ODM2/ODM2/tree/master/src/load_cvs">here</a>.</p>
 <p>You will need to create a database connection object, eg. using <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">DBI::dbConnect()</a></code> and your host and log-in credentials.</p>
 <p><strong>Without an external database</strong></p>
-<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R. By default, <code><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite()</a></code> just creates the sqlite file but <code>connect = TRUE</code> will return the connection object as well.</p>
+<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R. By default, <code><a href="reference/create_sqlite.html">create_sqlite()</a></code> just creates the sqlite file but <code>connect = TRUE</code> will return the connection object as well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-dblite &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
+dblite &lt;-<span class="st"> </span><span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Or create a connection to an existing sqlite file using <code>dbConnect</code> and the name of the file.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dblite &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)</code></pre></div>
 <p>There are 132 tables in the database. The “blank” database has the Units table populated as well as all of the controlled vocabularies.</p>
@@ -192,7 +194,7 @@ DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation
 </div>
 <div id="describe-functions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#describe-functions" class="anchor"></a>“Describe”" functions</h2>
+<a href="#describe-functions" class="anchor"></a>“Describe” functions</h2>
 <p>Add information using <code>db_describe_%TABLE%</code> functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> dblite, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
      <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
@@ -206,6 +208,8 @@ DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation
 <li>variables</li>
 <li>annotations</li>
 <li>organizations (necessary for equipment)</li>
+<li>sites</li>
+<li>site geometries</li>
 </ul>
 </div>
 <div id="insert-functions" class="section level2">
