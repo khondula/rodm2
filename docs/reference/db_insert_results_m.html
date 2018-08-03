@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Describe a new site with geometry — db_describe_site_geom • rodm2</title>
+<title>Insert time series data values to ODM2 database — db_insert_results_m • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Describe a new site with geometry — db_describe_site_geom" />
+<meta property="og:title" content="Insert time series data values to ODM2 database — db_insert_results_m" />
 
-<meta property="og:description" content="Describe a new site with geometry" />
+<meta property="og:description" content="Insert time series data values to ODM2 database" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -113,18 +113,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Describe a new site with geometry</h1>
+    <h1>Insert time series data values to ODM2 database</h1>
     
-    <div class="hidden name"><code>db_describe_site_geom.Rd</code></div>
+    <div class="hidden name"><code>db_insert_results_m.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Describe a new site with geometry</p>
+    <p>Insert time series data values to ODM2 database</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_site_geom</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='no'>site_geometry</span>, <span class='no'>sitetype</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>db_insert_results_m</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>method</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
+  <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
+  <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>,
+  <span class='st'>"Minute"</span>), <span class='kw'>methodtypecv</span> <span class='kw'>=</span> <span class='st'>"Instrument deployment"</span>, <span class='kw'>actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocationunits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,34 +139,84 @@
       <td><p>database connection</p></td>
     </tr>
     <tr>
-      <th>site_code</th>
-      <td><p>unique short code name for site or maybe column of sf with site code</p></td>
+      <th>datavalues</th>
+      <td><p>data frame with columns "Timestamp" with
+YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></td>
     </tr>
     <tr>
-      <th>site_geometry</th>
-      <td><p>sf object with point coordinates of site</p></td>
+      <th>method</th>
+      <td><p>code for method used to collect data</p></td>
     </tr>
     <tr>
-      <th>sitetype</th>
-      <td><p>term from sitetype controlled vocabulary</p></td>
+      <th>site_code_col</th>
+      <td><p>name of column with site codes. defaults to "site"</p></td>
+    </tr>
+    <tr>
+      <th>variables</th>
+      <td><p>a named list of lists defining variable names, units, and columns in datavalues data frame
+with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))</p></td>
+    </tr>
+    <tr>
+      <th>sampledmedium</th>
+      <td><p>term from controlled vocabulary for medium sampled eg. Air, Water, Soil</p></td>
+    </tr>
+    <tr>
+      <th>processinglevel</th>
+      <td><p>code for processing level. will be added to processinglevels table if new.
+defaults to "Raw data'.</p></td>
+    </tr>
+    <tr>
+      <th>aggregationstatistic</th>
+      <td><p>defaults to unknown</p></td>
+    </tr>
+    <tr>
+      <th>time_aggregation_interval</th>
+      <td><p>defaults to unknown</p></td>
+    </tr>
+    <tr>
+      <th>methodtypecv</th>
+      <td><p>defaults to instrument deployment</p></td>
+    </tr>
+    <tr>
+      <th>actionby</th>
+      <td><p>(optional) the person who performed the action</p></td>
+    </tr>
+    <tr>
+      <th>equipment_name</th>
+      <td><p>(optional) the equipment used to collect the data</p></td>
+    </tr>
+    <tr>
+      <th>zlocation</th>
+      <td><p>(optional) z location offset</p></td>
+    </tr>
+    <tr>
+      <th>zlocationunits</th>
+      <td><p>(optional but required if zlocation is set) name of units of z location offset</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional parameters to db_describe_site (site_name, site_description)</p></td>
+      <td><p>parameters to pass to various db_describe_ functions</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>message that site has been added</p>
+    <p>true if successful</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># add a site with coordinate information</span>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># make database and data frame</span>
 <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>pt1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/sfc'>st_sfc</a></span>(<span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/st'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>76.503394</span>, <span class='fl'>38.976546</span>)),<span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/st_crs'>st_crs</a></span>(<span class='fl'>4326</span>))
-<span class='no'>site_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/sf'>st_sf</a></span>(<span class='fu'>data.frame</span>(<span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"my_site"</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='no'>pt1</span>))
-<span class='fu'>db_describe_site_geom</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"my_code"</span>, <span class='kw'>site_geometry</span> <span class='kw'>=</span> <span class='no'>site_sf</span>, <span class='kw'>sitetype</span> <span class='kw'>=</span> <span class='st'>'Unknown'</span>)</div><div class='output co'>#&gt; <span class='message'>Site my_code has been entered into the samplingfeatures table.</span></div></pre>
+<span class='no'>mrv</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='st'>"2018-06-27 13:55:00"</span>,
+<span class='st'>"vwc"</span> <span class='kw'>=</span> <span class='fl'>68.3</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>)
+
+<span class='fu'>db_insert_results_m</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>mrv</span>,
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"soilmoisture"</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
+    <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"Volumetric water content"</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"vwc"</span>,<span class='st'>" Percent"</span>)),
+    <span class='kw'>sampledmedium</span> <span class='kw'>=</span> <span class='st'>"Soil"</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

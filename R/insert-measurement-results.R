@@ -127,8 +127,7 @@ db_insert_results_m <- function(db,
     #######################################
     # for each ROW of MRV data frame
 
-    for(mrv_id in 1:nrow(datavalues)){
-    # db_insert_one_mrv <- function(mrv_id){
+    db_insert_one_mrv <- function(mrv_id){
       sql1 <- RSQLite::dbSendQuery(db, 'INSERT into actions
                                    (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
                                    VALUES
@@ -348,7 +347,9 @@ db_insert_results_m <- function(db,
 
     #######################################
     # for each ROW of MRV data frame
-    db_insert_one_mrv_postgres <- function(mrv_id){
+    for(mrv_id in 1:nrow(datavalues)){
+
+    # db_insert_one_mrv_postgres <- function(mrv_id){
       sql1 <- DBI::sqlInterpolate(db,
                                   'WITH newact AS (
                                   INSERT into odm2.actions

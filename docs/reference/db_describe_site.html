@@ -84,6 +84,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/insert-measurements.html">Insert measurement results</a>
+    </li>
+    <li>
       <a href="../articles/introduction.html">Insert time series results</a>
     </li>
     <li>
@@ -91,9 +94,6 @@
     </li>
     <li>
       <a href="../articles/newsites.html">Add new sites</a>
-    </li>
-    <li>
-      <a href="../articles/view-time-series-results.html">View time series results</a>
     </li>
   </ul>
 </li>
@@ -124,7 +124,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='kw'>site_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='kw'>site_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>site_description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,7 +155,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># just add site name</span>
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'>create_sqlite</span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"new_site"</span>)</div><div class='output co'>#&gt; <span class='message'>Site new_site has been entered into the samplingfeatures table.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
