@@ -158,4 +158,27 @@ db_get_sites <- function(db){
   return(current_sites)
 }
 
+#' Get list of sample codes currently in database
+#'
+#' @param db
+#'
+#' @return the current values in the samplingfeaturecode column
+#' @export
+#'
+#' @examples
+#' #db_get_samples(db)
+db_get_samples <- function(db){
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  current_samples <- c()
+  if (class(db) == "SQLiteConnection"){
+    current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures
+                                     WHERE samplingfeaturetypecv = 'Specimen'")[[1]]
+  }
+  if (class(db) == "PostgreSQLConnection"){
+    current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures
+                                     WHERE samplingfeaturetypecv = 'Specimen'")[[1]]
+  }
+  return(current_samples)
+}
 

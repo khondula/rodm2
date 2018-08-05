@@ -1,6 +1,6 @@
 # input data frame: site, datetime, variable
 
-#' Insert time series data values to ODM2 database
+#' Insert measurement data values to ODM2 database
 #'
 #' @param db database connection
 #' @param datavalues data frame with columns "Timestamp" with

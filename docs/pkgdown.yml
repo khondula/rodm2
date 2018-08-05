@@ -2,8 +2,8 @@ pandoc: 1.19.2.1
 pkgdown: 1.1.0.9000
 pkgdown_sha: be03b4b7b3d5203ba67423ff6888ab92f1420b76
 articles:
+  insert-measurements: insert-measurements.html
   introduction: introduction.html
   new_person: new_person.html
   newsites: newsites.html
-  view-time-series-results: view-time-series-results.html
 
