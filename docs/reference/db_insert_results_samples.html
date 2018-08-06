@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insert measurement data values to ODM2 database — db_insert_results_m • rodm2</title>
+<title>Insert sample result data values to ODM2 database — db_insert_results_samples • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Insert measurement data values to ODM2 database — db_insert_results_m" />
+<meta property="og:title" content="Insert sample result data values to ODM2 database — db_insert_results_samples" />
 
-<meta property="og:description" content="Insert measurement data values to ODM2 database" />
+<meta property="og:description" content="Insert sample result data values to ODM2 database" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,23 +116,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Insert measurement data values to ODM2 database</h1>
+    <h1>Insert sample result data values to ODM2 database</h1>
     
-    <div class="hidden name"><code>db_insert_results_m.Rd</code></div>
+    <div class="hidden name"><code>db_insert_results_samples.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Insert measurement data values to ODM2 database</p>
+    <p>Insert sample result data values to ODM2 database</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>db_insert_results_m</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>method</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
-  <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
+    <pre class="usage"><span class='fu'>db_insert_results_samples</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>field_method</span>, <span class='no'>lab_method</span>,
+  <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+  <span class='kw'>sample_code_col</span> <span class='kw'>=</span> <span class='st'>"Sample"</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
   <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>,
-  <span class='st'>"Minute"</span>), <span class='kw'>methodtypecv</span> <span class='kw'>=</span> <span class='st'>"Instrument deployment"</span>, <span class='kw'>actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocationunits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>)</pre>
+  <span class='st'>"Minute"</span>), <span class='kw'>field_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>field_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lab_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>zlocationunits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,12 +148,12 @@
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></td>
     </tr>
     <tr>
-      <th>method</th>
-      <td><p>code for method used to collect data</p></td>
+      <th>field_method</th>
+      <td><p>short description of field method</p></td>
     </tr>
     <tr>
-      <th>site_code_col</th>
-      <td><p>name of column with site codes. defaults to "site"</p></td>
+      <th>lab_method</th>
+      <td><p>short description of lab method</p></td>
     </tr>
     <tr>
       <th>variables</th>
@@ -162,6 +163,14 @@ with format list("variablen1ame" = list(units = 'unitsname', column = 'colname',
     <tr>
       <th>sampledmedium</th>
       <td><p>term from controlled vocabulary for medium sampled eg. Air, Water, Soil</p></td>
+    </tr>
+    <tr>
+      <th>site_code_col</th>
+      <td><p>name of column with site codes. defaults to "Site"</p></td>
+    </tr>
+    <tr>
+      <th>sample_code_col</th>
+      <td><p>name of column in input data frame with sample ID. defeaults to "Sample"</p></td>
     </tr>
     <tr>
       <th>processinglevel</th>
@@ -177,16 +186,20 @@ defaults to "Raw data'.</p></td>
       <td><p>defaults to unknown</p></td>
     </tr>
     <tr>
-      <th>methodtypecv</th>
-      <td><p>defaults to instrument deployment</p></td>
+      <th>field_actionby</th>
+      <td><p>optional first name of lead for field action, must already be in people table</p></td>
     </tr>
     <tr>
-      <th>actionby</th>
-      <td><p>(optional) the person who performed the action</p></td>
+      <th>field_equipment_name</th>
+      <td><p>optional code name of equipment used for field action, must already be in equipment table</p></td>
     </tr>
     <tr>
-      <th>equipment_name</th>
-      <td><p>(optional) the equipment used to collect the data</p></td>
+      <th>lab_actionby</th>
+      <td><p>optional first name of lead for lab action, must already be in people table</p></td>
+    </tr>
+    <tr>
+      <th>lab_equipment_name</th>
+      <td><p>optional code name of equipment used for lab action, must already be in equipment table</p></td>
     </tr>
     <tr>
       <th>zlocation</th>
@@ -212,11 +225,12 @@ defaults to "Raw data'.</p></td>
 <span class='co'># make database and data frame</span>
 <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>mrv</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='st'>"2018-06-27 13:55:00"</span>,
-<span class='st'>"vwc"</span> <span class='kw'>=</span> <span class='fl'>68.3</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>)
+<span class='st'>"pH"</span> <span class='kw'>=</span> <span class='fl'>4.5</span>, <span class='kw'>Site</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>, <span class='kw'>Sample</span> <span class='kw'>=</span> <span class='st'>"CEM 1"</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>db_insert_results_m</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>mrv</span>,
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"soilmoisture"</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
-    <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"Volumetric water content"</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"vwc"</span>,<span class='st'>" Percent"</span>)),
+<span class='fu'>db_insert_results_sample</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>soil_ph</span>,
+    <span class='kw'>field_method</span> <span class='kw'>=</span> <span class='st'>"1 inch 30 cm soil core"</span>,
+    <span class='kw'>lab_method</span> <span class='kw'>=</span> <span class='st'>"Soil pH CEM"</span>,
+    <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"pH"</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"pH"</span>, <span class='kw'>units</span> <span class='kw'>=</span> <span class='st'>"pH"</span>)),
     <span class='kw'>sampledmedium</span> <span class='kw'>=</span> <span class='st'>"Soil"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
