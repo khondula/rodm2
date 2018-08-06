@@ -96,7 +96,7 @@ insert_processinglevel <- function(db, processinglevel){
     RPostgreSQL::dbGetQuery(db, sql)
     }
   }
-  message(paste(processinglevel), "has been inserted into the processinglevel table.")
+  message(paste(processinglevel), " has been inserted into the processinglevel table.")
 }
 
 #' Check that the names of a variables list are in a database
@@ -112,7 +112,6 @@ insert_processinglevel <- function(db, processinglevel){
 check_variables_list <- function(db, variables){
   if (class(db) == "SQLiteConnection"){
     # check that all variables are in variables table
-    rodm2::check_variables_list(db = db, variables = variables)
 
     # check that all variables are in variables table
     for(newvar in names(variables)){
