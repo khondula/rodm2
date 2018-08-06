@@ -447,8 +447,11 @@ RETURNING featureactionid, actionid
 ',
 actiontypecv = 'Specimen analysis',
 lab_method = lab_method,
-begindatetime = ifelse(),
-utcoffset = ifelse(),
+begindatetime = ifelse(          is.null(datavalues[["Timestamp_analysis"]][sample_id]),
+                                 as.character(Sys.time()),
+                                 datavalues[["Timestamp_analysis"]][sample_id]),
+utcoffset = as.integer(substr(
+  format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
 relationshiptypecv = 'Is related to',
 field_fa_id = field_fa_id,
 samplecode = datavalues[[sample_code_col]][sample_id]
