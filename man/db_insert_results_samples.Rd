@@ -8,8 +8,9 @@ db_insert_results_samples(db, datavalues, field_method, lab_method,
   variables, sampledmedium, site_code_col = "Site",
   sample_code_col = "Sample", processinglevel = "Raw data",
   aggregationstatistic = "Unknown", time_aggregation_interval = list(1,
-  "Minute"), actionby = NULL, equipment_name = NULL,
-  zlocation = NULL, zlocationunits = NULL, ...)
+  "Minute"), field_actionby = NULL, field_equipment_name = NULL,
+  lab_actionby = NULL, lab_equipment_name = NULL, zlocation = NULL,
+  zlocationunits = NULL, ...)
 }
 \arguments{
 \item{db}{database connection}
@@ -37,9 +38,13 @@ defaults to "Raw data'.}
 
 \item{time_aggregation_interval}{defaults to unknown}
 
-\item{actionby}{(optional) the person who performed the action}
+\item{field_actionby}{optional first name of lead for field action, must already be in people table}
 
-\item{equipment_name}{(optional) the equipment used to collect the data}
+\item{field_equipment_name}{optional code name of equipment used for field action, must already be in equipment table}
+
+\item{lab_actionby}{optional first name of lead for lab action, must already be in people table}
+
+\item{lab_equipment_name}{optional code name of equipment used for lab action, must already be in equipment table}
 
 \item{zlocation}{(optional) z location offset}
 

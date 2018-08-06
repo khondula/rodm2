@@ -499,7 +499,7 @@ db_insert_results_m <- function(db,
 
         if(!is.null(zlocation)){
           sql <- DBI::sqlInterpolate(db,
-                                     'UPDATE odm2.timeseriesresults
+                                     'UPDATE odm2.measurementresults
                                      SET zlocation = ?zlocation,
                                      zlocationunitsid = (SELECT unitsid FROM odm2.units WHERE unitsname = ?zlocationunits)
                                      WHERE resultid = ?resultid)',

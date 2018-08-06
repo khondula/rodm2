@@ -11,6 +11,8 @@ get_site_names_like(x, db, ...)
 check_samplingfeaturecodes(new_codes, db = db)
 }
 \arguments{
+\item{x}{pattern to search for}
+
 \item{db}{database connection}
 
 \item{...}{extra parameters to pass to agrep}
