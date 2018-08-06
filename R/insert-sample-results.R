@@ -340,6 +340,8 @@ db_insert_results_samples <- function(db,
         # append
         RSQLite::dbAppendTable(db, "measurementresultvalues", datavalues_var)
       }
+      message(paste("Sample ", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
+
     }
     purrr::map(1:nrow(datavalues), db_insert_one_sample)
   }
@@ -365,21 +367,24 @@ db_insert_results_samples <- function(db,
 
                                  newsample AS (
                                  INSERT into odm2.samplingfeatures
-(samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
-VALUES
-(?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplecode)
-RETURNING samplingfeatureid
+                                 (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
+                                 VALUES
+                                 (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplecode)
+                                 RETURNING samplingfeatureid
                                  ),
-newrel AS (
-INSERT into odm2.relatedfeatures
-(samplingfeatureid, relationshiptypecv, relatedfeatureid)
-VALUES
-(?samplecode, ?relationshiptypecv, ?site_code)
-)
 
-INSERT into odm2.featureactions (samplingfeatureid, actionid)
-VALUES (newsample.samplingfeatureid, fieldact.actionid)
-RETURNING featureactionid, actionid',
+                                 newrel AS (
+                                 INSERT into odm2.relatedfeatures
+                                 (samplingfeatureid, relationshiptypecv, relatedfeatureid)
+                                 VALUES
+                                 ((SELECT newsample.samplingfeatureid FROM newsample), ?relationshiptypecv,
+                                 (SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?site_code)
+                                 ))
+
+                                 INSERT into odm2.featureactions (samplingfeatureid, actionid)
+                                 VALUES ((SELECT newsample.samplingfeatureid FROM newsample),
+                                 (SELECT fieldact.actionid FROM fieldact))
+                                 RETURNING featureactionid, actionid',
                                  actiontypecv = 'Specimen collection',
                                  field_method = field_method,
                                  begindatetime = datavalues[["Timestamp"]][sample_id],
@@ -395,212 +400,214 @@ RETURNING featureactionid, actionid',
       field_fa_id <- field_fa$featureactionid
       field_action_id <- field_fa$actionid
 
-# field actionby
+      # field actionby
       if(!is.null(field_actionby)){
 
         sql <- DBI::sqlInterpolate(db,
-                                    'INSERT into odm2.actionby
-                                    (actionid, affiliationid, isactionlead)
-                                    VALUES
-                                    (?newactionid,
-                                    (SELECT affiliationid FROM odm2.affiliations
-                                    WHERE personid =
-                                    (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
-                                    ?isactionlead)',
-                                    newactionid = field_action_id,
-                                    actionby = field_actionby,
-                                    isactionlead = "TRUE")
+                                   'INSERT into odm2.actionby
+                                   (actionid, affiliationid, isactionlead)
+                                   VALUES
+                                   (?newactionid,
+                                   (SELECT affiliationid FROM odm2.affiliations
+                                   WHERE personid =
+                                   (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
+                                   ?isactionlead)',
+                                   newactionid = field_action_id,
+                                   actionby = field_actionby,
+                                   isactionlead = "TRUE")
         RPostgreSQL::dbGetQuery(db, sql)
       }
-# field equipmentused
+      # field equipmentused
       if(!is.null(field_equipment_name)){
         sql <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
-                                     VALUES
-                                     (?newactionid,
-                                     (SELECT equipmentid
-                                     FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
-                                     newactionid = field_action_id,
-                                     equipmentcode = field_equipment_name)
+                                   VALUES
+                                   (?newactionid,
+                                   (SELECT equipmentid
+                                   FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
+                                   newactionid = field_action_id,
+                                   equipmentcode = field_equipment_name)
         RPostgreSQL::dbGetQuery(db, sql)
       }
 
       # insert lab action and action relation and lab feature action
-sql <- DBI::sqlInterpolate(db,
-                           'WITH labact AS (INSERT into odm2.actions
+      sql <- DBI::sqlInterpolate(db,
+                                 'WITH labact AS (INSERT into odm2.actions
                                  (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
-                           VALUES
-                           (?actiontypecv,
-                           (SELECT methodid FROM odm2.methods WHERE methodcode = ?lab_method),
-                           ?begindatetime,
-                           ?utcoffset)
-                           RETURNING actionid),
-WITH newrel AS (
-INSERT into odm2.relatedactions (actionid, relationshiptypecv, relatedactionid)
-VALUES
-(labact.actionid, ?relationshiptypecv, ?field_fa_id)
-),
+                                 VALUES
+                                 (?actiontypecv,
+                                 (SELECT methodid FROM odm2.methods WHERE methodcode = ?lab_method),
+                                 ?begindatetime,
+                                 ?utcoffset)
+                                 RETURNING actionid),
 
-INSERT into odm2.featureactions (samplingfeatureid, actionid)
-VALUES (
-(SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?samplecode), labact.actionid)
-RETURNING featureactionid, actionid
-',
-actiontypecv = 'Specimen analysis',
-lab_method = lab_method,
-begindatetime = ifelse(          is.null(datavalues[["Timestamp_analysis"]][sample_id]),
-                                 as.character(Sys.time()),
-                                 datavalues[["Timestamp_analysis"]][sample_id]),
-utcoffset = as.integer(substr(
-  format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
-relationshiptypecv = 'Is related to',
-field_fa_id = field_fa_id,
-samplecode = datavalues[[sample_code_col]][sample_id]
-)
-newfa <- RPostgreSQL::dbGetQuery(db, sql)
-newfaid <- newfa$featureactionid
-lab_actionid <- newfa$actionid
+                                 newrel AS (
+                                 INSERT into odm2.relatedactions (actionid, relationshiptypecv, relatedactionid)
+                                 VALUES
+                                 ((SELECT labact.actionid FROM labact), ?relationshiptypecv, ?field_actionid)
+                                 )
 
-# lab actionby
-if(!is.null(lab_actionby)){
+                                 INSERT into odm2.featureactions (samplingfeatureid, actionid)
+                                 VALUES (
+                                 (SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?samplecode),
+                                 (SELECT labact.actionid FROM labact))
+                                 RETURNING featureactionid, actionid
+                                 ',
+                                 actiontypecv = 'Specimen analysis',
+                                 lab_method = lab_method,
+                                 begindatetime = ifelse(          is.null(datavalues[["Timestamp_analysis"]][sample_id]),
+                                                                  as.character(Sys.time()),
+                                                                  datavalues[["Timestamp_analysis"]][sample_id]),
+                                 utcoffset = as.integer(substr(
+                                   format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
+                                 relationshiptypecv = 'Is related to',
+                                 field_actionid = field_action_id,
+                                 samplecode = datavalues[[sample_code_col]][sample_id]
+                                 )
+      newfa <- RPostgreSQL::dbGetQuery(db, sql)
+      newfaid <- newfa$featureactionid
+      lab_actionid <- newfa$actionid
 
-  sql <- DBI::sqlInterpolate(db,
-                             'INSERT into odm2.actionby
-                             (actionid, affiliationid, isactionlead)
-                             VALUES
-                             (?newactionid,
-                             (SELECT affiliationid FROM odm2.affiliations
-                             WHERE personid =
-                             (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
-                             ?isactionlead)',
-                             newactionid = lab_actionid,
-                             actionby = lab_actionby,
-                             isactionlead = "TRUE")
-  RPostgreSQL::dbGetQuery(db, sql)
-}
-# lab equipmentused
-if(!is.null(lab_equipment_name)){
-  sql <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
-                             VALUES
-                             (?newactionid,
-                             (SELECT equipmentid
-                             FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
-                             newactionid = lab_actionid,
-                             equipmentcode = lab_equipment_name)
-  RPostgreSQL::dbGetQuery(db, sql)
-}
+      # lab actionby
+      if(!is.null(lab_actionby)){
+
+        sql <- DBI::sqlInterpolate(db,
+                                   'INSERT into odm2.actionby
+                                   (actionid, affiliationid, isactionlead)
+                                   VALUES
+                                   (?newactionid,
+                                   (SELECT affiliationid FROM odm2.affiliations
+                                   WHERE personid =
+                                   (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
+                                   ?isactionlead)',
+                                   newactionid = lab_actionid,
+                                   actionby = lab_actionby,
+                                   isactionlead = "TRUE")
+        RPostgreSQL::dbGetQuery(db, sql)
+      }
+      # lab equipmentused
+      if(!is.null(lab_equipment_name)){
+        sql <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
+                                   VALUES
+                                   (?newactionid,
+                                   (SELECT equipmentid
+                                   FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
+                                   newactionid = lab_actionid,
+                                   equipmentcode = lab_equipment_name)
+        RPostgreSQL::dbGetQuery(db, sql)
+      }
 
       # for each variable insert measurement results
 
-# add result! new result for each variable
-# for variables list, if no 'column', make col = name
-for(j in names(variables)){
-  if(!"column" %in% names(variables[[j]])){
-    variables[[j]][["column"]] <- j
-  }
-}
+      # add result! new result for each variable
+      # for variables list, if no 'column', make col = name
+      for(j in names(variables)){
+        if(!"column" %in% names(variables[[j]])){
+          variables[[j]][["column"]] <- j
+        }
+      }
 
-newresultids <- c()
+      newresultids <- c()
 
-for(j in names(variables)){
-  sql4 <- DBI::sqlInterpolate(db, 'INSERT into odm2.results
-                              (resultuuid, featureactionid, resulttypecv,
-                              variableid, unitsid, processinglevelid,
-                              sampledmediumcv, valuecount)
-                              VALUES
-                              (?uuid, ?newfaid, ?resulttypecv,
-                              (SELECT variableid FROM odm2.variables
-                              WHERE variablenamecv = ?variablenamecv),
-                              (SELECT unitsid FROM odm2.units WHERE unitsname = ?units),
-                              (SELECT processinglevelid FROM odm2.processinglevels
-                              WHERE definition = ?processinglevel),
-                              ?sampledmedium, ?valuecount)
-                              RETURNING resultid',
-                              uuid = uuid::UUIDgenerate(),
-                              newfaid = newfaid,
-                              resulttypecv = 'Measurement',
-                              variablenamecv = j,
-                              units = variables[[j]][["units"]],
-                              processinglevel = processinglevel,
-                              sampledmedium = sampledmedium,
-                              valuecount = 1)
+      for(j in names(variables)){
+        sql4 <- DBI::sqlInterpolate(db, 'INSERT into odm2.results
+                                    (resultuuid, featureactionid, resulttypecv,
+                                    variableid, unitsid, processinglevelid,
+                                    sampledmediumcv, valuecount)
+                                    VALUES
+                                    (?uuid, ?newfaid, ?resulttypecv,
+                                    (SELECT variableid FROM odm2.variables
+                                    WHERE variablenamecv = ?variablenamecv),
+                                    (SELECT unitsid FROM odm2.units WHERE unitsname = ?units),
+                                    (SELECT processinglevelid FROM odm2.processinglevels
+                                    WHERE definition = ?processinglevel),
+                                    ?sampledmedium, ?valuecount)
+                                    RETURNING resultid',
+                                    uuid = uuid::UUIDgenerate(),
+                                    newfaid = newfaid,
+                                    resulttypecv = 'Measurement',
+                                    variablenamecv = j,
+                                    units = variables[[j]][["units"]],
+                                    processinglevel = processinglevel,
+                                    sampledmedium = sampledmedium,
+                                    valuecount = 1)
 
-  newresult <- RPostgreSQL::dbGetQuery(db, sql4)
-  newresultids <- append(newresultids, as.integer(newresult))
-}
-names(newresultids) <- names(variables)
-#######################################
+        newresult <- RPostgreSQL::dbGetQuery(db, sql4)
+        newresultids <- append(newresultids, as.integer(newresult))
+      }
+      names(newresultids) <- names(variables)
+      #######################################
 
-# for each of the new results, insert into measurement results
-for(j in names(newresultids)){
+      # for each of the new results, insert into measurement results
+      for(j in names(newresultids)){
 
-  qualitycodecv <- dplyr::select(datavalues, variables[[j]][["qualitycodecol"]])
+        qualitycodecv <- dplyr::select(datavalues, variables[[j]][["qualitycodecol"]])
 
-  if(is.null(variables[[j]][["qualitycodecol"]])){
-    qualitycodecv <- "Unknown"
-  }
+        if(is.null(variables[[j]][["qualitycodecol"]])){
+          qualitycodecv <- "Unknown"
+        }
 
-  censorcodecv <- dplyr::select(datavalues, variables[[j]][["censorcodecol"]])
+        censorcodecv <- dplyr::select(datavalues, variables[[j]][["censorcodecol"]])
 
-  if(is.null(variables[[j]][["censorcodecol"]])){
-    censorcodecv <- "Unknown"
-  }
+        if(is.null(variables[[j]][["censorcodecol"]])){
+          censorcodecv <- "Unknown"
+        }
 
-  sql5 <- 'INSERT into odm2.measurementresults
-  (resultid, aggregationstatisticcv,
-  timeaggregationinterval, timeaggregationintervalunitsid, censorcodecv, qualitycodecv)
-  VALUES (?resultid, ?aggstatcv,
-  ?timeaggregationinterval,
-  (SELECT unitsid FROM odm2.units WHERE unitsname = ?timeaggregationintervalunits),
-  ?censorcodecv, ?qualitycodecv)'
-  sql5 <- DBI::sqlInterpolate(db, sql5,
-                              resultid = newresultids[[j]],
-                              aggstatcv = ifelse(is.null(aggregationstatistic),
-                                                 "Unknown", aggregationstatistic),
-                              timeaggregationinterval = time_aggregation_interval[[1]],
-                              timeaggregationintervalunits = time_aggregation_interval[[2]],
-                              censorcodecv = ifelse(is.null(variables[[j]]$censorcodecol),
-                                                    "Unknown", variables[[j]]$censorcodecol),
-                              qualitycodecv = ifelse(is.null(variables[[j]]$qualitycodecol),
-                                                     "Unknown", variables[[j]]$qualitycodecol)
-  )
-  RPostgreSQL::dbGetQuery(db, sql5)
+        sql5 <- 'INSERT into odm2.measurementresults
+        (resultid, aggregationstatisticcv,
+        timeaggregationinterval, timeaggregationintervalunitsid, censorcodecv, qualitycodecv)
+        VALUES (?resultid, ?aggstatcv,
+        ?timeaggregationinterval,
+        (SELECT unitsid FROM odm2.units WHERE unitsname = ?timeaggregationintervalunits),
+        ?censorcodecv, ?qualitycodecv)'
+        sql5 <- DBI::sqlInterpolate(db, sql5,
+                                    resultid = newresultids[[j]],
+                                    aggstatcv = ifelse(is.null(aggregationstatistic),
+                                                       "Unknown", aggregationstatistic),
+                                    timeaggregationinterval = time_aggregation_interval[[1]],
+                                    timeaggregationintervalunits = time_aggregation_interval[[2]],
+                                    censorcodecv = ifelse(is.null(variables[[j]]$censorcodecol),
+                                                          "Unknown", variables[[j]]$censorcodecol),
+                                    qualitycodecv = ifelse(is.null(variables[[j]]$qualitycodecol),
+                                                           "Unknown", variables[[j]]$qualitycodecol)
+        )
+        RPostgreSQL::dbGetQuery(db, sql5)
 
-  if(!is.null(zlocation)){
-    sql <- DBI::sqlInterpolate(db,
-                               'UPDATE odm2.measurementresults
-                               SET zlocation = ?zlocation,
-                               zlocationunitsid = (SELECT unitsid FROM odm2.units WHERE unitsname = ?zlocationunits)
-                               WHERE resultid = ?resultid)',
-                               zlocation = zlocation,
-                               zlocationunits = zlocationunits, resultid = j)
-    RPostgreSQL::dbGetQuery(db, sql)}
-}
-################################
-# then insert into measurementresultvalues
-for(j in names(newresultids)){
-  # subset data values
-  var_colname <- variables[[j]]$column
-  # make data frame to append
-  datavalues_var <- datavalues %>%
-    dplyr::slice(mrv_id) %>%
-    dplyr::select(Timestamp, var_colname) %>%
-    dplyr::rename(valuedatetime = Timestamp,
-                  datavalue = var_colname) %>%
-    dplyr::mutate(valuedatetimeutcoffset = as.integer(substr(
-      format(as.POSIXct(valuedatetime), "%z"), 1,3)),
-      valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
-      resultid = as.integer(newresultids[[j]]))
-  # append
-  DBI::dbWriteTable(db, c("odm2", "measurementresultvalues"),
-                    datavalues_var, row.names = FALSE,
-                    overwrite = FALSE,
-                    append = TRUE)
-}
+        if(!is.null(zlocation)){
+          sql <- DBI::sqlInterpolate(db,
+                                     'UPDATE odm2.measurementresults
+                                 SET zlocation = ?zlocation,
+                                 zlocationunitsid = (SELECT unitsid FROM odm2.units WHERE unitsname = ?zlocationunits)
+                                 WHERE resultid = ?resultid)',
+                                     zlocation = zlocation,
+                                     zlocationunits = zlocationunits, resultid = j)
+          RPostgreSQL::dbGetQuery(db, sql)}
+      }
+      ################################
+      # then insert into measurementresultvalues
+      for(j in names(newresultids)){
+        # subset data values
+        var_colname <- variables[[j]]$column
+        # make data frame to append
+        datavalues_var <- datavalues %>%
+          dplyr::slice(sample_id) %>%
+          dplyr::select(Timestamp, var_colname) %>%
+          dplyr::rename(valuedatetime = Timestamp,
+                        datavalue = var_colname) %>%
+          dplyr::mutate(valuedatetimeutcoffset = as.integer(substr(
+            format(as.POSIXct(valuedatetime), "%z"), 1,3)),
+            valuedatetime = format(as.POSIXct(valuedatetime), "%Y-%m-%d %H:%M:%S"),
+            resultid = as.integer(newresultids[[j]]))
+        # append
+        DBI::dbWriteTable(db, c("odm2", "measurementresultvalues"),
+                          datavalues_var, row.names = FALSE,
+                          overwrite = FALSE,
+                          append = TRUE)
+      }
+      message(paste("Sample ", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
     }
 
 
     purrr::map(1:nrow(datavalues), db_insert_one_sample_postgres)
-
   }
 
   }
