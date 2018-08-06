@@ -4,7 +4,8 @@
 \alias{db_insert_sample_relations}
 \title{Insert new sample relationships to the related features table}
 \usage{
-db_insert_sample_relations(new_related_samples, lhc, relationshiptypecv, rhc)
+db_insert_sample_relations(new_related_samples, lhc, relationshiptypecv,
+  rhc)
 }
 \arguments{
 \item{new_related_samples}{data frame with one row for each new relationship}

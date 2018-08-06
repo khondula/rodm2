@@ -1,5 +1,5 @@
 Package: rodm2
-Version: 0.0.0.9000
+Version: 0.1.0
 Title: Use an ODM2 Database in R
 Description: Organize site, sample, and sensor data with R.
 Authors@R: person("Kelly", "Hondula", , "khondula@sesync.org", c("aut", "cre"))
@@ -24,3 +24,5 @@ Imports:
     lubridate,
     purrr
 RoxygenNote: 6.1.0
+URL: https://github.com/khondula/rodm2
+BugReports: hhttps://github.com/khondula/rodm2/issues

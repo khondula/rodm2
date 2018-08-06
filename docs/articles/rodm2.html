@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insert measurement results • rodm2</title>
+<title>Insert time series results • rodm2</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Insert measurement results">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Insert time series results">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -91,17 +91,16 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Insert measurement results</h1>
+      <h1>Insert time series results</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/khondula/rodm2/blob/master/vignettes/insert-measurements.Rmd"><code>vignettes/insert-measurements.Rmd</code></a></small>
-      <div class="hidden name"><code>insert-measurements.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/khondula/rodm2/blob/master/vignettes/rodm2.Rmd"><code>vignettes/rodm2.Rmd</code></a></small>
+      <div class="hidden name"><code>rodm2.Rmd</code></div>
 
     </div>
 
     
     
-<p>Measurement results are one value per variable collected at one site using a specific method. This example shows how to upload data from a dataframe where each row is point data about a set variables collected at a site. The data are associated with one “action” because the same instrument measured all 3 variables. Each variable’s data is a different “result” with different units.</p>
 <div id="connect" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connect" class="anchor"></a>Connect</h2>
@@ -112,18 +111,17 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <div id="prepare-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#prepare-data" class="anchor"></a>Prepare data</h2>
-<p>The data to upload should have data for one or more variables, where data in each row was collected at one site using the same instrument. It needs a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS, and a column with site codes. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">measurement_data &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tibble/topics/tibble">tibble</a></span>(<span class="dt">Timestamp =</span> <span class="kw">c</span>(<span class="st">"2018-06-27 13:45:00"</span>, <span class="st">"2018-06-27 13:55:00"</span>),
+<p>The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ts_data &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tibble/topics/tibble">tibble</a></span>(<span class="dt">Timestamp =</span> <span class="kw">c</span>(<span class="st">"2018-06-27 13:45:00"</span>, <span class="st">"2018-06-27 13:55:00"</span>),
                    <span class="st">"wd"</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">180</span>,<span class="dv">170</span>),
                    <span class="st">"ws"</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>), 
-                   <span class="st">"gustspeed"</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">2.5</span>),
-                   <span class="st">"site"</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">"BB1"</span>, <span class="st">"BB2"</span>))
-<span class="kw">head</span>(measurement_data)
-<span class="co">#&gt; # A tibble: 2 x 5</span>
-<span class="co">#&gt;   Timestamp              wd    ws gustspeed site </span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 2018-06-27 13:45:00   180   1         2   BB1  </span>
-<span class="co">#&gt; 2 2018-06-27 13:55:00   170   1.5       2.5 BB2</span></code></pre></div>
+                   <span class="st">"gustspeed"</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">2.5</span>))
+<span class="kw">head</span>(ts_data)
+<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt;   Timestamp              wd    ws gustspeed</span>
+<span class="co">#&gt;   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 2018-06-27 13:45:00   180   1         2  </span>
+<span class="co">#&gt; 2 2018-06-27 13:55:00   170   1.5       2.5</span></code></pre></div>
 </div>
 <div id="variables-and-units" class="section level2">
 <h2 class="hasAnchor">
@@ -149,32 +147,27 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <div id="insert" class="section level2">
 <h2 class="hasAnchor">
 <a href="#insert" class="anchor"></a>Insert</h2>
-<p>The required arguments to <code><a href="../reference/db_insert_results_m.html">db_insert_results_m()</a></code> are</p>
+<p>The required arguments to <code><a href="../reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> are</p>
 <ul>
 <li>database connection</li>
-<li>data frame with Timestamp, site, and [Variable Name] columns</li>
+<li>data frame with Timestamp and [Variable Name] columns</li>
 <li>list of (“variables” = “units”) for each variable to be uploaded</li>
 <li>method code</li>
-<li>name of column with site codes</li>
+<li>site code</li>
 <li>sampled medium (from medium controlled vocabulary e.g. Air, Soil, etc.)</li>
 </ul>
 <p>If the variable(s), method, or site code do not already exist in the database, they will be added.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/db_insert_results_m.html">db_insert_results_m</a></span>(<span class="dt">db =</span> db, 
-                     <span class="dt">datavalues =</span> measurement_data,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(<span class="dt">db =</span> db, 
+                     <span class="dt">datavalues =</span> ts_data,
                      <span class="dt">variables =</span> vars_list,
-                    <span class="dt">site_code_col =</span> <span class="st">"site"</span>,
                      <span class="dt">method =</span> <span class="st">"SonicAnemometer"</span>,
                      <span class="dt">site_code =</span> <span class="st">"BB2"</span>,
                      <span class="dt">sampledmedium =</span> <span class="st">"Air"</span>)
 <span class="co">#&gt; SonicAnemometer has been added to the Methods table.</span>
-<span class="co">#&gt; Site BB1 has been entered into the samplingfeatures table.</span>
-<span class="co">#&gt; Site BB2 has been entered into the samplingfeatures table.</span>
 <span class="co">#&gt; Wind direction has been added to the Variables table.</span>
 <span class="co">#&gt; Wind speed has been added to the Variables table.</span>
 <span class="co">#&gt; Wind gust speed has been added to the Variables table.</span>
-<span class="co">#&gt; Wind direction has been added to the Variables table.</span>
-<span class="co">#&gt; Wind speed has been added to the Variables table.</span>
-<span class="co">#&gt; Wind gust speed has been added to the Variables table.</span></code></pre></div>
+<span class="co">#&gt; Site BB2 has been entered into the samplingfeatures table.</span></code></pre></div>
 <p>Optional arguments:</p>
 <ul>
 <li>processing level (otherwise “Raw data”)</li>
@@ -186,75 +179,28 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <div id="get-values" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-values" class="anchor"></a>Get values</h2>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> datavalue, res.resultid, var.variablenamecv, units.unitsname, valuedatetime, sf.samplingfeaturecode
-<span class="kw">FROM</span> measurementresultvalues mrv
-<span class="kw">INNER</span> <span class="kw">JOIN</span> results res <span class="kw">ON</span> mrv.resultid = res.resultid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> variables var <span class="kw">ON</span> res.variableid = var.variableid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> featureactions fa <span class="kw">ON</span> res.featureactionid = fa.featureactionid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> samplingfeatures sf <span class="kw">ON</span> sf.samplingfeatureid = fa.samplingfeatureid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> actions acts <span class="kw">ON</span> acts.actionid = fa.actionid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> units units <span class="kw">ON</span> units.unitsid = res.unitsid
-<span class="kw">INNER</span> <span class="kw">JOIN</span> methods meth <span class="kw">ON</span> meth.methodid = acts.methodid</code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">DataValue</th>
-<th align="right">ResultID</th>
-<th align="left">VariableNameCV</th>
-<th align="left">UnitsName</th>
-<th align="left">ValueDateTime</th>
-<th align="left">SamplingFeatureCode</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">180.0</td>
-<td align="right">1</td>
-<td align="left">Wind direction</td>
-<td align="left">Degree</td>
-<td align="left">2018-06-27 13:45:00</td>
-<td align="left">BB1</td>
-</tr>
-<tr class="even">
-<td align="right">1.0</td>
-<td align="right">2</td>
-<td align="left">Wind speed</td>
-<td align="left">Meter per Second</td>
-<td align="left">2018-06-27 13:45:00</td>
-<td align="left">BB1</td>
-</tr>
-<tr class="odd">
-<td align="right">2.0</td>
-<td align="right">3</td>
-<td align="left">Wind gust speed</td>
-<td align="left">Meter per Second</td>
-<td align="left">2018-06-27 13:45:00</td>
-<td align="left">BB1</td>
-</tr>
-<tr class="even">
-<td align="right">170.0</td>
-<td align="right">4</td>
-<td align="left">Wind direction</td>
-<td align="left">Degree</td>
-<td align="left">2018-06-27 13:55:00</td>
-<td align="left">BB2</td>
-</tr>
-<tr class="odd">
-<td align="right">1.5</td>
-<td align="right">5</td>
-<td align="left">Wind speed</td>
-<td align="left">Meter per Second</td>
-<td align="left">2018-06-27 13:55:00</td>
-<td align="left">BB2</td>
-</tr>
-<tr class="even">
-<td align="right">2.5</td>
-<td align="right">6</td>
-<td align="left">Wind gust speed</td>
-<td align="left">Meter per Second</td>
-<td align="left">2018-06-27 13:55:00</td>
-<td align="left">BB2</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbReadTable">dbReadTable</a></span>(db, <span class="st">"timeseriesresultvalues"</span>)
+<span class="co">#&gt;   ValueID ResultID DataValue       ValueDateTime ValueDateTimeUTCOffset</span>
+<span class="co">#&gt; 1       1        1     180.0 2018-06-27 13:45:00                     -4</span>
+<span class="co">#&gt; 2       2        1     170.0 2018-06-27 13:55:00                     -4</span>
+<span class="co">#&gt; 3       3        2       1.0 2018-06-27 13:45:00                     -4</span>
+<span class="co">#&gt; 4       4        2       1.5 2018-06-27 13:55:00                     -4</span>
+<span class="co">#&gt; 5       5        3       2.0 2018-06-27 13:45:00                     -4</span>
+<span class="co">#&gt; 6       6        3       2.5 2018-06-27 13:55:00                     -4</span>
+<span class="co">#&gt;   CensorCodeCV QualityCodeCV TimeAggregationInterval</span>
+<span class="co">#&gt; 1      Unknown       Unknown                      10</span>
+<span class="co">#&gt; 2      Unknown       Unknown                      10</span>
+<span class="co">#&gt; 3      Unknown       Unknown                      10</span>
+<span class="co">#&gt; 4      Unknown       Unknown                      10</span>
+<span class="co">#&gt; 5      Unknown       Unknown                      10</span>
+<span class="co">#&gt; 6      Unknown       Unknown                      10</span>
+<span class="co">#&gt;   TimeAggregationIntervalUnitsID</span>
+<span class="co">#&gt; 1                           1060</span>
+<span class="co">#&gt; 2                           1060</span>
+<span class="co">#&gt; 3                           1060</span>
+<span class="co">#&gt; 4                           1060</span>
+<span class="co">#&gt; 5                           1060</span>
+<span class="co">#&gt; 6                           1060</span></code></pre></div>
 </div>
   </div>
 
