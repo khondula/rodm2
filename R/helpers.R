@@ -96,7 +96,6 @@ insert_processinglevel <- function(db, processinglevel){
     RPostgreSQL::dbGetQuery(db, sql)
     }
   }
-  message(paste(processinglevel), " has been inserted into the processinglevel table.")
 }
 
 #' Check that the names of a variables list are in a database

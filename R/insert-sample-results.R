@@ -340,7 +340,7 @@ db_insert_results_samples <- function(db,
         # append
         RSQLite::dbAppendTable(db, "measurementresultvalues", datavalues_var)
       }
-      message(paste("Sample ", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
+      message(paste("Sample", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
 
     }
     purrr::map(1:nrow(datavalues), db_insert_one_sample)
@@ -603,7 +603,7 @@ db_insert_results_samples <- function(db,
                           overwrite = FALSE,
                           append = TRUE)
       }
-      message(paste("Sample ", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
+      message(paste("Sample", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
     }
 
 

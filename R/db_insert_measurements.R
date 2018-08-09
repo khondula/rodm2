@@ -6,7 +6,7 @@
 # insert new feature action with new actionid
 
 
-#' Insert new soil moisture measurements
+#' Insert new soil moisture measurements - OLD please use db_insert_results_m()
 #'
 #' @param x
 #'

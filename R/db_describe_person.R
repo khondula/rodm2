@@ -30,7 +30,7 @@ db_describe_person <- function(db = db,
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
-
+    AffiliationStartDate <- as.character(AffiliationStartDate)
     sql1 <- RSQLite::dbSendStatement(db,
                             'INSERT into people
                             (PersonFirstName, PersonLastName)

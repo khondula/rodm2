@@ -2,7 +2,7 @@
 % Please edit documentation in R/db_insert_measurements.R
 \name{db_insert_measurements_sm}
 \alias{db_insert_measurements_sm}
-\title{Insert new soil moisture measurements}
+\title{Insert new soil moisture measurements - OLD please use db_insert_results_m()}
 \usage{
 db_insert_measurements_sm(x)
 }
@@ -13,7 +13,7 @@ db_insert_measurements_sm(x)
 TRUE if successful
 }
 \description{
-Insert new soil moisture measurements
+Insert new soil moisture measurements - OLD please use db_insert_results_m()
 }
 \examples{
 \dontrun{
