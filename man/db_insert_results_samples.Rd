@@ -4,8 +4,8 @@
 \alias{db_insert_results_samples}
 \title{Insert sample result data values to ODM2 database}
 \usage{
-db_insert_results_samples(db, datavalues, field_method, lab_method,
-  variables, sampledmedium, site_code_col = "Site",
+db_insert_results_samples(db, datavalues, field_method = NULL,
+  lab_method, variables, sampledmedium, site_code_col = "Site",
   sample_code_col = "Sample", processinglevel = "Raw data",
   aggregationstatistic = "Unknown", time_aggregation_interval = list(1,
   "Minute"), field_actionby = NULL, field_equipment_name = NULL,
@@ -18,7 +18,7 @@ db_insert_results_samples(db, datavalues, field_method, lab_method,
 \item{datavalues}{data frame with columns "Timestamp" with
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
-\item{field_method}{short description of field method}
+\item{field_method}{short description of field method to collect new samples. Dont include for new data about existing samples.}
 
 \item{lab_method}{short description of lab method}
 

@@ -15,7 +15,7 @@
 #' @param ... parameters to pass to various db_describe_ functions
 #' @param site_code_col name of column with site codes. defaults to "Site"
 #' @param time_aggregation_interval defaults to unknown
-#' @param field_method short description of field method
+#' @param field_method short description of field method to collect new samples. Dont include for new data about existing samples.
 #' @param lab_method short description of lab method
 #' @param sample_code_col name of column in input data frame with sample ID. defeaults to "Sample"
 #' @param aggregationstatistic defaults to unknown
@@ -43,7 +43,7 @@
 #'
 db_insert_results_samples <- function(db,
                                 datavalues,
-                                field_method,
+                                field_method = NULL,
                                 lab_method,
                                 variables,
                                 sampledmedium,
@@ -64,12 +64,15 @@ db_insert_results_samples <- function(db,
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgres database connections are supported so far")}
 
-  # check for method and add if not in there
-  if(!(field_method %in% rodm2::db_get_methods(db))){
-    rodm2::db_describe_method(db, methodname = field_method,
-                              methodcode = field_method,
-                              methodtypecv = 'Specimen collection')
+  # check for methods and add if not in there
+  # add if not null field method
+  if(!is.null(field_method)){
+    if(!(field_method %in% rodm2::db_get_methods(db))){
+      rodm2::db_describe_method(db, methodname = field_method,
+                                methodcode = field_method,
+                                methodtypecv = 'Specimen collection')}
   }
+
   if(!(lab_method %in% rodm2::db_get_methods(db))){
     rodm2::db_describe_method(db, methodname = lab_method,
                               methodcode = lab_method,
@@ -93,97 +96,106 @@ db_insert_results_samples <- function(db,
 
     #######################################
     # for each ROW of samples data frame
-
     db_insert_one_sample <- function(sample_id){
-
-      # add sample collection
-      sql <- 'INSERT into actions
-  (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
-      VALUES
-      (:actiontypecv,
-      (SELECT methodid FROM methods WHERE methodcode = :field_method),
-      :begindatetime,
-      :utcoffset)'
-      sql <- RSQLite::dbSendQuery(db, sql)
-      RSQLite::dbBind(sql, params = list(
-        actiontypecv = 'Specimen collection',
-        field_method = field_method,
-        begindatetime = datavalues[["Timestamp"]][sample_id],
-        utcoffset = as.integer(substr(
-          format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3))
-      ))
-      RSQLite::dbClearResult(res = sql)
-      field_actionid <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
-
-      # field_actionby
-      if(!is.null(field_actionby)){
-
-        sql <- RSQLite::dbSendStatement(db, 'INSERT into actionby (actionid, affiliationid, isactionlead)
-                                         VALUES
-                                         (:newactionid,
-                                         (SELECT affiliationid FROM affiliations
-                                         WHERE personid = (SELECT personid FROM people WHERE personfirstname = :actionby)),
-                                         "TRUE")')
-        RSQLite::dbBind(sql, params = list(newactionid = field_actionid,
-                                            actionby = field_actionby))
+      sample_sf_id <- c()
+      field_actionid <- c()
+      ### for new samples only, based on argument supplied for field_method
+      if(!is.null(field_method)){
+        # add sample collection
+        sql <- 'INSERT into actions
+        (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
+        VALUES
+        (:actiontypecv,
+        (SELECT methodid FROM methods WHERE methodcode = :field_method),
+        :begindatetime,
+        :utcoffset)'
+        sql <- RSQLite::dbSendQuery(db, sql)
+        RSQLite::dbBind(sql, params = list(
+          actiontypecv = 'Specimen collection',
+          field_method = field_method,
+          begindatetime = datavalues[["Timestamp"]][sample_id],
+          utcoffset = as.integer(substr(
+            format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3))
+        ))
         RSQLite::dbClearResult(res = sql)
-      }
-      # field_equipmentused
-      if(!is.null(field_equipment_name)){
-        sql <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
-                                       VALUES
+        field_actionid <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
+
+        # field_actionby
+        if(!is.null(field_actionby)){
+
+          sql <- RSQLite::dbSendStatement(db, 'INSERT into actionby (actionid, affiliationid, isactionlead)
+                                          VALUES
+                                          (:newactionid,
+                                          (SELECT affiliationid FROM affiliations
+                                          WHERE personid = (SELECT personid FROM people WHERE personfirstname = :actionby)),
+                                          "TRUE")')
+          RSQLite::dbBind(sql, params = list(newactionid = field_actionid,
+                                             actionby = field_actionby))
+          RSQLite::dbClearResult(res = sql)
+        }
+        # field_equipmentused
+        if(!is.null(field_equipment_name)){
+          sql <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
+                                          VALUES
                                           (:newactionid,
                                           (SELECT equipmentid FROM equipment WHERE equipmentcode = :equipmentcode))')
-        RSQLite::dbBind(sql, params = list(newactionid = field_actionid,
+          RSQLite::dbBind(sql, params = list(newactionid = field_actionid,
                                              equipmentcode = field_equipment_name))
+          RSQLite::dbClearResult(res = sql)
+        }
+
+        # add sample
+        sql <- 'INSERT or IGNORE into samplingfeatures
+        (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
+        VALUES
+        (:samplingfeatureuuid, :samplingfeaturetypecv, :samplingfeaturecode)'
+        sql <- RSQLite::dbSendQuery(db, sql)
+        RSQLite::dbBind(sql, params = list(
+          samplingfeatureuuid = uuid::UUIDgenerate(),
+          samplingfeaturetypecv = "Specimen",
+          samplingfeaturecode = datavalues[[sample_code_col]][sample_id]
+        ))
+        RSQLite::dbClearResult(res = sql)
+        sample_sf_id <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
+
+        # add featureaction for sample collection
+        sql <- 'INSERT into featureactions
+        (samplingfeatureid, actionid)
+        VALUES
+        (:samplingfeatureid, :actionid)'
+        sql <- RSQLite::dbSendQuery(db, sql)
+        RSQLite::dbBind(sql, params = list(
+          samplingfeatureid = sample_sf_id,
+          actionid = field_actionid
+        ))
+        RSQLite::dbClearResult(res = sql)
+        field_fa_id <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
+
+        # add was collected at relationship
+        sql <- 'INSERT into relatedfeatures
+        (samplingfeatureid, relationshiptypecv, relatedfeatureid)
+        VALUES
+        (:samplingfeatureid, :relationshiptypecv,
+        (SELECT samplingfeatureid FROM samplingfeatures WHERE
+        samplingfeaturecode = :site_code))'
+        sql <- RSQLite::dbSendQuery(db, sql)
+        RSQLite::dbBind(sql, params = list(
+          samplingfeatureid = sample_sf_id,
+          relationshiptypecv = "Was collected at",
+          site_code = datavalues[[site_code_col]][sample_id]
+        ))
         RSQLite::dbClearResult(res = sql)
       }
-
-      # add sample
-      sql <- 'INSERT or IGNORE into samplingfeatures
- (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
-      VALUES
-      (:samplingfeatureuuid, :samplingfeaturetypecv, :samplingfeaturecode)'
-      sql <- RSQLite::dbSendQuery(db, sql)
-      RSQLite::dbBind(sql, params = list(
-        samplingfeatureuuid = uuid::UUIDgenerate(),
-        samplingfeaturetypecv = "Specimen",
-        samplingfeaturecode = datavalues[[sample_code_col]][sample_id]
-      ))
-      RSQLite::dbClearResult(res = sql)
-      sample_sf_id <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
-
-      # add featureaction for sample collection
-      sql <- 'INSERT into featureactions
- (samplingfeatureid, actionid)
-      VALUES
-      (:samplingfeatureid, :actionid)'
-      sql <- RSQLite::dbSendQuery(db, sql)
-      RSQLite::dbBind(sql, params = list(
-        samplingfeatureid = sample_sf_id,
-        actionid = field_actionid
-      ))
-      RSQLite::dbClearResult(res = sql)
-      field_fa_id <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
-
-      # add was collected at relationship
-      sql <- 'INSERT into relatedfeatures
-(samplingfeatureid, relationshiptypecv, relatedfeatureid)
-      VALUES
-      (:samplingfeatureid, :relationshiptypecv,
-      (SELECT samplingfeatureid FROM samplingfeatures WHERE
-      samplingfeaturecode = :site_code))'
-      sql <- RSQLite::dbSendQuery(db, sql)
-      RSQLite::dbBind(sql, params = list(
-        samplingfeatureid = sample_sf_id,
-        relationshiptypecv = "Was collected at",
-        site_code = datavalues[[site_code_col]][sample_id]
-      ))
-      RSQLite::dbClearResult(res = sql)
+      ### for existing samples, get sample ID
+      if(is.null(sample_sf_id)){
+        sql <- paste0("SELECT samplingfeatureid FROM samplingfeatures WHERE samplingfeaturecode = '",
+                      datavalues[[sample_code_col]][sample_id], "'")
+        sample_sf_id <- as.integer(RSQLite::dbGetQuery(db, sql))
+      }
 
       # add lab action
       sql <- 'INSERT into actions
-  (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
+      (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
       VALUES
       (:actiontypecv,
       (SELECT methodid FROM methods WHERE methodcode = :lab_method),
@@ -205,7 +217,6 @@ db_insert_results_samples <- function(db,
 
       # lab_actionby
       if(!is.null(lab_actionby)){
-
         sql <- RSQLite::dbSendStatement(db, 'INSERT into actionby (actionid, affiliationid, isactionlead)
                                         VALUES
                                         (:newactionid,
@@ -228,10 +239,20 @@ db_insert_results_samples <- function(db,
       }
 
       # relate field and lab action
+      # if field method wasn't supplied, need to get field action id
+      # of sample collection action
+      if(is.null(field_actionid)){
+        sql <- paste0('SELECT actionid FROM featureactions WHERE samplingfeatureid = (SELECT samplingfeatureid FROM samplingfeatures WHERE samplingfeaturecode =',
+                      '"',datavalues[[sample_code_col]][sample_id],
+                      '") AND actionid = (SELECT actionid FROM actions WHERE actiontypecv = "Specimen collection")')
+        field_actionid <- as.integer(RSQLite::dbGetQuery(db, sql))
+      }
+
       sql <- 'INSERT into relatedactions
-(actionid, relationshiptypecv, relatedactionid)
+      (actionid, relationshiptypecv, relatedactionid)
       VALUES
-      (:lab_actionid, :relationshiptypecv, :field_actionid)'
+      (:lab_actionid, :relationshiptypecv,
+      :field_actionid)'
       sql <- RSQLite::dbSendStatement(db, sql)
       RSQLite::dbBind(sql, params = list(
         lab_actionid = lab_actionid,
@@ -242,7 +263,7 @@ db_insert_results_samples <- function(db,
 
       # lab feature action
       sql <- 'INSERT into featureactions
- (samplingfeatureid, actionid)
+      (samplingfeatureid, actionid)
       VALUES
       (:samplingfeatureid, :actionid)'
       sql <- RSQLite::dbSendQuery(db, sql)
@@ -343,6 +364,7 @@ db_insert_results_samples <- function(db,
       message(paste("Sample", datavalues[[sample_code_col]][sample_id], "and associated data have been entered."))
 
     }
+
     purrr::map(1:nrow(datavalues), db_insert_one_sample)
   }
 
