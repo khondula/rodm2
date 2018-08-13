@@ -108,6 +108,11 @@
 <li>A <strong>sample analysis action</strong>, specifying how and when the results were produced, i.e. how and when the sample was analyzed in the lab.</li>
 </ul>
 <p>Results are associated with the “feature action” of analyzing the sample. Multiple variables can be associated with the same procedure in the lab, such as multiple peak values from the GC. Each variable is described as a separate result with its own units and missing data value.</p>
+<blockquote>
+<p>New samples vs. existing samples</p>
+</blockquote>
+<p>Results about the <em>same sample</em> that were analyzed using <em>different laboratory methods</em> should be uploaded separately – each set of results uploaded with <code><a href="../reference/db_insert_results_samples.html">db_insert_results_samples()</a></code> should have the same lab method, sampled medium (e.g Soil, Air), and other optional metadata such as processing level (defaults to “Raw data”)), action lead, and equipment used.</p>
+<p>Sample data uploaded using <code><a href="../reference/db_insert_results_samples.html">db_insert_results_samples()</a></code> along with a specified <code>field_method</code> for sample collection will be inserted as new samples into the database. Samples should only have one field collection action, but can have multiple subsequent processing steps. Additional data generated with different laboratory methods should be uploaded using <code><a href="../reference/db_insert_results_samples.html">db_insert_results_samples()</a></code> <strong>without</strong> the field_method argument (ie. <code>field_method = NULL</code>, which is the default). This will produce new “specimen analysis” actions related to the original sample collection action based on each sample’s identification code.</p>
 <div id="prepare-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#prepare-data" class="anchor"></a>Prepare data</h1>
@@ -178,9 +183,8 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <span class="co">#&gt; 1 inch 30 cm soil core has been added to the Methods table.</span>
 <span class="co">#&gt; soil pH CEM has been added to the Methods table.</span>
 <span class="co">#&gt; Site QB SC-A has been entered into the samplingfeatures table.</span>
-<span class="co">#&gt; Raw data has been inserted into the processinglevel table.</span>
 <span class="co">#&gt; pH has been added to the Variables table.</span>
-<span class="co">#&gt; Sample  CEM 2 and associated data have been entered.</span></code></pre></div>
+<span class="co">#&gt; Sample CEM 2 and associated data have been entered.</span></code></pre></div>
 <p><strong>Arguments with defaults</strong></p>
 <p>Use these arguments if needed to change defaults:</p>
 <ul>
@@ -202,6 +206,15 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <blockquote>
 <p>Note: field_actionby &amp; lab_actionby must be people who are already in the database (can be added using the <code><a href="../reference/db_describe_person.html">db_describe_person()</a></code> function). Similarly, field_equipment_name &amp; lab_equipment_name must be equipment already in the database (can be added using the <code><a href="../reference/db_describe_equipment.html">db_describe_equipment()</a></code> function).</p>
 </blockquote>
+</div>
+<div id="insert-data-about-existing-samples" class="section level1">
+<h1 class="hasAnchor">
+<a href="#insert-data-about-existing-samples" class="anchor"></a>Insert data about existing samples</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># new data</span>
+<span class="co"># new vars_list</span></code></pre></div>
+<p>Use the same function, without a <code>field_method</code> argument but new values for <code>datavalues</code>, <code>lab_method</code>, and <code>variables</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># db_insert_results_samples(db = db, datavalues = soil_data2, lab_method = "",</span>
+<span class="co"># sampledmedium = "Soil", variables = vars_list)</span></code></pre></div>
 <blockquote>
 <p>What about time zone?</p>
 </blockquote>
@@ -254,8 +267,9 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
       <li><a href="#connect">Connect</a></li>
       </ul>
 </li>
+      <li><a href="#insert">Insert</a></li>
       <li>
-<a href="#insert">Insert</a><ul class="nav nav-pills nav-stacked">
+<a href="#insert-data-about-existing-samples">Insert data about existing samples</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#get-values">Get values</a></li>
       </ul>
 </li>

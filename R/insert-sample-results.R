@@ -244,7 +244,7 @@ db_insert_results_samples <- function(db,
       if(is.null(field_actionid)){
         sql <- paste0('SELECT actionid FROM featureactions WHERE samplingfeatureid = (SELECT samplingfeatureid FROM samplingfeatures WHERE samplingfeaturecode =',
                       '"',datavalues[[sample_code_col]][sample_id],
-                      '") AND actionid = (SELECT actionid FROM actions WHERE actiontypecv = "Specimen collection")')
+                      '") AND actionid IN (SELECT actionid FROM actions WHERE actiontypecv = "Specimen collection")')
         field_actionid <- as.integer(RSQLite::dbGetQuery(db, sql))
       }
 
@@ -377,78 +377,108 @@ db_insert_results_samples <- function(db,
     db_insert_one_sample_postgres <- function(sample_id){
 
       # insert field action and sample and field feature action
-      sql <- DBI::sqlInterpolate(db,
-                                 'WITH fieldact AS (INSERT into odm2.actions
-                                 (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
-                                 VALUES
-                                 (?actiontypecv,
-                                 (SELECT methodid FROM odm2.methods WHERE methodcode = ?field_method),
-                                 ?begindatetime,
-                                 ?utcoffset)
-                                 RETURNING actionid),
+      sample_sf_id <- c()
+      field_actionid <- c()
+      ### for new samples only, based on argument supplied for field_method
+      if(!is.null(field_method)){
 
-                                 newsample AS (
-                                 INSERT into odm2.samplingfeatures
-                                 (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
-                                 VALUES
-                                 (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplecode)
-                                 RETURNING samplingfeatureid
-                                 ),
-
-                                 newrel AS (
-                                 INSERT into odm2.relatedfeatures
-                                 (samplingfeatureid, relationshiptypecv, relatedfeatureid)
-                                 VALUES
-                                 ((SELECT newsample.samplingfeatureid FROM newsample), ?relationshiptypecv,
-                                 (SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?site_code)
-                                 ))
-
-                                 INSERT into odm2.featureactions (samplingfeatureid, actionid)
-                                 VALUES ((SELECT newsample.samplingfeatureid FROM newsample),
-                                 (SELECT fieldact.actionid FROM fieldact))
-                                 RETURNING featureactionid, actionid',
-                                 actiontypecv = 'Specimen collection',
-                                 field_method = field_method,
-                                 begindatetime = datavalues[["Timestamp"]][sample_id],
-                                 utcoffset = as.integer(substr(
-                                   format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
-                                 samplingfeatureuuid = uuid::UUIDgenerate(),
-                                 samplingfeaturetypecv = 'Specimen',
-                                 samplecode = datavalues[[sample_code_col]][sample_id],
-                                 relationshiptypecv = 'Was collected at',
-                                 site_code = datavalues[[site_code_col]][sample_id]
-                                 )
-      field_fa <- RPostgreSQL::dbGetQuery(db, sql)
-      field_fa_id <- field_fa$featureactionid
-      field_action_id <- field_fa$actionid
-
-      # field actionby
-      if(!is.null(field_actionby)){
-
+        # insert field action and sample and field feature action
         sql <- DBI::sqlInterpolate(db,
-                                   'INSERT into odm2.actionby
-                                   (actionid, affiliationid, isactionlead)
+                                   'WITH fieldact AS (INSERT into odm2.actions
+                                   (actiontypecv, methodid, begindatetime, begindatetimeutcoffset)
                                    VALUES
-                                   (?newactionid,
-                                   (SELECT affiliationid FROM odm2.affiliations
-                                   WHERE personid =
-                                   (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
-                                   ?isactionlead)',
-                                   newactionid = field_action_id,
-                                   actionby = field_actionby,
-                                   isactionlead = "TRUE")
-        RPostgreSQL::dbGetQuery(db, sql)
+                                   (?actiontypecv,
+                                   (SELECT methodid FROM odm2.methods WHERE methodcode = ?field_method),
+                                   ?begindatetime,
+                                   ?utcoffset)
+                                   RETURNING actionid),
+
+                                   newsample AS (
+                                   INSERT into odm2.samplingfeatures
+                                   (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
+                                   VALUES
+                                   (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplecode)
+                                   RETURNING samplingfeatureid
+                                   ),
+
+                                   newrel AS (
+                                   INSERT into odm2.relatedfeatures
+                                   (samplingfeatureid, relationshiptypecv, relatedfeatureid)
+                                   VALUES
+                                   ((SELECT newsample.samplingfeatureid FROM newsample), ?relationshiptypecv,
+                                   (SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?site_code)
+                                   ))
+
+                                   INSERT into odm2.featureactions (samplingfeatureid, actionid)
+                                   VALUES ((SELECT newsample.samplingfeatureid FROM newsample),
+                                   (SELECT fieldact.actionid FROM fieldact))
+                                   RETURNING featureactionid, actionid',
+                                   actiontypecv = 'Specimen collection',
+                                   field_method = field_method,
+                                   begindatetime = datavalues[["Timestamp"]][sample_id],
+                                   utcoffset = as.integer(substr(
+                                     format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
+                                   samplingfeatureuuid = uuid::UUIDgenerate(),
+                                   samplingfeaturetypecv = 'Specimen',
+                                   samplecode = datavalues[[sample_code_col]][sample_id],
+                                   relationshiptypecv = 'Was collected at',
+                                   site_code = datavalues[[site_code_col]][sample_id]
+                                   )
+        field_fa <- RPostgreSQL::dbGetQuery(db, sql)
+        field_fa_id <- field_fa$featureactionid
+        field_actionid <- field_fa$actionid
+
+        # field actionby
+        if(!is.null(field_actionby)){
+
+          sql <- DBI::sqlInterpolate(db,
+                                     'INSERT into odm2.actionby
+                                     (actionid, affiliationid, isactionlead)
+                                     VALUES
+                                     (?newactionid,
+                                     (SELECT affiliationid FROM odm2.affiliations
+                                     WHERE personid =
+                                     (SELECT personid FROM odm2.people WHERE personfirstname = ?actionby)),
+                                     ?isactionlead)',
+                                     newactionid = field_actionid,
+                                     actionby = field_actionby,
+                                     isactionlead = "TRUE")
+          RPostgreSQL::dbGetQuery(db, sql)
+        }
+        # field equipmentused
+        if(!is.null(field_equipment_name)){
+          sql <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
+                                     VALUES
+                                     (?newactionid,
+                                     (SELECT equipmentid
+                                     FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
+                                     newactionid = field_actionid,
+                                     equipmentcode = field_equipment_name)
+          RPostgreSQL::dbGetQuery(db, sql)
+        }
       }
-      # field equipmentused
-      if(!is.null(field_equipment_name)){
-        sql <- DBI::sqlInterpolate(db, 'INSERT into odm2.equipmentused (actionid, equipmentid)
-                                   VALUES
-                                   (?newactionid,
-                                   (SELECT equipmentid
-                                   FROM odm2.equipment WHERE equipmentcode = ?equipmentcode))',
-                                   newactionid = field_action_id,
-                                   equipmentcode = field_equipment_name)
-        RPostgreSQL::dbGetQuery(db, sql)
+
+
+      ### for existing samples, get sample ID
+      if(is.null(sample_sf_id)){
+        sql <- DBI::sqlInterpolate(db, "SELECT samplingfeatureid
+                                   FROM odm2.samplingfeatures
+                                   WHERE samplingfeaturecode = ?sample_code",
+                                   sample_code = datavalues[[sample_code_col]][sample_id])
+        sample_sf_id <- as.integer(RPostgreSQL::dbGetQuery(db, sql))
+      }
+
+      # if field method wasn't supplied, need to get field action id
+      # of sample collection action
+      if(is.null(field_actionid)){
+        sql <- DBI::sqlInterpolate(db, "SELECT actionid
+                             FROM odm2.featureactions
+                                   WHERE samplingfeatureid = (
+                                   SELECT samplingfeatureid FROM odm2.samplingfeatures WHERE samplingfeaturecode = ?sample_code)
+                                   AND actionid IN (
+                                   SELECT actionid FROM odm2.actions WHERE actiontypecv = 'Specimen collection')",
+                                   sample_code = datavalues[[sample_code_col]][sample_id])
+        field_actionid <- as.integer(RPostgreSQL::dbGetQuery(db, sql))
       }
 
       # insert lab action and action relation and lab feature action
@@ -474,21 +504,20 @@ db_insert_results_samples <- function(db,
                                  (SELECT labact.actionid FROM labact))
                                  RETURNING featureactionid, actionid
                                  ',
-                                 actiontypecv = 'Specimen analysis',
-                                 lab_method = lab_method,
-                                 begindatetime = ifelse(          is.null(datavalues[["Timestamp_analysis"]][sample_id]),
-                                                                  as.character(Sys.time()),
-                                                                  datavalues[["Timestamp_analysis"]][sample_id]),
-                                 utcoffset = as.integer(substr(
-                                   format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
-                                 relationshiptypecv = 'Is related to',
-                                 field_actionid = field_action_id,
-                                 samplecode = datavalues[[sample_code_col]][sample_id]
-                                 )
-      newfa <- RPostgreSQL::dbGetQuery(db, sql)
-      newfaid <- newfa$featureactionid
-      lab_actionid <- newfa$actionid
-
+                               actiontypecv = 'Specimen analysis',
+                               lab_method = lab_method,
+                               begindatetime = ifelse(          is.null(datavalues[["Timestamp_analysis"]][sample_id]),
+                                                                as.character(Sys.time()),
+                                                                datavalues[["Timestamp_analysis"]][sample_id]),
+                               utcoffset = as.integer(substr(
+                                 format(as.POSIXct(datavalues[["Timestamp"]][sample_id]), "%z"), 1, 3)),
+                               relationshiptypecv = 'Is related to',
+                               field_actionid = field_actionid,
+                               samplecode = datavalues[[sample_code_col]][sample_id]
+                               )
+    newfa <- RPostgreSQL::dbGetQuery(db, sql)
+    newfaid <- newfa$featureactionid
+    lab_actionid <- newfa$actionid
       # lab actionby
       if(!is.null(lab_actionby)){
 

@@ -22,6 +22,12 @@ Sample results are measurement results (i.e., numeric) associated with an ex-sit
 
 Results are associated with the "feature action" of analyzing the sample. Multiple variables can be associated with the same procedure in the lab, such as multiple peak values from the GC. Each variable is described as a separate result with its own units and missing data value. 
 
+## New samples vs. existing samples
+
+Results about the *same sample* that were analyzed using *different laboratory methods* should be uploaded separately -- each set of results uploaded with `db_insert_results_samples()` should have the same lab method, sampled medium (e.g Soil, Air), and other optional metadata such as processing level (defaults to "Raw data")), action lead, and equipment used. 
+
+Sample data uploaded using `db_insert_results_samples()` along with a specified `field_method` for sample collection will be inserted as new samples into the database. Samples should only have one field collection action, but can have multiple subsequent processing steps. Additional data generated with different laboratory methods should be uploaded using `db_insert_results_samples()` **without** the field_method argument (ie. `field_method = NULL`, which is the default). This will produce new "specimen analysis" actions related to the original sample collection action based on each sample's identification code. 
+
 # Prepare data
 
 Dataset to upload must have columns for:
@@ -118,6 +124,31 @@ Use these arguments if needed to change defaults:
 
 > Note: field_actionby & lab_actionby must be people who are already in the database (can be added using the `db_describe_person()` function).
 > Similarly, field_equipment_name & lab_equipment_name must be equipment already in the database (can be added using the `db_describe_equipment()` function).
+
+# Insert data about existing samples
+
+To insert a second set of results associated with the same results but a different laboratory procedure, create a data frame with the new information and a new vars_list if needed:
+
+```{r}
+soil_ph_method2 <- data.frame(
+  Timestamp = "2018-02-06 23:59:59",
+  Site = "QB SC-A",
+  Sample = "CEM 2",
+  pH = 5.5,
+  stringsAsFactors = FALSE
+)
+
+```
+
+Use the same function, without a `field_method` argument but new values for `datavalues`, `lab_method`, and `variables`. 
+
+```{r}
+db_insert_results_samples(db = db, 
+                          datavalues = soil_ph_method2, 
+                          lab_method = "soil pH method2",
+                          sampledmedium = "Soil", 
+                          variables = vars_list)
+```
 
 
 > What about time zone?

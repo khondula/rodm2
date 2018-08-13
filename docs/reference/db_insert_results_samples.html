@@ -135,8 +135,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>db_insert_results_samples</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>field_method</span>, <span class='no'>lab_method</span>,
-  <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+    <pre class="usage"><span class='fu'>db_insert_results_samples</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='kw'>field_method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>lab_method</span>, <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
   <span class='kw'>sample_code_col</span> <span class='kw'>=</span> <span class='st'>"Sample"</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
   <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>,
   <span class='st'>"Minute"</span>), <span class='kw'>field_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>field_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -157,7 +157,7 @@ YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></t
     </tr>
     <tr>
       <th>field_method</th>
-      <td><p>short description of field method</p></td>
+      <td><p>short description of field method to collect new samples. Dont include for new data about existing samples.</p></td>
     </tr>
     <tr>
       <th>lab_method</th>
