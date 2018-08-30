@@ -56,7 +56,7 @@ db_describe_variable <- function(db,
 
   if (class(db) == "PostgreSQLConnection"){
 
-  sql <- DBI::sqlInterpolate("INSERT INTO odm2.variables
+  sql <- DBI::sqlInterpolate(db, "INSERT INTO odm2.variables
                  (variabletypecv, variablecode,
                   variablenamecv,
                   nodatavalue)
@@ -73,7 +73,7 @@ db_describe_variable <- function(db,
   if(!is.null(variabledefinition)){
     sql2 <- DBI::sqlInterpolate(db, "UPDATE odm2.variables
                                   SET variabledefinition = ?variabledefinition
-                                  WHERE methodcode = ?methodcode",
+                                  WHERE variablecode = ?variablecode",
                                 variabledefinition = variabledefinition,
                                 variablecode = variablecode)
     RPostgreSQL::dbGetQuery(db, sql2)
