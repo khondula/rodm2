@@ -73,7 +73,7 @@ db_describe_variable <- function(db,
   if(!is.null(variabledefinition)){
     sql2 <- DBI::sqlInterpolate(db, "UPDATE odm2.variables
                                   SET variabledefinition = ?variabledefinition
-                                  WHERE methodcode = :methodcode",
+                                  WHERE methodcode = ?methodcode",
                                 variabledefinition = variabledefinition,
                                 variablecode = variablecode)
     RPostgreSQL::dbGetQuery(db, sql2)
