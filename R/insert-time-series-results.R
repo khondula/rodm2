@@ -163,7 +163,7 @@ db_insert_results_ts <- function(db,
 
     if(!is.null(actionby)){
       if(!(actionby %in% rodm2::db_get_people(db))){
-        rodm2::db_describe_person(db, PersonFirstName = actionby, ...)
+        rodm2::db_describe_person(db, PersonFirstName = actionby, AffiliationStartDate = as.character(Sys.Date()), ...)
       }
       sql2 <- RSQLite::dbSendStatement(db, 'INSERT into actionby (actionid, affiliationid, isactionlead)
                                        VALUES
