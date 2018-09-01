@@ -85,11 +85,12 @@ db_insert_results_ts <- function(db,
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
+    dbSendStatement(db, 'BEGIN TRANSACTION')
 
     # make sure site is in sampling features table
     if(!site_code %in% rodm2::db_get_sites(db)){
       rodm2::db_describe_site(db, site_code)
-  }
+    }
 
     # make sure processing level is in processinglevel table
     sql <- "INSERT or IGNORE into processinglevels (processinglevelcode) VALUES (:processinglevel)"
@@ -142,7 +143,7 @@ db_insert_results_ts <- function(db,
     }
 
     sql1 <- 'INSERT into actions
-(actiontypecv, methodid, begindatetime, begindatetimeutcoffset, enddatetime)
+    (actiontypecv, methodid, begindatetime, begindatetimeutcoffset, enddatetime)
     VALUES
     ("Instrument deployment",
     (SELECT methodid from methods WHERE methodcode = :method),
@@ -154,10 +155,10 @@ db_insert_results_ts <- function(db,
                                                                "%Y-%m-%d %H:%M:%S"),
                                         begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
                                           datavalues[["Timestamp"]][1]),
-                                                                                   "%z"),1,3)),
+                                          "%z"),1,3)),
                                         enddatetime = format(as.POSIXct(
                                           datavalues[["Timestamp"]][nrow(datavalues)]),
-                                                             "%Y-%m-%d %H:%M:%S")))
+                                          "%Y-%m-%d %H:%M:%S")))
     RSQLite::dbClearResult(res = sql1)
     newactionid <- as.integer(RSQLite::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
 
@@ -183,9 +184,9 @@ db_insert_results_ts <- function(db,
       }
       # add to equipment used
       sql2b <- RSQLite::dbSendStatement(db, 'INSERT into equipmentused (actionid, equipmentid)
-                                       VALUES
-                                       (:newactionid,
-                                       (SELECT equipmentid FROM equipment WHERE equipmentcode = :equipmentcode))')
+                                        VALUES
+                                        (:newactionid,
+                                        (SELECT equipmentid FROM equipment WHERE equipmentcode = :equipmentcode))')
       RSQLite::dbBind(sql2b, params = list(newactionid = newactionid,
                                            equipmentcode = equipment_name))
       RSQLite::dbClearResult(res = sql2b)
@@ -249,7 +250,7 @@ db_insert_results_ts <- function(db,
       sql5 <- RSQLite::dbSendStatement(db, sql5)
       RSQLite::dbBind(sql5, params = list(resultid = i,
                                           aggstatcv = ifelse(is.null(aggregationstatisticcv),
-                                          "Unknown", aggregationstatisticcv),
+                                                             "Unknown", aggregationstatisticcv),
                                           zlocation = ifelse(is.null(zlocation), "", zlocation),
                                           zlocationunits = ifelse(is.null(zlocationunits), "", zlocationunits)))
       RSQLite::dbClearResult(res = sql5)
@@ -291,6 +292,7 @@ db_insert_results_ts <- function(db,
       RSQLite::dbAppendTable(db, "timeseriesresultvalues", datavalues_var)
 
     }
+    dbSendStatement(db, "END TRANSACTION")
 
   }
 
@@ -298,7 +300,7 @@ db_insert_results_ts <- function(db,
     # make sure site is in sampling features table
     if(!site_code %in% db_get_sites(db)){
       rodm2::db_describe_site(db, site_code)
-  }
+    }
 
     if(!processinglevel %in%
        DBI::dbGetQuery(db, "SELECT definition from odm2.processinglevels")$definition){
@@ -339,7 +341,7 @@ db_insert_results_ts <- function(db,
                                  datavalues[["Timestamp"]][nrow(datavalues)]),
                                  "%Y-%m-%d %H:%M:%S"),
                                site_code = site_code
-       )
+                               )
 
     new_fa <- RPostgreSQL::dbGetQuery(db, sql)
     newactionid <- new_fa$actionid
@@ -464,7 +466,7 @@ db_insert_results_ts <- function(db,
                                        .f = lubridate::as.duration)
       timeagg_mins <- c(timeagg_seconds[1], timeagg_seconds)/60
       timeaggunitsid <- RPostgreSQL::dbGetQuery(db,
-                                            "select unitsid from odm2.units where unitsname = 'Minute'")
+                                                "select unitsid from odm2.units where unitsname = 'Minute'")
       # make data frame to append
       datavalues_var <- datavalues %>%
         dplyr::select(Timestamp, var_colname) %>%
@@ -486,6 +488,6 @@ db_insert_results_ts <- function(db,
   }
 
 
-}
+    }
 
 
