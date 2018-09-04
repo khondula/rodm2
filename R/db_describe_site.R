@@ -17,8 +17,6 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
-  if (!class(db) %in% c("SQLiteConnection")) {
-    stop("sorry, only sqlite database connections are supported so far")}
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
