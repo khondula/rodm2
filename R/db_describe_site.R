@@ -52,8 +52,9 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
 
   # check type of database object
   if (class(db) == "PostgreSQLConnection"){
+
     sql1 <- DBI::sqlInterpolate(db,
-                                'INSERT or IGNORE INTO samplingfeatures
+                                'INSERT INTO samplingfeatures
                                      (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
                                      VALUES
                                      (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplingfeaturecode)',
