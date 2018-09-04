@@ -54,7 +54,7 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
   if (class(db) == "PostgreSQLConnection"){
 
     sql1 <- DBI::sqlInterpolate(db,
-                                'INSERT INTO samplingfeatures
+                                'INSERT INTO odm2.samplingfeatures
                                      (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
                                      VALUES
                                      (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplingfeaturecode)',
@@ -66,7 +66,7 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
 
     if(!is.null(site_name)){
       sql2 <- DBI::sqlInterpolate(db,
-                                       'UPDATE samplingfeatures
+                                       'UPDATE odm2.samplingfeatures
                                        SET samplingfeaturename = ?sitename
                                        WHERE samplingfeaturecode = ?samplingfeaturecode',
                                   sitename = site_name,
@@ -75,7 +75,7 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
     }
     if(!is.null(site_description)){
       sql3 <- DBI::sqlInterpolate(db,
-                                       'UPDATE samplingfeatures
+                                       'UPDATE odm2.samplingfeatures
                                        SET samplingfeaturedescription = ?sitedescription
                                        WHERE samplingfeaturecode = ?samplingfeaturecode',
                                   sitedescription = site_description,
