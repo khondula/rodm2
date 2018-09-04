@@ -14,8 +14,8 @@
 #' db_describe_site(db, site_code = "new_site")
 db_describe_site <- function(db, site_code, site_name = NULL, site_description = NULL){
 
-  # if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-  #   stop("sorry, only sqlite and postgresql database connections are supported so far")}
+  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
+    stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
   if (!class(db) %in% c("SQLiteConnection")) {
     stop("sorry, only sqlite database connections are supported so far")}
@@ -48,6 +48,40 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
       RSQLite::dbBind(sql3, param = list(sitedescription = site_description,
                                          samplingfeaturecode = site_code))
       RSQLite::dbClearResult(res = sql3)
+    }
+    message(paste("Site", site_code, "has been entered into the samplingfeatures table."))
+  }
+
+  # check type of database object
+  if (class(db) == "PostgreSQLConnection"){
+    sql1 <- DBI::sqlInterpolate(db,
+                                'INSERT or IGNORE INTO samplingfeatures
+                                     (samplingfeatureuuid, samplingfeaturetypecv, samplingfeaturecode)
+                                     VALUES
+                                     (?samplingfeatureuuid, ?samplingfeaturetypecv, ?samplingfeaturecode)',
+              samplingfeatureuuid = uuid::UUIDgenerate(),
+              samplingfeaturetypecv = 'Site',
+              samplingfeaturecode = site_code)
+
+    RPostgreSQL::dbGetQuery(db, sql1)
+
+    if(!is.null(site_name)){
+      sql2 <- DBI::sqlInterpolate(db,
+                                       'UPDATE samplingfeatures
+                                       SET samplingfeaturename = ?sitename
+                                       WHERE samplingfeaturecode = ?samplingfeaturecode',
+                                  sitename = site_name,
+                                         samplingfeaturecode = site_code)
+      RPostgreSQL::dbGetQuery(db, sql2)
+    }
+    if(!is.null(site_description)){
+      sql3 <- DBI::sqlInterpolate(db,
+                                       'UPDATE samplingfeatures
+                                       SET samplingfeaturedescription = ?sitedescription
+                                       WHERE samplingfeaturecode = ?samplingfeaturecode',
+                                  sitedescription = site_description,
+                                         samplingfeaturecode = site_code)
+      RPostgreSQL::dbGetQuery(db, sql3)
     }
     message(paste("Site", site_code, "has been entered into the samplingfeatures table."))
   }
