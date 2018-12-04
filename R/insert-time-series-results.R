@@ -292,7 +292,7 @@ db_insert_results_ts <- function(db,
       RSQLite::dbAppendTable(db, "timeseriesresultvalues", datavalues_var)
 
     }
-    dbSendStatement(db, "END TRANSACTION")
+    RSQLite::dbSendStatement(db, "END TRANSACTION")
 
   }
 
