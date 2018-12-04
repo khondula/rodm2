@@ -85,7 +85,7 @@ db_insert_results_ts <- function(db,
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
-    dbSendStatement(db, 'BEGIN TRANSACTION')
+    RSQLite::dbSendStatement(db, 'BEGIN TRANSACTION')
 
     # make sure site is in sampling features table
     if(!site_code %in% rodm2::db_get_sites(db)){
