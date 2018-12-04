@@ -5,7 +5,7 @@
 #' @param filename Filename for sqlite database file. Defaults to odm2, creating odm2.sqlite
 #' @param connect whether or not to return the database connection object
 #'
-#' @details This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
+#' @details This function copies a template sqlite file with the ODM2 schema, controlled vocabularies, and units to the specified location.
 #'
 #' @export
 #'

@@ -2,7 +2,8 @@ Package: rodm2
 Version: 0.1.0
 Title: Use an ODM2 Database in R
 Description: Organize site, sample, and sensor data with R.
-Authors@R: person("Kelly", "Hondula", , "khondula@sesync.org", c("aut", "cre"))
+Authors@R: c(person("Kelly", "Hondula", email = "khondula@sesync.org", role = c("aut", "cre")),
+            person("Nate", "Jones", email = "njones@umd.edu", role = c("aut")))
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -17,7 +17,7 @@ create_sqlite(dir = ".", filename = "odm2", connect = FALSE)
 Make a new ODM2 sqlite database
 }
 \details{
-This function copies a template sqlite file with the ODM2 schema and controlled vocabularies to the specified location.
+This function copies a template sqlite file with the ODM2 schema, controlled vocabularies, and units to the specified location.
 }
 \examples{
 create_sqlite(dir = tempdir())
