@@ -97,6 +97,7 @@ db_get_variables <- function(db){
   current_variables <- c()
   if (class(db) == "SQLiteConnection"){
     current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM variables")
+    RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
     current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.variables")
