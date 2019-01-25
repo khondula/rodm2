@@ -5,6 +5,7 @@
 #' @param datavalues data frame with columns "Timestamp" with
 #'    POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names
 #' @param method code for method used to collect data
+#' @param methodtypecv Instrument deployment or derivation
 #' @param site_code sampling feature code at which data were collected
 #' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
 #'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
@@ -55,6 +56,7 @@
 db_insert_results_ts <- function(db,
                                  datavalues,
                                  method,
+                                 methodtypecv = "Instrument deployment",
                                  site_code,
                                  variables,
                                  sampledmedium,
@@ -73,7 +75,7 @@ db_insert_results_ts <- function(db,
   # check for method and add if not in there
   if(!(method %in% rodm2::db_get_methods(db))){
     rodm2::db_describe_method(db, methodname = method, methodcode = method,
-                              methodtypecv = 'Instrument deployment')
+                              methodtypecv = methodtypecv)
   }
 
 
@@ -145,12 +147,13 @@ db_insert_results_ts <- function(db,
     sql1 <- 'INSERT into actions
     (actiontypecv, methodid, begindatetime, begindatetimeutcoffset, enddatetime)
     VALUES
-    ("Instrument deployment",
+    (:methodtypecv,
     (SELECT methodid from methods WHERE methodcode = :method),
     DATETIME(:begindatetime), :begindatetimeutcoffset, DATETIME(:enddatetime))'
 
     sql1 <- RSQLite::dbSendQuery(db, sql1)
-    RSQLite::dbBind(sql1, params = list(method = method,
+    RSQLite::dbBind(sql1, params = list(methodtypecv = methodtypecv,
+                                        method = method,
                                         begindatetime = format(as.POSIXct(datavalues[["Timestamp"]][1]),
                                                                "%Y-%m-%d %H:%M:%S"),
                                         begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
@@ -331,7 +334,7 @@ db_insert_results_ts <- function(db,
                                WHERE samplingfeaturecode = ?site_code))
                                RETURNING actionid, featureactionid',
 
-                               actiontype = "Instrument deployment",
+                               actiontype = methodtypecv,
                                method = method,
                                begindatetime = format(as.POSIXct(
                                  datavalues[["Timestamp"]][1]), "%Y-%m-%d %H:%M:%S"),
