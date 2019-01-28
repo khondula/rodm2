@@ -87,7 +87,6 @@ db_get_methods <- function(db){
   current_methods <- c()
   if (class(db) == "SQLiteConnection"){
     current_methods <- DBI::dbGetQuery(db, "SELECT methodcode FROM methods")$MethodCode
-    RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
     current_methods <- DBI::dbGetQuery(db, "SELECT methodcode FROM odm2.methods")$methodcode
