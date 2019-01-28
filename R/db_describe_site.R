@@ -208,7 +208,7 @@ db_get_samples <- function(db){
   if (class(db) == "SQLiteConnection"){
     current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures
                                      WHERE samplingfeaturetypecv = 'Specimen'")[[1]]
-    RSQLite::dbClearResult()
+    # RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
     current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures
