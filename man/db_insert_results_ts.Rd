@@ -4,7 +4,8 @@
 \alias{db_insert_results_ts}
 \title{Insert time series data values to ODM2 database}
 \usage{
-db_insert_results_ts(db, datavalues, method, site_code, variables,
+db_insert_results_ts(db, datavalues, method,
+  methodtypecv = "Instrument deployment", site_code, variables,
   sampledmedium, processinglevel = "Raw data", actionby = NULL,
   equipment_name = NULL, aggregationstatisticcv = NULL,
   zlocation = NULL, zlocationunits = NULL, ...)
@@ -16,6 +17,8 @@ db_insert_results_ts(db, datavalues, method, site_code, variables,
 POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
 \item{method}{code for method used to collect data}
+
+\item{methodtypecv}{Instrument deployment or derivation}
 
 \item{site_code}{sampling feature code at which data were collected}
 

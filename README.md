@@ -3,13 +3,19 @@
 rodm2
 =====
 
+[![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2)
+
 The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists.
 
-Organize site, sample, and sensor data all in one place! For example:
+Organize site, sample, and sensor data all in one place!
 
--   time series hydrologic observations from a well or stream gage
--   sediment sample properties from a soil core analyzed in a lab
--   categorical observations manually recorded in the field
+-   create the skeleton of an sqlite ODM2 database with create\_sql()
+-   insert time series data using db\_insert\_results\_ts()
+-   insert (in situ) measurement data using db\_insert\_results\_m()
+-   insert (ex situ) sample measurement data using db\_insert\_results\_samples()
+-   helper functions for controlled vocab terms and site names
+-   populate sites, people, methods, variables, equipment, organizations, annotation with db\_describe\_%() functions
+-   query list of site names, people, methods, variables, equipment, organizations with db\_get\_%() functions
 
 This project is just getting started! Get in touch or open an [issue](https://github.com/khondula/rodm2/issues) if you have a use case or if you're interested in collaborating.
 
@@ -21,52 +27,6 @@ You can install this package from GitHub with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("khondula/rodm2")
-```
-
-Usage
------
-
-Organize a dataframe of time series values into a new ODM2 sqlite database:
-
-The data to upload must have at least 2 timepoints, a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS, and column names that are controlled vocabulary variable names (use a tibble to allow for spaces in column names).
-
-| Timestamp           |   wd|   ws|  gustspeed|
-|:--------------------|----:|----:|----------:|
-| 2018-06-27 13:45:00 |  180|  1.0|        2.0|
-| 2018-06-27 13:55:00 |  170|  1.5|        2.5|
-
-``` r
-library(rodm2)
-dblite <- create_sqlite(connect = TRUE)
-```
-
-Create a list that matches the variables to column names and units:
-
-``` r
-vars_list <- list(
-  'Wind direction' = list(column = 'wd', units = 'Degree'),
-  'Wind speed' = list(column = 'ws', units = 'Meter per Second'),
-  'Wind gust speed' = list(column = 'gustspeed', units = 'Meter per Second')
-)
-```
-
-If there are columns in the data that correspond to censor codes or data quality codes, also supply those column names as 'qualitycodecol' and/or 'censorcodecol' in the list for each variable.
-
-Supply database connection object, new data, method, site, variables, and sampled medium to insert time series data.
-
-``` r
-db_insert_results_ts(db = dblite, # database connection
-                     datavalues = ts_data, # dataframe with Timestamp column
-                     method = "SonicAnemometer", 
-                     site_code = "Site1", 
-                     variables = vars_list, 
-                     sampledmedium = "Air"
-                     )
-#> SonicAnemometer has been added to the Methods table.
-#> Wind direction has been added to the Variables table.
-#> Wind speed has been added to the Variables table.
-#> Wind gust speed has been added to the Variables table.
-#> Site Site1 has been entered into the samplingfeatures table.
 ```
 
 More details
@@ -130,8 +90,8 @@ head(DBI::dbReadTable(dblite, "units"))
 #> 6      <NA>
 ```
 
-"Describe"" functions
----------------------
+"Describe" functions
+--------------------
 
 Add information using `db_describe_%TABLE%` functions.
 
@@ -150,6 +110,8 @@ There are currently "describe" functions for:
 -   variables
 -   annotations
 -   organizations (necessary for equipment)
+-   sites
+-   site geometries
 
 'Insert' functions
 ------------------

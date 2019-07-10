@@ -19,5 +19,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Kelly Hondula \email{khondula@sesync.org}
 
+Authors:
+\itemize{
+  \item Nate Jones \email{njones@umd.edu}
+}
+
 }
 \keyword{internal}

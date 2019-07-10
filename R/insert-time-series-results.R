@@ -234,14 +234,15 @@ db_insert_results_ts <- function(db,
                                           newfaid = newfaid,
                                           resulttypecv = 'Time series coverage',
                                           variablenamecv = i,
-                                          units = variables[[i]][["units"]],
+                                          units = variables[[i]][[2]],
                                           processinglevel = processinglevel,
                                           sampledmedium = sampledmedium,
                                           valuecount = nrow(datavalues)
       ))
       RSQLite::dbClearResult(res = sql4)
       newresultids <- append(newresultids, as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()")))
-    }
+      # RSQLite::dbClearResult()
+      }
     names(newresultids) <- names(variables)
 
     # for each of the new results, insert into time series results

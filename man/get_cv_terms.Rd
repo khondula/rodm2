@@ -4,7 +4,7 @@
 \alias{get_cv_terms}
 \title{Print a list of controlled vocabulary terms}
 \usage{
-get_cv_terms(cvtype)
+get_cv_terms(cvtype, quietly = TRUE)
 }
 \arguments{
 \item{cvtype}{the name of the controlled vocab eg. "resulttype" or "methodtype"}
