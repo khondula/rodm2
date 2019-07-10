@@ -226,7 +226,6 @@ db_get_equipment <- function(db){
   current_equipment <- c()
   if (class(db) == "SQLiteConnection"){
     current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM equipment")[[1]]
-    RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
     current_equipment <- DBI::dbGetQuery(db, "SELECT equipmentname FROM odm2.equipment")[[1]]
