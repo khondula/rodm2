@@ -135,7 +135,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='no'>cvtype</span>)</pre>
+    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='no'>cvtype</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +152,7 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div><div class='input'><span class='no'>resultterms</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div><div class='input'><span class='no'>resultterms</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -169,7 +169,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Kelly Hondula.</p>
+  <p>Developed by Kelly Hondula, Nate Jones.</p>
 </div>
 
 <div class="pkgdown">
