@@ -12,7 +12,8 @@
 #' # just add site name
 #' db <- rodm2::create_sqlite(connect = TRUE)
 #' db_describe_site(db, site_code = "new_site")
-db_describe_site <- function(db, site_code, site_name = NULL, site_description = NULL){
+db_describe_site <- function(db, site_code, sitetypecv = 'Site',
+                             site_name = NULL, site_description = NULL){
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
@@ -26,7 +27,7 @@ db_describe_site <- function(db, site_code, site_name = NULL, site_description =
                                      VALUES
                                      (:samplingfeatureuuid, :samplingfeaturetypecv, :samplingfeaturecode)')
     RSQLite::dbBind(sql1, param = list(samplingfeatureuuid = uuid::UUIDgenerate(),
-                                       samplingfeaturetypecv = 'Site',
+                                       samplingfeaturetypecv = sitetypecv,
                                        samplingfeaturecode = site_code))
     RSQLite::dbClearResult(res = sql1)
     if(!is.null(site_name)){
