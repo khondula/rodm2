@@ -3,7 +3,7 @@
 #' Insert sample result data values to ODM2 database
 #'
 #' @param db database connection
-#' @param datavalues data frame with columns "Timestamp" with
+#' @param datavalues data frame with data to upload columns "Timestamp" with
 #'    YYYY-MM-DD H:M:S format, and column names corresponding to variable names
 #' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
 #'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
