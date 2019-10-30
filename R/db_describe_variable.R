@@ -102,5 +102,5 @@ db_get_variables <- function(db){
   if (class(db) == "PostgreSQLConnection"){
     current_variables <- DBI::dbGetQuery(db, "SELECT variablecode FROM odm2.variables")
   }
-  return(current_variables)
+  return(current_variables[[1]])
 }
