@@ -50,7 +50,7 @@ db_describe_variable <- function(db,
                                           variablecode = variablecode))
       RSQLite::dbClearResult(res = sql2)
     }
-    message(paste(variablenamecv, "has been added to the Variables table."))
+    message(paste(variablenamecv, "has been added to the Variables table as", variablecode,"."))
 
   }
 
@@ -78,7 +78,7 @@ db_describe_variable <- function(db,
                                 variablecode = variablecode)
     RPostgreSQL::dbGetQuery(db, sql2)
   }
-  message(paste(variablenamecv, "has been added to the Variables table."))
+  message(paste(variablenamecv, "has been added to the Variables table as", variablecode,"."))
   }
 }
 
@@ -96,11 +96,11 @@ db_get_variables <- function(db){
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
   current_variables <- c()
   if (class(db) == "SQLiteConnection"){
-    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM variables")
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablecode FROM variables")
     # RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
-    current_variables <- DBI::dbGetQuery(db, "SELECT variablenamecv FROM odm2.variables")
+    current_variables <- DBI::dbGetQuery(db, "SELECT variablecode FROM odm2.variables")
   }
   return(current_variables)
 }
