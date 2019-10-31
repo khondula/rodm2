@@ -45,7 +45,7 @@ db_get_results <- function(db,
     variable_code <- RSQLite::dbGetQuery(db, "SELECT variablecode from variables")
     variable_code <- unique(variable_code[[1]][!is.null(variable_code)])
   }
-
+  results_data_ts <- c()
   if("ts" %in% result_type){
 
     # Retreive Sampling Feature ID for site code
@@ -107,6 +107,7 @@ db_get_results <- function(db,
                                            WHERE tsrv.ResultID IN (:x)",
                                            params=list(x=result_id_integer))
   }
+  results_data_samples <- c()
 
   if("sample" %in% result_type){
 
