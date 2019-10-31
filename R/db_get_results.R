@@ -20,11 +20,11 @@ db_get_results <- function(db,
   if (!class(db) %in% c("SQLiteConnection")) {
     stop("sorry, only sqlite database connections are supported so far")}
 
-  if("measurement" %in% results_type){
+  if("measurement" %in% result_type){
     stop("to be implemented after lunch")
   }
 
-  if("profile" %in% results_type){
+  if("profile" %in% result_type){
     stop("to be implemented after lunch")
   }
 
@@ -46,7 +46,7 @@ db_get_results <- function(db,
     variable_code <- unique(variable_code[[1]][!is.null(variable_code)])
   }
 
-  if("ts" %in% results_type){
+  if("ts" %in% result_type){
 
     # Retreive Sampling Feature ID for site code
     sf_id <- RSQLite::dbGetQuery(db,"SELECT SamplingFeatureID
@@ -108,7 +108,7 @@ db_get_results <- function(db,
                                            params=list(x=result_id_integer))
   }
 
-  if("sample" %in% results_type){
+  if("sample" %in% result_type){
 
     # Retreive Sampling Feature ID for site code
     sf_id <- RSQLite::dbGetQuery(db,"SELECT SamplingFeatureID
