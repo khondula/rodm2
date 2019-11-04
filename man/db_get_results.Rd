@@ -5,10 +5,19 @@
 \title{Title}
 \usage{
 db_get_results(db, site_code = NULL, variable_code = NULL,
-  result_type = c("sample", "ts", "measurement"))
+  result_type = c("sample", "ts", "measurement", "profile"))
 }
 \arguments{
-\item{result_type}{}
+\item{db}{database connection object}
+
+\item{site_code}{a string vector with codes of sites to get data for. default NULL returns all sites}
+
+\item{variable_code}{a string vector with codes of variables to get data for. default NULL returns all variables}
+
+\item{result_type}{a string vector of result types to include: "ts" for time series results, "sample" for sample-based results, "measurement" for measurements}
+}
+\value{
+a named list of dataframes corresponding to each result type.
 }
 \description{
 Title
