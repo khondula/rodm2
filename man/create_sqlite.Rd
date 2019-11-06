@@ -9,19 +9,21 @@ create_sqlite(dir = ".", filename = "odm2", connect = FALSE)
 \arguments{
 \item{dir}{Name of existing directory for the sqlite database file to be created in. Defaults to current directory}
 
-\item{filename}{Filename for sqlite database file. Defaults to odm2, creating odm2.sqlite}
+\item{filename}{Filename for sqlite database file. Defaults to "odm2", making a file called odm2.sqlite}
 
-\item{connect}{whether or not to return the database connection object}
+\item{connect}{Whether or not to return the database connection object}
+}
+\value{
+Returns database connecton object if connect = TRUE, otherwise just creates file.
 }
 \description{
 Make a new ODM2 sqlite database
 }
 \details{
-This function copies a template sqlite file with the ODM2 schema, controlled vocabularies, and units to the specified location.
+This function copies a template sqlite file with the ODM2 schema, controlled vocabularies,
+and units to the specified location.
 }
 \examples{
 create_sqlite(dir = tempdir())
-dblite <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-# OR
 dblite <- create_sqlite(connect = TRUE)
 }

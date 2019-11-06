@@ -2,6 +2,7 @@
 
 export(check_samplingfeaturecodes)
 export(check_variables_list)
+export(connect_sqlite)
 export(create_sqlite)
 export(db_describe_annotation)
 export(db_describe_equipment)
