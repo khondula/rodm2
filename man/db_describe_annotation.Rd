@@ -4,14 +4,17 @@
 \alias{db_describe_annotation}
 \title{Add a new annotation text}
 \usage{
-db_describe_annotation(db, annotationtypecv, annotationtext)
+db_describe_annotation(db, annotationtypecv, annotationtext = NULL,
+  annotationcode = NULL)
 }
 \arguments{
 \item{db}{database connection object}
 
-\item{annotationtypecv}{annotation type from controlled vocab}
+\item{annotationtypecv}{annotation type from [controlled vocab](http://vocabulary.odm2.org/annotationtype/)}
 
 \item{annotationtext}{text string of annotation}
+
+\item{annotationcode}{Optional short codename for annotation}
 }
 \value{
 TRUE if successful
@@ -19,9 +22,12 @@ TRUE if successful
 \description{
 Add a new annotation text
 }
-\examples{
-\dontrun{
-db_describe_annotaion("samplingfeature annotation", "primary sites")
+\details{
+Use this function to add new annotations such as the name of a Site group.
 }
+\examples{
+db <- create_sqlite(dir = tempdir())
+db_describe_annotaion(db, "Site group", "Riparian wells")
+db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
 
 }

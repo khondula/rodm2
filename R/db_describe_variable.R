@@ -16,8 +16,8 @@
 #' }
 
 db_describe_variable <- function(db,
-                                 variabletypecv,
                                  variablecode,
+                                 variabletypecv,
                                  variablenamecv,
                                  variabledefinition = NULL,
                                  nodatavalue = -9999){
