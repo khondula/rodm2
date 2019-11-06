@@ -82,7 +82,7 @@ db_describe_person <- function(db = db,
 
 #' Get list of people currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current first and last names in the people table
 #' @export

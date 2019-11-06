@@ -39,10 +39,6 @@ get_site_names_like <- function(x, db, ...){
 #' @param new_codes vector of names to compare with samplingfeaturecode vector
 #' @param db database connection (defaults to db)
 #'
-#' @importFrom magrittr %>%
-#' @name %>%
-#' @rdname pipe
-#'
 #' @return data frame with new_codes and in_db column
 #'
 #' @examples

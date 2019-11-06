@@ -1,7 +1,7 @@
 #' Function to retrieve time series data with variablecode waterLevel from a specified sampling feature
 #'
 #' @param db database connection object
-#' @param site_code
+#' @param site_code site code to get water level time series for
 #'
 #' @return
 #' @export

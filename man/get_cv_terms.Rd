@@ -4,10 +4,12 @@
 \alias{get_cv_terms}
 \title{Print a list of controlled vocabulary terms}
 \usage{
-get_cv_terms(cvtype, quietly = TRUE)
+get_cv_terms(cvtype, quietly = FALSE)
 }
 \arguments{
 \item{cvtype}{the name of the controlled vocab eg. "resulttype" or "methodtype"}
+
+\item{quietly}{whether to print in console or not}
 }
 \value{
 a vector of the Names column from the controlled vocab table

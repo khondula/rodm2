@@ -7,7 +7,7 @@
 db_get_people(db)
 }
 \arguments{
-\item{db}{}
+\item{db}{database connection object}
 }
 \value{
 the current first and last names in the people table

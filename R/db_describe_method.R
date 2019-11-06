@@ -74,7 +74,7 @@ db_describe_method <- function(db,
 
 #' Get list of methods currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current values in the methodname column of the methods table
 #' @export

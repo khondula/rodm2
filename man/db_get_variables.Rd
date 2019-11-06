@@ -7,7 +7,7 @@
 db_get_variables(db)
 }
 \arguments{
-\item{db}{}
+\item{db}{database connection object}
 }
 \value{
 the current values in the variablenamecv column

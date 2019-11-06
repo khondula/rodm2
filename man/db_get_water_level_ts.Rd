@@ -9,7 +9,7 @@ db_get_water_level_ts(db, site_code)
 \arguments{
 \item{db}{database connection object}
 
-\item{site_code}{}
+\item{site_code}{site code to get water level time series for}
 }
 \description{
 Function to retrieve time series data with variablecode waterLevel from a specified sampling feature

@@ -213,7 +213,7 @@ db_describe_equipment <- function(db,
 
 #' Get list of equipment currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current values in the equipmentcode column of the equipment table
 #' @export

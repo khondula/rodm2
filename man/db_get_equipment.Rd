@@ -7,7 +7,7 @@
 db_get_equipment(db)
 }
 \arguments{
-\item{db}{}
+\item{db}{database connection object}
 }
 \value{
 the current values in the equipmentcode column of the equipment table

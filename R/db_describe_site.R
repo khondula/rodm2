@@ -4,6 +4,7 @@
 #' @param site_code unique short code name (required)
 #' @param site_name optional longer site name
 #' @param site_description optional longer site description
+#' @param sitetypecv site type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"
 #'
 #' @return message that site was added
 #' @export
@@ -91,7 +92,7 @@ db_describe_site <- function(db, site_code, sitetypecv = 'Site',
 
 #' Get list of site codes currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current values in the samplingfeaturecode column
 #' @export
@@ -116,7 +117,7 @@ db_get_sites <- function(db){
 
 #' Get list of sample codes currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current values in the samplingfeaturecode column
 #' @export

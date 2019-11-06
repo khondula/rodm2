@@ -7,7 +7,7 @@
 db_get_sites(db)
 }
 \arguments{
-\item{db}{}
+\item{db}{database connection object}
 }
 \value{
 the current values in the samplingfeaturecode column

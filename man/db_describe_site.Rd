@@ -12,6 +12,8 @@ db_describe_site(db, site_code, sitetypecv = "Site", site_name = NULL,
 
 \item{site_code}{unique short code name (required)}
 
+\item{sitetypecv}{site type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"}
+
 \item{site_name}{optional longer site name}
 
 \item{site_description}{optional longer site description}

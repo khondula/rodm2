@@ -1,6 +1,7 @@
 #' Print a list of controlled vocabulary terms
 #'
 #' @param cvtype the name of the controlled vocab eg. "resulttype" or "methodtype"
+#' @param quietly whether to print in console or not
 #'
 #' @return a vector of the Names column from the controlled vocab table
 #' @export
@@ -8,7 +9,7 @@
 #' @examples
 #' get_cv_terms("resulttype")
 #' resultterms <- get_cv_terms("resulttype")
-get_cv_terms <- function(cvtype, quietly = TRUE){
+get_cv_terms <- function(cvtype, quietly = FALSE){
   tmp <- tempdir()
   if(file.exists(file.path(tmp, "odm2.sqlite"))){
     db <- rodm2::connect_sqlite()

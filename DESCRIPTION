@@ -21,7 +21,6 @@ Imports:
     DBI,
     fs,
     crayon,
-    sf,
     lubridate,
     purrr,
     miniUI,

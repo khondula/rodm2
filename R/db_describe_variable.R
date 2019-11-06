@@ -84,7 +84,7 @@ db_describe_variable <- function(db,
 
 #' Get list of variables currently in database
 #'
-#' @param db
+#' @param db database connection object
 #'
 #' @return the current values in the variablenamecv column
 #' @export

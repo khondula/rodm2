@@ -3,12 +3,9 @@
 \name{\%>\%}
 \alias{\%>\%}
 \alias{get_site_names_like}
-\alias{check_samplingfeaturecodes}
 \title{Search for site names with a pattern}
 \usage{
 get_site_names_like(x, db, ...)
-
-check_samplingfeaturecodes(new_codes, db = db)
 }
 \arguments{
 \item{x}{pattern to search for}
@@ -16,20 +13,12 @@ check_samplingfeaturecodes(new_codes, db = db)
 \item{db}{database connection}
 
 \item{...}{extra parameters to pass to agrep}
-
-\item{new_codes}{vector of names to compare with samplingfeaturecode vector}
-
-\item{db}{database connection (defaults to db)}
 }
 \value{
 matching elements if the samplingfeaturecode vector
-
-data frame with new_codes and in_db column
 }
 \description{
 Uses agrep to search the samplingfeaturecode column of the samplingfeature table
-
-Returns a data frame specifying whether each element of new_codes exists in samplingfeatures
 }
 \examples{
 \dontrun{
@@ -37,9 +26,4 @@ get_site_names_like("weather")
 # Pass extra arguments to agrep
 get_site_names_like("weather", max.distance = 2)
 }
-\dontrun{
-#
-check_samplingfeaturecodes(new_codes = new_sites$sites)
-}
-
 }
