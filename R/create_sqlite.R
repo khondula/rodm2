@@ -44,8 +44,20 @@ create_sqlite <- function(dir = ".", filename = "odm2", connect = FALSE){
 #' create_sqlite(filename = "odm2", dir = tempdir())
 #' db <- connect_sqlite(filename = "odm2')
 connect_sqlite <- function(filename = "odm2", dir = "."){
+
   path <- file.path(dir, paste0(filename, ".sqlite"))
-  conn_obj <- DBI::dbConnect(RSQLite::SQLite(), dbname = file.path())
+  conn_obj <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
+  # check if it has same tables as template file
+  conn_tables <- RSQLite::dbListTables(db_template)
+
+  template_file <- system.file("odm2-template.sqlite", package = "rodm2")
+  db_template <- DBI::dbConnect(RSQLite::SQLite(), template_file)
+  odm2_tables <- RSQLite::dbListTables(db_template)
+  DBI::dbDisconnect(db_template)
+  if(!setequal(odm2_tables, conn_tables)){
+    warning("This file does not match the ODM2 schema.")
+  }
+
   return(conn_obj)
 }
 
