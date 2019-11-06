@@ -48,7 +48,7 @@ connect_sqlite <- function(filename = "odm2", dir = "."){
   path <- file.path(dir, paste0(filename, ".sqlite"))
   conn_obj <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
   # check if it has same tables as template file
-  conn_tables <- RSQLite::dbListTables(db_template)
+  conn_tables <- RSQLite::dbListTables(conn_obj)
 
   template_file <- system.file("odm2-template.sqlite", package = "rodm2")
   db_template <- DBI::dbConnect(RSQLite::SQLite(), template_file)
