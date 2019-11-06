@@ -11,6 +11,9 @@ db_get_water_level_ts(db, site_code)
 
 \item{site_code}{site code to get water level time series for}
 }
+\value{
+time series
+}
 \description{
 Function to retrieve time series data with variablecode waterLevel from a specified sampling feature
 }

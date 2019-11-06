@@ -22,3 +22,6 @@ a named list of dataframes corresponding to each result type.
 \description{
 Title
 }
+\examples{
+# db_get_results(db, result_type = "ts")
+}

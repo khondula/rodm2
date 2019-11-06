@@ -3,7 +3,7 @@
 #' @param db database connection object
 #' @param site_code site code to get water level time series for
 #'
-#' @return
+#' @return time series
 #' @export
 #'
 #' @examples

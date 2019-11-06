@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' # db_get_results(db, result_type = "ts")
 db_get_results <- function(db,
                            site_code = NULL,
                            variable_code = NULL,
