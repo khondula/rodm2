@@ -17,10 +17,20 @@ knitr::opts_chunk$set(
 ## Connect
 
 Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. 
-
-```{r}
+```{r eval=FALSE}
 library(rodm2)
-db <- rodm2::connect_sqlite()
+db <- rodm2::create_sqlite()
+
+```
+
+```{r, echo=FALSE}
+library(rodm2)
+
+if(file.exists("odm2.sqlite")){
+ db <- rodm2::connect_sqlite() 
+} else {
+  db <- rodm2::create_sqlite()
+}
 ```
 
 ## Prepare data
