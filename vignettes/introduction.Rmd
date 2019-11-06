@@ -61,7 +61,7 @@ vars_list <- list(
 To see a list of any controlled vocabulary terms, use the `get_cv_terms()` function. 
 
 ```{r, }
-varnames <- get_cv_terms("variablename") 
+varnames <- get_cv_terms("variablename", quietly = TRUE) 
 grep("Wind", varnames, value = TRUE)
 ```
 
@@ -101,6 +101,8 @@ Optional arguments:
 ## Get values
 
 ```{r}
-DBI::dbReadTable(db, "timeseriesresultvalues")
+my_data <- rodm2::db_get_results(db, result_type = "ts")
+
+head(my_data)
 ```
 
