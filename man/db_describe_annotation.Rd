@@ -26,8 +26,8 @@ Add a new annotation text
 Use this function to add new annotations such as the name of a Site group.
 }
 \examples{
-db <- create_sqlite(dir = tempdir())
-db_describe_annotaion(db, "Site group", "Riparian wells")
-db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
+#db <- create_sqlite(dir = tempdir())
+#db_describe_annotaion(db, "Site group", "Riparian wells")
+#db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
 
 }

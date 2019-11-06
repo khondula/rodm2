@@ -18,11 +18,11 @@ Measurement results are one value per variable collected at one site using a spe
 
 ## Connect
 
-Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database using `create_sqlite(connect = TRUE)`. 
+Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. 
 
 ```{r}
 library(rodm2)
-db <- rodm2::create_sqlite(connect = TRUE)
+db <- rodm2::connect_sqlite()
 ```
 
 ## Prepare data
@@ -75,7 +75,7 @@ The required arguments to `db_insert_results_m()` are
 
 If the variable(s), method, or site code do not already exist in the database, they will be added. 
 
-```{r}
+```{r, eval=FALSE}
 db_insert_results_m(db = db, 
                      datavalues = measurement_data,
                      variables = vars_list,

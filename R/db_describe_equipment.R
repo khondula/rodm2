@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-#' db <- create_sqlite(connect = TRUE)
+#' db <- connect_sqlite()
 #' db_describe_equipment(db, "unit1", "001", "model1",
 #' "vendor name", "Wendy", "Sensor", "Wetland", "ww email", "hobo")
 db_describe_equipment <- function(db,

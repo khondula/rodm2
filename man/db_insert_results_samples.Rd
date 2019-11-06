@@ -15,7 +15,7 @@ db_insert_results_samples(db, datavalues, field_method = NULL,
 \arguments{
 \item{db}{database connection}
 
-\item{datavalues}{data frame with columns "Timestamp" with
+\item{datavalues}{data frame with data to upload columns "Timestamp" with
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
 \item{field_method}{short description of field method to collect new samples. Dont include for new data about existing samples.}

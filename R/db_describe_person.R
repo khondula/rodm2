@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' create_sqlite(dir = ".")
+#' connect_sqlite(dir = ".")
 #' db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 #' db_describe_person(db = db, PersonFirstName = "Wendy",
 #'     PersonLastName = "Wetland",

@@ -14,8 +14,10 @@ knitr::opts_chunk$set(
 ```
 # rodm2
 
- [![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2)
- 
+  <!-- badges: start -->
+  [![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2)
+  <!-- badges: end -->
+  
 The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. 
 
 Organize site, sample, and sensor data all in one place!

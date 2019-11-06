@@ -80,7 +80,7 @@ db_insert_results_ts <- function(db,
 
 
   # check that all variables are in variables table
-  vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)[[1]])
+  vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db))
   for(newvar in vars_to_add){
     rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
   }

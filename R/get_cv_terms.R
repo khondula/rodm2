@@ -10,7 +10,11 @@
 #' resultterms <- get_cv_terms("resulttype")
 get_cv_terms <- function(cvtype, quietly = TRUE){
   tmp <- tempdir()
-  db <- rodm2::create_sqlite(dir = tmp, connect = TRUE)
+  if(file.exists(file.path(tmp, "odm2.sqlite"))){
+    db <- rodm2::connect_sqlite()
+  } else {
+    db <- rodm2::create_sqlite(dir = tmp, connect = TRUE)
+  }
   sql <- DBI::sqlInterpolate(db, paste0("SELECT Name from cv_", cvtype))
   if(cvtype == "units"){
     sql <- DBI::sqlInterpolate(db, "SELECT unitsname from units")

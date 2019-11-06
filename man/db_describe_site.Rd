@@ -4,7 +4,7 @@
 \alias{db_describe_site}
 \title{Describe a new site}
 \usage{
-db_describe_site(db, site_code, site_name = NULL,
+db_describe_site(db, site_code, sitetypecv = "Site", site_name = NULL,
   site_description = NULL)
 }
 \arguments{
@@ -24,6 +24,6 @@ Describe a new site
 }
 \examples{
 # just add site name
-db <- rodm2::create_sqlite(connect = TRUE)
+db <- rodm2::connect_sqlite()
 db_describe_site(db, site_code = "new_site")
 }

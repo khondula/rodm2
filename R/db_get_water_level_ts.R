@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' db <- rodm2::create_sqlite(connect = TRUE)
+#' db <- rodm2::connect_sqlite()
 #'
 #' tsrv <-data.frame(
 #'  Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),

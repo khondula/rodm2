@@ -80,12 +80,12 @@ get_cv_terms("units")
 
 ## Connect
 
-Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database using `create_sqlite(connect = TRUE)`. 
+Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. 
 
 ```{r, message=FALSE, comment=FALSE}
 devtools::install_github("khondula/rodm2")
 library(rodm2)
-db <- rodm2::create_sqlite(connect = TRUE)
+db <- rodm2::connect_sqlite()
 ```
 
 
