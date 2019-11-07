@@ -55,19 +55,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Insert-sample-results-data.html">Insert sample results data</a>
-    </li>
-    <li>
-      <a href="articles/insert-measurements.html">Insert measurement results</a>
-    </li>
-    <li>
       <a href="articles/introduction.html">Insert time series results</a>
-    </li>
-    <li>
-      <a href="articles/new_person.html">Link Actions to People</a>
-    </li>
-    <li>
-      <a href="articles/newsites.html">Add new sites</a>
     </li>
   </ul>
 </li>
@@ -122,61 +110,28 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <h2 class="hasAnchor">
 <a href="#more-details" class="anchor"></a>More details</h2>
 <p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html">here</a> for an overview of the data structure.</p>
-<p><strong>With a PostgreSQL database</strong></p>
-<p>A script for creating a PostgreSQL database with the ODM2 schema is <a href="https://github.com/ODM2/ODM2/blob/master/src/blank_schema_scripts/postgresql/ODM2_for_PostgreSQL.sql">here</a> and instructions for populating the controlled vocabularies tables using a script are <a href="https://github.com/ODM2/ODM2/tree/master/src/load_cvs">here</a>.</p>
-<p>You will need to create a database connection object, eg. using <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">DBI::dbConnect()</a></code> and your host and log-in credentials.</p>
-<p><strong>Without an external database</strong></p>
-<p>Initialize an empty sqlite database with odm2 schema in your working directory (empty except for the controlled vocabulary tables). You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R. By default, <code><a href="reference/create_sqlite.html">create_sqlite()</a></code> just creates the sqlite file but <code>connect = TRUE</code> will return the connection object as well.</p>
+</div>
+<div id="getting-started" class="section level2">
+<h2 class="hasAnchor">
+<a href="#getting-started" class="anchor"></a>Getting started</h2>
+<p>Load rodm2 and create a connection to your database. If you don’t have an existing database, create an empty ODM2 sqlite database and connection using <code><a href="reference/create_sqlite.html">create_sqlite(connect = TRUE)</a></code> or if you are starting from an existing database use <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-dblite &lt;-<span class="st"> </span><span class="kw"><a href="reference/create_sqlite.html">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Or create a connection to an existing sqlite file using <code>dbConnect</code> and the name of the file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dblite &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="st">"odm2.sqlite"</span>)</code></pre></div>
+db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>()</code></pre></div>
 <p>There are 132 tables in the database. The “blank” database has the Units table populated as well as all of the controlled vocabularies.</p>
 <p>See the terms for a given controlled vocabulary:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/get_cv_terms">get_cv_terms</a></span>(<span class="st">"methodtype"</span>)
+<span class="co">#&gt; methodtype controlled vocabulary terms: "Cruise", "Data retrieval", "Derivation", "Equipment deployment", "Equipment maintenance", "Equipment programming", "Equipment retrieval", "Estimation", "Expedition", "Field activity", "Generic non-observation", "Instrument Continuing Calibration Verification", "Instrument calibration", "Instrument deployment", "Instrument retrieval", "Observation", "Simulation", "Site visit", "Specimen analysis", "Specimen collection", "Specimen fractionation", "Specimen preparation", "Specimen preservation", "Submersible launch", "Unknown")</span>
 <span class="co">#&gt; use quietly = FALSE to print out all controlled vocabulary terms</span></code></pre></div>
-<p>Explore the database structure:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(dblite))
-<span class="co">#&gt; [1] "ActionAnnotations"             "ActionBy"                     </span>
-<span class="co">#&gt; [3] "ActionDirectives"              "ActionExtensionPropertyValues"</span>
-<span class="co">#&gt; [5] "Actions"                       "Affiliations"</span>
-DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListFields">dbListFields</a></span>(dblite, <span class="st">"featureactions"</span>)
-<span class="co">#&gt; [1] "FeatureActionID"   "SamplingFeatureID" "ActionID"</span>
-<span class="kw">head</span>(DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbReadTable">dbReadTable</a></span>(dblite, <span class="st">"units"</span>))
-<span class="co">#&gt;   UnitsID           UnitsTypeCV UnitsAbbreviation       UnitsName</span>
-<span class="co">#&gt; 1       1         Absorbed dose                Gy            Gray</span>
-<span class="co">#&gt; 2       2         Absorbed dose               rad             RAD</span>
-<span class="co">#&gt; 3       3    Absorbed dose rate              Gy/s Gray per Second</span>
-<span class="co">#&gt; 4       4 Amount of Information               ban             Ban</span>
-<span class="co">#&gt; 5       5 Amount of Information               bit             Bit</span>
-<span class="co">#&gt; 6       6 Amount of Information                By            Byte</span>
-<span class="co">#&gt;   UnitsLink</span>
-<span class="co">#&gt; 1      &lt;NA&gt;</span>
-<span class="co">#&gt; 2      &lt;NA&gt;</span>
-<span class="co">#&gt; 3      &lt;NA&gt;</span>
-<span class="co">#&gt; 4      &lt;NA&gt;</span>
-<span class="co">#&gt; 5      &lt;NA&gt;</span>
-<span class="co">#&gt; 6      &lt;NA&gt;</span></code></pre></div>
 </div>
 <div id="describe-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#describe-functions" class="anchor"></a>“Describe” functions</h2>
 <p>Add information using <code>db_describe_%TABLE%</code> functions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> dblite, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> db, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
      <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
      <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
      <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
 <span class="co">#&gt; Wendy Wetland has been entered into the People table.</span></code></pre></div>
-<p>There are currently “describe” functions for:</p>
-<ul>
-<li>methods</li>
-<li>people</li>
-<li>variables</li>
-<li>annotations</li>
-<li>organizations (necessary for equipment)</li>
-<li>sites</li>
-<li>site geometries</li>
-</ul>
 </div>
 <div id="insert-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -184,12 +139,6 @@ DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation
 <p>Data are uploaded using “insert” functions for specific types of results, eg. <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> for a data frame of time series results.</p>
 <ul>
 <li>time_series: time series data collected at a site using a sensor</li>
-</ul>
-<p>In progress:</p>
-<ul>
-<li>measurement: in-situ point measurement (numeric) taken at a site</li>
-<li>category: in-situ point measurement (text/categorical) taken at a site</li>
-<li>sample_measurement: ex-situ measurement (numeric) of a sample taken at a site</li>
 </ul>
 </div>
 <div id="acknowledgements" class="section level2">
@@ -210,7 +159,7 @@ DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/khondula/rodm2">https://​github.com/​khondula/​rodm2</a>
 </li>
-<li>Report a bug at <br><a href="hhttps://github.com/khondula/rodm2/issues">hhttps://​github.com/​khondula/​rodm2/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/khondula/rodm2/issues">https://​github.com/​khondula/​rodm2/​issues</a>
 </li>
 </ul>
 </div>
@@ -228,6 +177,7 @@ DBI<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation
 <li>Nate Jones <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
+
 
       <div class="dev-status">
 <h2>Dev status</h2>

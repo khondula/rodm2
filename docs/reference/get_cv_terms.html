@@ -13,6 +13,7 @@
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -30,10 +31,11 @@
 
 
 
-<meta property="og:title" content="Print a list of controlled vocabulary terms — get_cv_terms" />
 
+<meta property="og:title" content="Print a list of controlled vocabulary terms — get_cv_terms" />
 <meta property="og:description" content="Print a list of controlled vocabulary terms" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -87,24 +89,11 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Insert-sample-results-data.html">Insert sample results data</a>
-    </li>
-    <li>
-      <a href="../articles/insert-measurements.html">Insert measurement results</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Insert time series results</a>
-    </li>
-    <li>
-      <a href="../articles/new_person.html">Link Actions to People</a>
-    </li>
-    <li>
-      <a href="../articles/newsites.html">Add new sites</a>
     </li>
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/khondula/rodm2">
@@ -130,13 +119,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Print a list of controlled vocabulary terms</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='no'>cvtype</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='no'>cvtype</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -144,23 +131,24 @@
       <th>cvtype</th>
       <td><p>the name of the controlled vocab eg. "resulttype" or "methodtype"</p></td>
     </tr>
+    <tr>
+      <th>quietly</th>
+      <td><p>whether to print in console or not</p></td>
+    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a vector of the Names column from the controlled vocab table</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div><div class='input'><span class='no'>resultterms</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div><div class='input'><span class='no'>resultterms</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

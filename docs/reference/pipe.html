@@ -13,6 +13,7 @@
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -30,11 +31,11 @@
 
 
 
-<meta property="og:title" content="Search for site names with a pattern — %&gt;%" />
 
-<meta property="og:description" content="Uses agrep to search the samplingfeaturecode column of the samplingfeature table
-Returns a data frame specifying whether each element of new_codes exists in samplingfeatures" />
+<meta property="og:title" content="Search for site names with a pattern — %&gt;%" />
+<meta property="og:description" content="Uses agrep to search the samplingfeaturecode column of the samplingfeature table" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -88,24 +89,11 @@ Returns a data frame specifying whether each element of new_codes exists in samp
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Insert-sample-results-data.html">Insert sample results data</a>
-    </li>
-    <li>
-      <a href="../articles/insert-measurements.html">Insert measurement results</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Insert time series results</a>
-    </li>
-    <li>
-      <a href="../articles/new_person.html">Link Actions to People</a>
-    </li>
-    <li>
-      <a href="../articles/newsites.html">Add new sites</a>
     </li>
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/khondula/rodm2">
@@ -131,16 +119,11 @@ Returns a data frame specifying whether each element of new_codes exists in samp
     </div>
 
     <div class="ref-description">
-    
     <p>Uses agrep to search the samplingfeaturecode column of the samplingfeature table</p>
-<p>Returns a data frame specifying whether each element of new_codes exists in samplingfeatures</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>get_site_names_like</span>(<span class='no'>x</span>, <span class='no'>db</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>get_site_names_like</span>(<span class='no'>x</span>, <span class='no'>db</span>, <span class='no'>...</span>)</pre>
 
-<span class='fu'>check_samplingfeaturecodes</span>(<span class='no'>new_codes</span>, <span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>)</pre>
-    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -156,40 +139,24 @@ Returns a data frame specifying whether each element of new_codes exists in samp
       <th>...</th>
       <td><p>extra parameters to pass to agrep</p></td>
     </tr>
-    <tr>
-      <th>new_codes</th>
-      <td><p>vector of names to compare with samplingfeaturecode vector</p></td>
-    </tr>
-    <tr>
-      <th>db</th>
-      <td><p>database connection (defaults to db)</p></td>
-    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>matching elements if the samplingfeaturecode vector</p>
-<p>data frame with new_codes and in_db column</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='fu'>get_site_names_like</span>(<span class='st'>"weather"</span>)
 <span class='co'># Pass extra arguments to agrep</span>
 <span class='fu'>get_site_names_like</span>(<span class='st'>"weather"</span>, <span class='kw'>max.distance</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='co'># }</span><span class='co'># NOT RUN {</span>
-<span class='co'>#</span>
-<span class='fu'>check_samplingfeaturecodes</span>(<span class='kw'>new_codes</span> <span class='kw'>=</span> <span class='no'>new_sites</span>$<span class='no'>sites</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

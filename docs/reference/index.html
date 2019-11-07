@@ -13,6 +13,7 @@
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -30,7 +31,9 @@
 
 
 
+
 <meta property="og:title" content="Function reference" />
+
 
 
 
@@ -84,24 +87,11 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Insert-sample-results-data.html">Insert sample results data</a>
-    </li>
-    <li>
-      <a href="../articles/insert-measurements.html">Insert measurement results</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Insert time series results</a>
-    </li>
-    <li>
-      <a href="../articles/new_person.html">Link Actions to People</a>
-    </li>
-    <li>
-      <a href="../articles/newsites.html">Add new sites</a>
     </li>
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/khondula/rodm2">
@@ -142,15 +132,33 @@
       <tr>
         
         <td>
+          <p><code><a href="check_samplingfeaturecodes.html">check_samplingfeaturecodes()</a></code> </p>
+        </td>
+        <td><p>Compare sampling feature names to existing ones</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="check_variables_list.html">check_variables_list()</a></code> </p>
         </td>
         <td><p>Check that the names of a variables list are in a database</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="connect_sqlite.html">connect_sqlite()</a></code> </p>
+        </td>
+        <td><p>Connect to an existing ODM2 sqlite database</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="create_sqlite.html">create_sqlite()</a></code> </p>
         </td>
         <td><p>Make a new ODM2 sqlite database</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="db_annotate.html">db_annotate()</a></code> </p>
+        </td>
+        <td><p>Insert new annotation</p></td>
       </tr><tr>
         
         <td>
@@ -190,15 +198,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="db_describe_site_geom.html">db_describe_site_geom()</a></code> </p>
-        </td>
-        <td><p>Describe a new site with geometry</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="db_describe_variable.html">db_describe_variable()</a></code> </p>
         </td>
         <td><p>Describe a new variable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="db_get_annotations.html">db_get_annotations()</a></code> </p>
+        </td>
+        <td><p>Get list of annotations currently in database</p></td>
       </tr><tr>
         
         <td>
@@ -217,6 +225,12 @@
           <p><code><a href="db_get_people.html">db_get_people()</a></code> </p>
         </td>
         <td><p>Get list of people currently in database</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="db_get_results.html">db_get_results()</a></code> </p>
+        </td>
+        <td><p>Title</p></td>
       </tr><tr>
         
         <td>
@@ -244,12 +258,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="db_insert_measurements_sm.html">db_insert_measurements_sm()</a></code> </p>
-        </td>
-        <td><p>Insert new soil moisture measurements - OLD please use db_insert_results_m()</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="db_insert_results_m.html">db_insert_results_m()</a></code> </p>
         </td>
         <td><p>Insert measurement data values to ODM2 database</p></td>
@@ -257,6 +265,12 @@
         
         <td>
           <p><code><a href="db_insert_results_samples.html">db_insert_results_samples()</a></code> </p>
+        </td>
+        <td><p>Insert sample result data values to ODM2 database</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="db_insert_results_samples_profile.html">db_insert_results_samples_profile()</a></code> </p>
         </td>
         <td><p>Insert sample result data values to ODM2 database</p></td>
       </tr><tr>
@@ -271,12 +285,6 @@
           <p><code><a href="db_insert_sample_relations.html">db_insert_sample_relations()</a></code> </p>
         </td>
         <td><p>Insert new sample relationships to the related features table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="db_insert_sites_latlon.html">db_insert_sites_latlon()</a></code> </p>
-        </td>
-        <td><p>Insert new sites from a new_sites table</p></td>
       </tr><tr>
         
         <td>
@@ -298,7 +306,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="pipe.html">get_site_names_like()</a></code> <code><a href="pipe.html">check_samplingfeaturecodes()</a></code> </p>
+          <p><code><a href="pipe.html">get_site_names_like()</a></code> </p>
         </td>
         <td><p>Search for site names with a pattern</p></td>
       </tr>

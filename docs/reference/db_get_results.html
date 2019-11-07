@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Describe a new person in the people and affiliations tables — db_describe_person • rodm2</title>
+<title>Title — db_get_results • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Describe a new person in the people and affiliations tables — db_describe_person" />
-<meta property="og:description" content="Describe a new person in the people and affiliations tables" />
+<meta property="og:title" content="Title — db_get_results" />
+<meta property="og:description" content="Title" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -113,55 +113,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Describe a new person in the people and affiliations tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_describe_person.R'><code>R/db_describe_person.R</code></a></small>
-    <div class="hidden name"><code>db_describe_person.Rd</code></div>
+    <h1>Title</h1>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_get_results.R'><code>R/db_get_results.R</code></a></small>
+    <div class="hidden name"><code>db_get_results.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Describe a new person in the people and affiliations tables</p>
+    <p>Title</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_person</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='no'>PersonFirstName</span>, <span class='no'>PersonLastName</span>,
-  <span class='kw'>AffiliationStartDate</span> <span class='kw'>=</span> <span class='fu'>Sys.Date</span>(), <span class='no'>PrimaryEmail</span>)</pre>
+    <pre class="usage"><span class='fu'>db_get_results</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>variable_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>result_type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sample"</span>, <span class='st'>"ts"</span>, <span class='st'>"measurement"</span>, <span class='st'>"profile"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>db</th>
-      <td><p>Database connection object (must be postgresql or sqlite)</p></td>
+      <td><p>database connection object</p></td>
     </tr>
     <tr>
-      <th>PersonFirstName</th>
-      <td><p>First name of the person</p></td>
+      <th>site_code</th>
+      <td><p>a string vector with codes of sites to get data for. default NULL returns all sites</p></td>
     </tr>
     <tr>
-      <th>PersonLastName</th>
-      <td><p>Last name of the person</p></td>
+      <th>variable_code</th>
+      <td><p>a string vector with codes of variables to get data for. default NULL returns all variables</p></td>
     </tr>
     <tr>
-      <th>AffiliationStartDate</th>
-      <td><p>The date (YYYY-MM-DD) on which the person became affiliated with the organization. Default is todays date</p></td>
-    </tr>
-    <tr>
-      <th>PrimaryEmail</th>
-      <td><p>The primary email address of the person</p></td>
+      <th>result_type</th>
+      <td><p>a string vector of result types to include: "ts" for time series results, "sample" for sample-based results, "measurement" for measurements</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>message that person was entered into database</p>
+    <p>a named list of dataframes corresponding to each result type.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='connect_sqlite.html'>connect_sqlite</a></span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt; &lt;SQLiteConnection&gt;
-#&gt;   Path: /Users/khondula/Documents/packages/rodm2/docs/reference/odm2.sqlite
-#&gt;   Extensions: TRUE</div><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/DBI/topics/dbConnect'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/RSQLite/topics/SQLite'>SQLite</a></span>(), <span class='st'>"odm2.sqlite"</span>)
-<span class='fu'>db_describe_person</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>PersonFirstName</span> <span class='kw'>=</span> <span class='st'>"Wendy"</span>,
-    <span class='kw'>PersonLastName</span> <span class='kw'>=</span> <span class='st'>"Wetland"</span>,
-    <span class='kw'>AffiliationStartDate</span> <span class='kw'>=</span> <span class='st'>"2018-01-01"</span>,
-    <span class='kw'>PrimaryEmail</span> <span class='kw'>=</span> <span class='st'>"wendy 'at' swamps.edu"</span>)</div><div class='output co'>#&gt; <span class='message'>Wendy Wetland has been entered into the People table.</span></div></pre>
+    <pre class="examples"><div class='input'># db_get_results(db, result_type = "ts")
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

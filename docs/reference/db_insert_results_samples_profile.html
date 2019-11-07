@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insert sample result data values to ODM2 database — db_insert_results_samples • rodm2</title>
+<title>Insert sample result data values to ODM2 database — db_insert_results_samples_profile • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,7 +32,7 @@
 
 
 
-<meta property="og:title" content="Insert sample result data values to ODM2 database — db_insert_results_samples" />
+<meta property="og:title" content="Insert sample result data values to ODM2 database — db_insert_results_samples_profile" />
 <meta property="og:description" content="Insert sample result data values to ODM2 database" />
 <meta name="twitter:card" content="summary" />
 
@@ -114,21 +114,22 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Insert sample result data values to ODM2 database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/insert-sample-results.R'><code>R/insert-sample-results.R</code></a></small>
-    <div class="hidden name"><code>db_insert_results_samples.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/insert-sample-profile-results.R'><code>R/insert-sample-profile-results.R</code></a></small>
+    <div class="hidden name"><code>db_insert_results_samples_profile.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Insert sample result data values to ODM2 database</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_insert_results_samples</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='kw'>field_method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>lab_method</span>, <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
-  <span class='kw'>sample_code_col</span> <span class='kw'>=</span> <span class='st'>"Sample"</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
-  <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>,
-  <span class='st'>"Minute"</span>), <span class='kw'>field_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>field_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lab_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>zlocationunits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>db_insert_results_samples_profile</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='kw'>field_method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lab_method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab_method_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>variables</span>, <span class='no'>sampledmedium</span>,
+  <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>sample_code_col</span> <span class='kw'>=</span> <span class='st'>"Sample"</span>,
+  <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>, <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
+  <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>, <span class='st'>"Minute"</span>), <span class='kw'>field_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>field_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lab_actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lab_equipment_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>zlocation_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>zinterval_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>zlocationunits</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +149,11 @@ YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></t
     </tr>
     <tr>
       <th>lab_method</th>
-      <td><p>short description of lab method</p></td>
+      <td><p>short description of lab method. only use if lab_method_col is NULL</p></td>
+    </tr>
+    <tr>
+      <th>lab_method_col</th>
+      <td><p>specify the column name of the lab method. only use if lab method is NULL</p></td>
     </tr>
     <tr>
       <th>variables</th>
@@ -197,12 +202,16 @@ defaults to "Raw data'.</p></td>
       <td><p>optional code name of equipment used for lab action, must already be in equipment table</p></td>
     </tr>
     <tr>
-      <th>zlocation</th>
-      <td><p>(optional) z location offset</p></td>
+      <th>zlocation_col</th>
+      <td><p>specify column name of the zlocation</p></td>
+    </tr>
+    <tr>
+      <th>zinterval_col</th>
+      <td><p>specify column name of the z aggregation interval</p></td>
     </tr>
     <tr>
       <th>zlocationunits</th>
-      <td><p>(optional but required if zlocation is set) name of units of z location offset</p></td>
+      <td><p>name of units of z location offset FROM CONTROLLED VOCAB</p></td>
     </tr>
     <tr>
       <th>...</th>

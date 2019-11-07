@@ -13,6 +13,7 @@
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -30,10 +31,11 @@
 
 
 
-<meta property="og:title" content="Describe a new site — db_describe_site" />
 
+<meta property="og:title" content="Describe a new site — db_describe_site" />
 <meta property="og:description" content="Describe a new site" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -87,24 +89,11 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Insert-sample-results-data.html">Insert sample results data</a>
-    </li>
-    <li>
-      <a href="../articles/insert-measurements.html">Insert measurement results</a>
-    </li>
-    <li>
       <a href="../articles/introduction.html">Insert time series results</a>
-    </li>
-    <li>
-      <a href="../articles/new_person.html">Link Actions to People</a>
-    </li>
-    <li>
-      <a href="../articles/newsites.html">Add new sites</a>
     </li>
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/khondula/rodm2">
@@ -130,14 +119,12 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Describe a new site</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='kw'>site_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='kw'>sitetypecv</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>site_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>site_description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -150,6 +137,10 @@
       <td><p>unique short code name (required)</p></td>
     </tr>
     <tr>
+      <th>sitetypecv</th>
+      <td><p>site type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"</p></td>
+    </tr>
+    <tr>
       <th>site_name</th>
       <td><p>optional longer site name</p></td>
     </tr>
@@ -158,24 +149,21 @@
       <td><p>optional longer site description</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>message that site was added</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># just add site name</span>
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/connect_sqlite'>connect_sqlite</a></span>()
 <span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"new_site"</span>)</div><div class='output co'>#&gt; <span class='message'>Site new_site has been entered into the samplingfeatures table.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
