@@ -17,21 +17,3 @@ time series
 \description{
 Function to retrieve time series data with variablecode waterLevel from a specified sampling feature
 }
-\examples{
-db <- rodm2::connect_sqlite()
-
-tsrv <-data.frame(
- Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
-  "wl" = c(1, 1.5))
-
-db_insert_results_ts(
-  db = db,
-  datavalues = tsrv,
-  method = "pressureTransducer",
-  site_code = "BB2",
-   variables = list("Water level" = list(column = "wl", units = "Meter")),
-  sampledmedium = "Liquid Aqueous")
-
- db_get_water_level_ts(db, "BB2")
-
-}

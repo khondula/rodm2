@@ -246,5 +246,9 @@ db_get_results <- function(db,
   results_list <- list("Time series data" = results_data_ts,
                        "Sample data" = results_data_samples,
                        "Measurements data" = results_data_measurement)
+  # remove items from results list that are null
+  # may or may not be helpful
+  # results_list[sapply(results_list, is.null)] <- NULL
+
   return(results_list)
 }

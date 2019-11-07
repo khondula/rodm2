@@ -80,10 +80,13 @@ db_insert_results_ts <- function(db,
 
 
   # check that all variables are in variables table
-  vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db))
-  for(newvar in vars_to_add){
-    rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
-  }
+  # vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db))
+  # for(newvar in vars_to_add){
+  #   rodm2::db_describe_variable(db,
+  #                               variabletypecv = 'Unknown',
+  #                               variablecode = newvar,
+  #                               variablenamecv = variables[[newvar]][["name"]])
+  # }
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
@@ -114,7 +117,7 @@ db_insert_results_ts <- function(db,
       sql <- RSQLite::dbSendQuery(db, sql)
       RSQLite::dbBind(sql, params = list(variabletypecv = "Unknown",
                                          variablecode = newvar,
-                                         variablenamecv = newvar,
+                                         variablenamecv = variables[[newvar]][["name"]],
                                          nodatavalue = '-9999'))
       RSQLite::dbClearResult(res = sql)
 
@@ -126,11 +129,11 @@ db_insert_results_ts <- function(db,
                                            variablecode = newvar))
         RSQLite::dbClearResult(res = sql)
       }
-      if(!is.null(variables[[newvar]]$variabletypecv)){
+      if(!is.null(variables[[newvar]][["name"]])){
         sql <- RSQLite::dbSendQuery(db,
                                     "UPDATE variables SET variabletypecv = :variabletypecv
                                     WHERE variablecode = :variablecode")
-        RSQLite::dbBind(sql, params = list(variabletypecv = variables[[newvar]]$variabletypecv,
+        RSQLite::dbBind(sql, params = list(variabletypecv = variables[[newvar]][["name"]],
                                            variablecode = newvar))
         RSQLite::dbClearResult(res = sql)
       }
@@ -209,13 +212,13 @@ db_insert_results_ts <- function(db,
     RSQLite::dbClearResult(res = sql3)
     newfaid <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
 
-    # add result! new result for each
-    # for variables list, if no 'column', make col = name
-    for(i in names(variables)){
-      if(!"column" %in% names(variables[[i]])){
-        variables[[i]][["column"]] <- i
-      }
-    }
+    # # add result! new result for each
+    # # for variables list, if no 'column', make col = name
+    # for(i in names(variables)){
+    #   if(!"column" %in% names(variables[[i]])){
+    #     variables[[i]][["column"]] <- i
+    #   }
+    # }
 
     newresultids <- c()
     # newresultids <- vector(mode = "integer", length = length(variables))
@@ -233,8 +236,8 @@ db_insert_results_ts <- function(db,
       RSQLite::dbBind(sql4, params = list(uuid = uuid::UUIDgenerate(),
                                           newfaid = newfaid,
                                           resulttypecv = 'Time series coverage',
-                                          variablenamecv = i,
-                                          units = variables[[i]][[2]],
+                                          variablenamecv = variables[[i]][["name"]],
+                                          units = variables[[i]][["units"]],
                                           processinglevel = processinglevel,
                                           sampledmedium = sampledmedium,
                                           valuecount = nrow(datavalues)

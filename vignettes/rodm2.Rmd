@@ -51,9 +51,18 @@ Each column in the data to upload should contain data about one variable with th
 
 ```{r}
 vars_list <- list(
-  'Wind direction' = list(column = 'wd', units = 'Degree'),
-  'Wind speed' = list(column = 'ws', units = 'Meter per Second'),
-  'Wind gust speed' = list(column = 'gustspeed', units = 'Meter per Second')
+  'wd' = list(
+    column = 'wd', 
+    name = 'Wind direction', 
+    units = 'Degree'),
+  'ws' = list(
+    column = 'ws', 
+    name = 'Wind speed', 
+    units = 'Meter per Second'),
+  'gustspeed' = list(
+    column = 'gustspeed', 
+    name = 'Wind gust speed', 
+    units = 'Meter per Second')
 )
 ```
 

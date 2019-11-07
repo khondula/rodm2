@@ -18,7 +18,9 @@
 #'   datavalues = tsrv,
 #'   method = "pressureTransducer",
 #'   site_code = "BB2",
-#'    variables = list("Water level" = list(column = "wl", units = "Meter")),
+#'  variables = list("wl" = list(column = "wl",
+#'  name = "Water level',
+#'  units = "Meter")),
 #'   sampledmedium = "Liquid Aqueous")
 #'
 #'  db_get_water_level_ts(db, "BB2")
