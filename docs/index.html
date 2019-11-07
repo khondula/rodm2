@@ -86,60 +86,162 @@
 <div id="rodm2" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rodm2" class="anchor"></a>rodm2</h1></div>
-
-<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists.</p>
+<p><!-- badges: start --></p>
+<p><a href="https://travis-ci.org/khondula/rodm2"><img src="https://travis-ci.org/khondula/rodm2.svg?branch=master" alt="Travis build status"></a></p>
+<p><!-- badges: end --></p>
 <p>Organize site, sample, and sensor data all in one place!</p>
-<ul>
-<li>create the skeleton of an sqlite ODM2 database with create_sql()</li>
-<li>insert time series data using db_insert_results_ts()</li>
-<li>insert (in situ) measurement data using db_insert_results_m()</li>
-<li>insert (ex situ) sample measurement data using db_insert_results_samples()</li>
-<li>helper functions for controlled vocab terms and site names</li>
-<li>populate sites, people, methods, variables, equipment, organizations, annotation with db_describe_%() functions</li>
-<li>query list of site names, people, methods, variables, equipment, organizations with db_get_%() functions</li>
-</ul>
+<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of database principles.</p>
+<p>Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure.</p>
 <p>This project is just getting started! Get in touch or open an <a href="https://github.com/khondula/rodm2/issues">issue</a> if you have a use case or if you’re interested in collaborating.</p>
-<div id="installation" class="section level2">
+<div id="getting-started" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<a href="#getting-started" class="anchor"></a>Getting started</h2>
 <p>You can install this package from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)</code></pre></div>
+<ul>
+<li>Set up or connect to an sqlite ODM2 database with create_sql() or connect_sqlite()</li>
+<li>Insert metadata about sites, methods, measured variables using <code>db_describe_*()</code> functions</li>
+<li>Optionally, label sites with annotations and describe hierarchical site designs as related features</li>
+<li>Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field</li>
+<li>Query results based on site, variable, and data type (e.g. time series, samples) using <code><a href="reference/db_get_results.html">db_get_results()</a></code>
+</li>
+</ul>
+</div>
+<div id="workflow" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workflow" class="anchor"></a>Workflow</h2>
+<ol style="list-style-type: decimal">
+<li>Connect</li>
+</ol>
+<p>Load rodm2 and create a connection to your database. If you don’t have an existing database, create an empty ODM2 sqlite database and connection using <code><a href="reference/create_sqlite.html">create_sqlite(connect = TRUE)</a></code> or if you are starting from an existing database use <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
+db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>()</code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Describe</li>
+</ol>
+<p>Add information about sites, methods, measured variables, etc. using <code>db_describe_%TABLE%</code> functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_describe_person.html">db_describe_person</a></span>(<span class="dt">db =</span> db, 
+                          <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
+                          <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
+                          <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
+                          <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
+
+<span class="kw"><a href="reference/db_describe_site.html">db_describe_site</a></span>(db, 
+                        <span class="dt">site_code =</span> <span class="st">"501R1"</span>, 
+                        <span class="dt">sitetypecv =</span> <span class="st">"Site"</span>)
+
+<span class="kw"><a href="reference/db_describe_method.html">db_describe_method</a></span>(db, 
+                          <span class="dt">methodname =</span> <span class="st">"Sonic anemometer"</span>,
+                          <span class="dt">methodcode =</span> <span class="st">"SA"</span>,
+                          <span class="dt">methodtypecv =</span> <span class="st">"dataRetrieval"</span>)</code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Insert data</li>
+</ol>
+<p>The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS. For example:</p>
+<table class="table table">
+<thead><tr class="header">
+<th align="left">Timestamp</th>
+<th align="right">wd</th>
+<th align="right">ws</th>
+<th align="right">gustspeed</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2018-06-27 13:45:00</td>
+<td align="right">180</td>
+<td align="right">1.0</td>
+<td align="right">2.0</td>
+</tr>
+<tr class="even">
+<td align="left">2018-06-27 13:55:00</td>
+<td align="right">170</td>
+<td align="right">1.5</td>
+<td align="right">2.5</td>
+</tr>
+</tbody>
+</table>
+<p>Data are uploaded using “insert” functions for specific types of results, eg. <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> for a data frame of time series results. Data needs to have a column “Timestamp” and can have multiple columns of data. The type of data in each column needs to be described in a “variables list” with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function <code><a href="reference/make_vars_list.html">make_vars_list()</a></code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(ts_data)</code></pre></div>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png" alt="vars list shiny gadget"><p class="caption">vars list shiny gadget</p>
+</div>
+<p>Once the <code>vars_list</code> is created, use it in the <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> function to upload data along with its associated metadata</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(db, 
+                     <span class="dt">datavalues =</span> ts_data,
+                     <span class="dt">method =</span> <span class="st">"SA"</span>,
+                     <span class="dt">site_code =</span> <span class="st">"501R1"</span>,
+                     <span class="dt">variables =</span> vars_list,
+                     <span class="dt">sampledmedium =</span> <span class="st">"Air"</span>)
+<span class="co">#&gt; Warning: Closing open result set, pending rows</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Query</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_get_results.html">db_get_results</a></span>(db, <span class="dt">result_type =</span> <span class="st">"ts"</span>)
+<span class="co">#&gt; Warning: Closing open result set, pending rows</span>
+<span class="co">#&gt; $`Time series data`</span>
+<span class="co">#&gt;          ValueDateTime DataValue        UnitsName  VariableNameCV</span>
+<span class="co">#&gt; 1  2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
+<span class="co">#&gt; 2  2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
+<span class="co">#&gt; 3  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 4  2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 5  2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 6  2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 7  2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
+<span class="co">#&gt; 8  2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
+<span class="co">#&gt; 9  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 10 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 11 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 12 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 13 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
+<span class="co">#&gt; 14 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
+<span class="co">#&gt; 15 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 16 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 17 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 18 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 19 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
+<span class="co">#&gt; 20 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
+<span class="co">#&gt; 21 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 22 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 23 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 24 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
+<span class="co">#&gt;    SamplingFeatureCode ProcessingLevelCode</span>
+<span class="co">#&gt; 1                501R1            Raw data</span>
+<span class="co">#&gt; 2                501R1            Raw data</span>
+<span class="co">#&gt; 3                501R1            Raw data</span>
+<span class="co">#&gt; 4                501R1            Raw data</span>
+<span class="co">#&gt; 5                501R1            Raw data</span>
+<span class="co">#&gt; 6                501R1            Raw data</span>
+<span class="co">#&gt; 7                501R1            Raw data</span>
+<span class="co">#&gt; 8                501R1            Raw data</span>
+<span class="co">#&gt; 9                501R1            Raw data</span>
+<span class="co">#&gt; 10               501R1            Raw data</span>
+<span class="co">#&gt; 11               501R1            Raw data</span>
+<span class="co">#&gt; 12               501R1            Raw data</span>
+<span class="co">#&gt; 13               501R1            Raw data</span>
+<span class="co">#&gt; 14               501R1            Raw data</span>
+<span class="co">#&gt; 15               501R1            Raw data</span>
+<span class="co">#&gt; 16               501R1            Raw data</span>
+<span class="co">#&gt; 17               501R1            Raw data</span>
+<span class="co">#&gt; 18               501R1            Raw data</span>
+<span class="co">#&gt; 19               501R1            Raw data</span>
+<span class="co">#&gt; 20               501R1            Raw data</span>
+<span class="co">#&gt; 21               501R1            Raw data</span>
+<span class="co">#&gt; 22               501R1            Raw data</span>
+<span class="co">#&gt; 23               501R1            Raw data</span>
+<span class="co">#&gt; 24               501R1            Raw data</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Sample data`</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Measurements data`</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RSQLite<span class="op">::</span><span class="kw">dbDisconnect</span>(db)</code></pre></div>
 </div>
 <div id="more-details" class="section level2">
 <h2 class="hasAnchor">
 <a href="#more-details" class="anchor"></a>More details</h2>
 <p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html">here</a> for an overview of the data structure.</p>
-</div>
-<div id="getting-started" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting started</h2>
-<p>Load rodm2 and create a connection to your database. If you don’t have an existing database, create an empty ODM2 sqlite database and connection using <code><a href="reference/create_sqlite.html">create_sqlite(connect = TRUE)</a></code> or if you are starting from an existing database use <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>()</code></pre></div>
-<p>There are 132 tables in the database. The “blank” database has the Units table populated as well as all of the controlled vocabularies.</p>
-<p>See the terms for a given controlled vocabulary:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/get_cv_terms">get_cv_terms</a></span>(<span class="st">"methodtype"</span>)
-<span class="co">#&gt; methodtype controlled vocabulary terms: "Cruise", "Data retrieval", "Derivation", "Equipment deployment", "Equipment maintenance", "Equipment programming", "Equipment retrieval", "Estimation", "Expedition", "Field activity", "Generic non-observation", "Instrument Continuing Calibration Verification", "Instrument calibration", "Instrument deployment", "Instrument retrieval", "Observation", "Simulation", "Site visit", "Specimen analysis", "Specimen collection", "Specimen fractionation", "Specimen preparation", "Specimen preservation", "Submersible launch", "Unknown")</span>
-<span class="co">#&gt; use quietly = FALSE to print out all controlled vocabulary terms</span></code></pre></div>
-</div>
-<div id="describe-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#describe-functions" class="anchor"></a>“Describe” functions</h2>
-<p>Add information using <code>db_describe_%TABLE%</code> functions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/db_describe_person">db_describe_person</a></span>(<span class="dt">db =</span> db, <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
-     <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
-     <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
-     <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
-<span class="co">#&gt; Wendy Wetland has been entered into the People table.</span></code></pre></div>
-</div>
-<div id="insert-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#insert-functions" class="anchor"></a>‘Insert’ functions</h2>
-<p>Data are uploaded using “insert” functions for specific types of results, eg. <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> for a data frame of time series results.</p>
-<ul>
-<li>time_series: time series data collected at a site using a sensor</li>
-</ul>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
@@ -179,13 +281,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 </div>
 
 
-      <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://travis-ci.org/khondula/rodm2"><img src="https://travis-ci.org/khondula/rodm2.svg?branch=master" alt="Travis build status"></a></li>
-</ul>
-</div>
-</div>
+      </div>
 
 </div>
 

@@ -154,9 +154,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <li>sampled medium (from medium controlled vocabulary e.g. Air, Soil, etc.)</li>
 </ul>
 <p>If the variable(s), method, or site code do not already exist in the database, they will be added.</p>
-<pre><code>#&gt; SonicAnemometer has been added to the Methods table.
-#&gt; Warning: Closing open result set, pending rows
-#&gt; Site BB2 has been entered into the samplingfeatures table.</code></pre>
+<pre><code>#&gt; Warning: Closing open result set, pending rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(db, 
                      <span class="dt">datavalues =</span> ts_data,
                      <span class="dt">variables =</span> vars_list,
