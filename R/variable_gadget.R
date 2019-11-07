@@ -15,8 +15,8 @@
 make_vars_list <- function(data) {
 
   data_colnames <- setdiff(names(data), "Timestamp")
-  suppressMessages(variablenamescv <- rodm2::get_cv_terms("variablename"))
-  suppressMessages(unitscv <- rodm2::get_cv_terms("units"))
+  suppressMessages(variablenamescv <- rodm2::get_cv_terms("variablename", quietly = TRUE))
+  suppressMessages(unitscv <- rodm2::get_cv_terms("units", quietly = TRUE))
 
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Specify code and controlled vocab (CV) for each column"),
