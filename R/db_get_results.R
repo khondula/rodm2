@@ -17,9 +17,9 @@ db_get_results <- function(db,
                            variable_code = NULL,
                            result_type = c("sample", "ts", "measurement", "profile")){
 
-  # Check if db is compatable
-  if (!class(db) %in% c("SQLiteConnection")) {
-    stop("sorry, only sqlite database connections are supported so far")}
+  # # Check if db is compatable
+  # if (!class(db) %in% c("SQLiteConnection")) {
+  #   stop("sorry, only sqlite database connections are supported so far")}
 
 
   if("profile" %in% result_type){

@@ -12,7 +12,7 @@ Organize site, sample, and sensor data with R.
 Useful links:
 \itemize{
   \item \url{https://github.com/khondula/rodm2}
-  \item Report bugs at \url{hhttps://github.com/khondula/rodm2/issues}
+  \item Report bugs at \url{https://github.com/khondula/rodm2/issues}
 }
 
 }
