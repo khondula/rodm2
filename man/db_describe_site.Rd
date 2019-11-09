@@ -26,6 +26,6 @@ Describe a new site
 }
 \examples{
 # just add site name
-db <- rodm2::connect_sqlite()
-db_describe_site(db, site_code = "new_site")
+#db <- rodm2::connect_sqlite()
+#db_describe_site(db, site_code = "new_site")
 }

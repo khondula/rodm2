@@ -7,11 +7,14 @@
 #' @export
 #'
 #' @examples
-#' db <- rodm2::connect_sqlite()
-#'
-#' tsrv <-data.frame(
-#'  Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
+#' \dontrun{
+#' tsrv <- data.frame(
+#'  Timestamp = c(
+#'  "2018-06-27 13:45:00",
+#'  "2018-06-27 13:55:00"),
 #'   "wl" = c(1, 1.5))
+#'
+#' db <- create_sqlite(filename = 'ts_example')
 #'
 #' db_insert_results_ts(
 #'   db = db,
@@ -19,11 +22,12 @@
 #'   method = "pressureTransducer",
 #'   site_code = "BB2",
 #'  variables = list("wl" = list(column = "wl",
-#'  name = "Water level',
+#'  name = "Water level",
 #'  units = "Meter")),
 #'   sampledmedium = "Liquid Aqueous")
 #'
 #'  db_get_water_level_ts(db, "BB2")
+#' }
 #'
 db_get_water_level_ts <- function(db, site_code){
 

@@ -47,7 +47,7 @@ devtools::install_github("khondula/rodm2")
 
 ## Workflow 
 
-1. Connect 
+### 1. Connect 
 
 Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R. 
 
@@ -66,7 +66,7 @@ if(file.exists("odm2.sqlite")){
 }
 ```
 
-2. Describe 
+### 2. Describe 
 
 Add information about sites, methods, measured variables, etc. using `db_describe_%TABLE%` functions. 
 
@@ -77,9 +77,7 @@ db_describe_person(db = db,
                           AffiliationStartDate = "2018-01-01",
                           PrimaryEmail = "wendy 'at' swamps.edu")
 
-db_describe_site(db, 
-                        site_code = "501R1", 
-                        sitetypecv = "Site")
+db_describe_site(db, site_code = "501R1", sitetypecv = "Site")
 
 db_describe_method(db, 
                           methodname = "Sonic anemometer",
@@ -87,7 +85,7 @@ db_describe_method(db,
                           methodtypecv = "dataRetrieval")
 ```
 
-3. Insert data 
+### 3. Insert data 
 
 The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
 
@@ -136,7 +134,7 @@ db_insert_results_ts(db,
                      sampledmedium = "Air")
 ```
 
-4. Query
+### 4. Query
 
 
 ```{r}

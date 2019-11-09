@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' create_sqlite(dir = tempdir())
-#' dblite <- create_sqlite(connect = TRUE)
+#' # create_sqlite()
+#' # db <- connect_sqlite()
 
 create_sqlite <- function(dir = ".", filename = "odm2", connect = FALSE){
   path <- file.path(dir)
@@ -41,8 +41,8 @@ create_sqlite <- function(dir = ".", filename = "odm2", connect = FALSE){
 #' @export
 #'
 #' @examples
-#' create_sqlite(filename = "odm2", dir = tempdir())
-#' db <- connect_sqlite(filename = "odm2')
+#' # create_sqlite(filename = "odm2", dir = tempdir())
+#' db <- connect_sqlite(filename = "odm2")
 connect_sqlite <- function(filename = "odm2", dir = "."){
 
   path <- file.path(dir, paste0(filename, ".sqlite"))

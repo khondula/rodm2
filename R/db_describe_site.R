@@ -11,8 +11,8 @@
 #'
 #' @examples
 #' # just add site name
-#' db <- rodm2::connect_sqlite()
-#' db_describe_site(db, site_code = "new_site")
+#' #db <- rodm2::connect_sqlite()
+#' #db_describe_site(db, site_code = "new_site")
 db_describe_site <- function(db, site_code, sitetypecv = 'Site',
                              site_name = NULL, site_description = NULL){
 

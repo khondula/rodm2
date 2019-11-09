@@ -23,7 +23,7 @@ message that your entry has been added
 Add a new entry to the Organizations table
 }
 \examples{
-connect_sqlite(dir = ".")
-db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-db_describe_organization(db, "Manufacturer", "Onset", "Onset")
+# connect_sqlite(dir = ".")
+# db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
+# db_describe_organization(db, "Manufacturer", "Onset", "Onset")
 }

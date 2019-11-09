@@ -38,7 +38,7 @@ db_get_results <- function(db,
   if(is.null(site_code)) {
     site_code <- rodm2::db_get_sites(db)
   }
-  # if site code is not provided, assume data for all sites
+  # if variable code is not provided, assume data for all variables
   if(is.null(variable_code)) {
     variable_code <- RSQLite::dbGetQuery(db, "SELECT variablecode from variables")
     variable_code <- unique(variable_code[[1]][!is.null(variable_code)])

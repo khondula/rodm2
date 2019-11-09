@@ -11,12 +11,11 @@
 #' @export
 #'
 #' @examples
-#' connect_sqlite(dir = ".")
-#' db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-#' db_describe_person(db = db, PersonFirstName = "Wendy",
-#'     PersonLastName = "Wetland",
-#'     AffiliationStartDate = "2018-01-01",
-#'     PrimaryEmail = "wendy 'at' swamps.edu")
+#' # db <- connect_sqlite(dir = ".")
+#' #db_describe_person(db = db, PersonFirstName = "Wendy",
+#'  #   PersonLastName = "Wetland",
+#'   #  AffiliationStartDate = "2018-01-01",
+#'    # PrimaryEmail = "wendy 'at' swamps.edu")
 db_describe_person <- function(db = db,
                                PersonFirstName,
                                PersonLastName,
