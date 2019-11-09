@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get list of annotations currently in database — db_get_annotations • rodm2</title>
+<title>Add relationships to related features table — db_add_relation • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Get list of annotations currently in database — db_get_annotations" />
-<meta property="og:description" content="Get list of annotations currently in database" />
+<meta property="og:title" content="Add relationships to related features table — db_add_relation" />
+<meta property="og:description" content="Add relationships to related features table" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,16 +98,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get list of annotations currently in database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_describe_annotation.R'><code>R/db_describe_annotation.R</code></a></small>
-    <div class="hidden name"><code>db_get_annotations.Rd</code></div>
+    <h1>Add relationships to related features table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_add_relation.R'><code>R/db_add_relation.R</code></a></small>
+    <div class="hidden name"><code>db_add_relation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get list of annotations currently in database</p>
+    <p>Add relationships to related features table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_get_annotations</span>(<span class='no'>db</span>)</pre>
+    <pre class="usage"><span class='fu'>db_add_relation</span>(<span class='no'>db</span>, <span class='no'>edgelist</span>, <span class='kw'>from_column</span> <span class='kw'>=</span> <span class='st'>"SamplingFeatureCode"</span>,
+  <span class='kw'>to_column</span> <span class='kw'>=</span> <span class='st'>"RelatedFeatureCode"</span>, <span class='kw'>relationtype_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>relationtype</span> <span class='kw'>=</span> <span class='st'>"isChildOf"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -116,14 +118,37 @@
       <th>db</th>
       <td><p>database connection object</p></td>
     </tr>
+    <tr>
+      <th>edgelist</th>
+      <td><p>dataframe with new relationships to add. see details</p></td>
+    </tr>
+    <tr>
+      <th>from_column</th>
+      <td><p>name of first column with feature codes to relate</p></td>
+    </tr>
+    <tr>
+      <th>to_column</th>
+      <td><p>name of second column with feature codes to relate</p></td>
+    </tr>
+    <tr>
+      <th>relationtype_column</th>
+      <td><p>name of column with relationship type from [controlled vocabulary](http://vocabulary.odm2.org/relationshiptype/)</p></td>
+    </tr>
+    <tr>
+      <th>relationtype</th>
+      <td><p>relationship type to use if no relationship type column. defaults to "is child of"</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a dataframe with the current values in the annotation code and annotation text columns</p>
+    <p>message with how many rows added</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>#db_get_annotations(db)
+    <pre class="examples"><div class='input'># df <- data.frame(
+# "SamplingFeatureCode" = "subsite1",
+# "RelatedFeatureCode" = "site1")
+# db_add_relation(db, edgelist = df)
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

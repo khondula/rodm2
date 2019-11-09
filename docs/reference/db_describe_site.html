@@ -76,22 +76,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/rodm2.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Insert time series results</a>
-    </li>
-  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -155,9 +140,10 @@
     <p>message that site was added</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># just add site name</span>
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/connect_sqlite'>connect_sqlite</a></span>()
-<span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"new_site"</span>)</div><div class='output co'>#&gt; <span class='message'>Site new_site has been entered into the samplingfeatures table.</span></div></pre>
+    <pre class="examples"><div class='input'># just add site name
+#db <- rodm2::connect_sqlite()
+#db_describe_site(db, site_code = "new_site")
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
