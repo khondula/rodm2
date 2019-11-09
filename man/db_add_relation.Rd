@@ -27,6 +27,14 @@ message with how many rows added
 \description{
 Add relationships to related features table
 }
+\details{
+Edgelist should be a data frame with 3 columns and one row for each new
+relationship to establish with the features to connect and the type of relationship.
+Specify the names of columns corresponding to the features using the 'from_column' and
+'to_column' arguments, and the name of the column with relationship types with
+'relationtype_column'. A two column data frame can be supplied along with a relationtype
+to use for all of the new relationships.
+}
 \examples{
 # df <- data.frame(
 # "SamplingFeatureCode" = "subsite1",
