@@ -6,10 +6,23 @@
 #'
 #' @return nested list for each column in data describing variable name and units
 #' @export
+#' @details This function creates the object needed for the variables argument
+#' in db_insert_results_m, db_insert_results_ts, db_insert_results_samples,
+#' db_insert_results_samples_profile, based on a data frame with the data to insert.
+#' The data frame supplied should include only the columns with data and optionally a
+#' column called Timestamp. For each column of data, provide a unique codename for the
+#' variable as well as the [term](http://vocabulary.odm2.org/variablename/)
+#' and [units](http://vocabulary.odm2.org/units/) from the controlled vocabularies. By
+#' default the column name will be used as the variable code.
 #'
 #' @examples
 #' \dontrun{
-#' vars_list <- make_vars_list(ts_data)
+#' ts <- data.frame(
+#'  Timestamp = c(
+#'  "2018-06-27 13:45:00",
+#'  "2018-06-27 13:55:00"),
+#'   "wl" = c(1, 1.5))
+#' vars_list <- make_vars_list(ts)
 #' }
 #'
 make_vars_list <- function(data) {

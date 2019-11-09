@@ -121,10 +121,25 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>nested list for each column in data describing variable name and units</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function creates the object needed for the variables argument
+in db_insert_results_m, db_insert_results_ts, db_insert_results_samples,
+db_insert_results_samples_profile, based on a data frame with the data to insert.
+The data frame supplied should include only the columns with data and optionally a
+column called Timestamp. For each column of data, provide a unique codename for the
+variable as well as the [term](http://vocabulary.odm2.org/variablename/)
+and [units](http://vocabulary.odm2.org/units/) from the controlled vocabularies. By
+default the column name will be used as the variable code.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>vars_list</span> <span class='kw'>&lt;-</span> <span class='fu'>make_vars_list</span>(<span class='no'>ts_data</span>)
+<span class='no'>ts</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(
+ <span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='fu'>c</span>(
+ <span class='st'>"2018-06-27 13:45:00"</span>,
+ <span class='st'>"2018-06-27 13:55:00"</span>),
+  <span class='st'>"wl"</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1.5</span>))
+<span class='no'>vars_list</span> <span class='kw'>&lt;-</span> <span class='fu'>make_vars_list</span>(<span class='no'>ts</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
@@ -133,6 +148,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
