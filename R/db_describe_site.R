@@ -4,7 +4,7 @@
 #' @param site_code unique short code name (required)
 #' @param site_name optional longer site name
 #' @param site_description optional longer site description
-#' @param sitetypecv site type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"
+#' @param sitetypecv samplingfeature type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"
 #'
 #' @return message that site was added
 #' @export

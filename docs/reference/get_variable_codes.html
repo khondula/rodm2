@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Describe a new site — db_describe_site • rodm2</title>
+<title>Shiny gadget to get variable codes of interest — get_variable_codes • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Describe a new site — db_describe_site" />
-<meta property="og:description" content="Describe a new site" />
+<meta property="og:title" content="Shiny gadget to get variable codes of interest — get_variable_codes" />
+<meta property="og:description" content="Shiny gadget to get variable codes of interest" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,17 +98,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Describe a new site</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_describe_site.R'><code>R/db_describe_site.R</code></a></small>
-    <div class="hidden name"><code>db_describe_site.Rd</code></div>
+    <h1>Shiny gadget to get variable codes of interest</h1>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/get_variable_codes.R'><code>R/get_variable_codes.R</code></a></small>
+    <div class="hidden name"><code>get_variable_codes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Describe a new site</p>
+    <p>Shiny gadget to get variable codes of interest</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='no'>site_code</span>, <span class='kw'>sitetypecv</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>site_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>site_description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_variable_codes</span>(<span class='no'>db</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -117,32 +116,15 @@
       <th>db</th>
       <td><p>database connection object</p></td>
     </tr>
-    <tr>
-      <th>site_code</th>
-      <td><p>unique short code name (required)</p></td>
-    </tr>
-    <tr>
-      <th>sitetypecv</th>
-      <td><p>samplingfeature type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"</p></td>
-    </tr>
-    <tr>
-      <th>site_name</th>
-      <td><p>optional longer site name</p></td>
-    </tr>
-    <tr>
-      <th>site_description</th>
-      <td><p>optional longer site description</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>message that site was added</p>
+    <p>selected variable codes</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># just add site name
-#db <- rodm2::connect_sqlite()
-#db_describe_site(db, site_code = "new_site")
+    <pre class="examples"><div class='input'># my_vars <- get_variable_codes(db)
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
