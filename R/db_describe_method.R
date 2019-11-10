@@ -24,19 +24,20 @@ db_describe_method <- function(db,
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
   if(methodcode %in% db_get_methods(db)){
-    methodcode <- readline(paste(methodcode, "methodcode already exists. Enter new code: "))
+    methodcode <- readline(paste(methodcode, "methodcode already exists. Enter new code or type 0 to quit: "))
+    if(methodcode == 0){stop("See existing method codes using db_get_methods()")}
   }
+
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
 
     all_methodtypes <- RSQLite::dbGetQuery(db, "SELECT term from cv_methodtype")[["Term"]]
-    if(!methodtypecv %in% all_methodtypes){
-      methodtypecv_id <- menu(choices = all_methodtypes,
+    while(!methodtypecv %in% all_methodtypes){
+      methodtypecv_id <- suppressMessages(menu(choices = all_methodtypes,
                               graphics = FALSE,
-                              title = "Select method type from CV")
+                              title = "Select method type from CV"))
       methodtypecv <- all_methodtypes[methodtypecv_id]
-      message(methodtypecv)
     }
 
     sql1 <- RSQLite::dbSendStatement(db,
