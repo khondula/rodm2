@@ -36,7 +36,7 @@ db_describe_method <- function(db,
     while(!methodtypecv %in% all_methodtypes){
       methodtypecv_id <- suppressMessages(menu(choices = all_methodtypes,
                               graphics = FALSE,
-                              title = "Please select method type for", methodcode, "from CV"))
+                              title = paste("Please select method type for", methodcode, "from CV")))
       methodtypecv <- all_methodtypes[methodtypecv_id]
     }
 
