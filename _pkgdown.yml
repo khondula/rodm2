@@ -1,0 +1,28 @@
+reference:
+- title: Set up database
+  desc:  Create or connect to an ODM2 database.
+  contents:
+  - create_sqlite
+  - connect_sqlite
+- title: Describe functions
+  desc: Add descriptive metadata about sites, methods, variables, etc.
+  contents:
+  - starts_with("db_describe_")
+- title: Add details
+  contents:
+  - db_annotate
+  - db_add_relation
+- title: Insert data
+  desc: Add different types of results to the database
+  contents:
+  - starts_with("db_insert_results_")
+- title: Get data
+  desc: Query results in the database
+  contents:
+  - db_get_results
+- title: Helpers
+  contents:
+  - make_vars_list
+  - get_variable_codes
+  - get_cv_terms
+

@@ -36,3 +36,7 @@ vars_list <- make_vars_list(ts)
 }
 
 }
+\seealso{
+Other interactive helpers: \code{\link{get_variable_codes}}
+}
+\concept{interactive helpers}

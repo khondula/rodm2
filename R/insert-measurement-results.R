@@ -23,7 +23,8 @@
 #'
 #' @return true if successful
 #' @export
-#'
+#' @family insert data functions
+
 #' @examples
 #' \dontrun{
 #' # make database and data frame

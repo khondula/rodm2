@@ -7,7 +7,7 @@
 #'
 #' @return message that your entry has been added
 #' @export
-#'
+#' @family describe functions
 #' @examples
 #' # connect_sqlite(dir = ".")
 #' # db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")

@@ -19,3 +19,7 @@ Shiny gadget to get variable codes of interest
 # my_vars <- get_variable_codes(db)
 
 }
+\seealso{
+Other interactive helpers: \code{\link{make_vars_list}}
+}
+\concept{interactive helpers}

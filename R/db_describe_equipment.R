@@ -18,7 +18,7 @@
 #'
 #' @return TRUE if successful
 #' @export
-#'
+#' @family describe functions
 #' @examples
 #' # db <- create_sqlite()
 #' # OR

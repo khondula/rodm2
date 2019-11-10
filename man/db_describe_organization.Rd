@@ -27,3 +27,12 @@ Add a new entry to the Organizations table
 # db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
 # db_describe_organization(db, "Manufacturer", "Onset", "Onset")
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_site}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

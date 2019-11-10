@@ -65,3 +65,9 @@ db_insert_results_m(db = db, datavalues = mrv,
 }
 
 }
+\seealso{
+Other insert data functions: \code{\link{db_insert_results_samples_profile}},
+  \code{\link{db_insert_results_samples}},
+  \code{\link{db_insert_results_ts}}
+}
+\concept{insert data functions}

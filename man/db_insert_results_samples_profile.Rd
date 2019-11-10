@@ -78,3 +78,9 @@ db_insert_results_sample(db = db, datavalues = soil_ph,
 }
 
 }
+\seealso{
+Other insert data functions: \code{\link{db_insert_results_m}},
+  \code{\link{db_insert_results_samples}},
+  \code{\link{db_insert_results_ts}}
+}
+\concept{insert data functions}

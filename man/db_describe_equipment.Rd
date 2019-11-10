@@ -49,3 +49,12 @@ Add a piece of equipment to the equipment table
 # db_describe_equipment(db, "unit1", "001", "model1",
 # "vendor name", "Wendy", "Sensor", "Wetland", "ww email", "hobo")
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_site}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

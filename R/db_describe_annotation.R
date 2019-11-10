@@ -9,6 +9,7 @@
 #' @export
 #' @details Use this function to add new annotations such as the name of a Site group.
 #'
+#' @family describe functions
 #' @examples
 #' #db <- create_sqlite(dir = tempdir())
 #' #db_describe_annotaion(db, "Site group", "Riparian wells")

@@ -14,7 +14,8 @@
 #' variable as well as the [term](http://vocabulary.odm2.org/variablename/)
 #' and [units](http://vocabulary.odm2.org/units/) from the controlled vocabularies. By
 #' default the column name will be used as the variable code.
-#'
+#' @family interactive helpers
+
 #' @examples
 #' \dontrun{
 #' ts <- data.frame(

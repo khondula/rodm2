@@ -29,3 +29,12 @@ Describe a new method
 db_describe_method("new method", "new", "Field Activity", "doing stuf")
 }
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_site}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

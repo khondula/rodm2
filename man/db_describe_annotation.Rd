@@ -31,3 +31,12 @@ Use this function to add new annotations such as the name of a Site group.
 #db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
 
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_site}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

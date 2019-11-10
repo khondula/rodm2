@@ -2,7 +2,7 @@
 % Please edit documentation in R/db_get_results.R
 \name{db_get_results}
 \alias{db_get_results}
-\title{Title}
+\title{Query result data}
 \usage{
 db_get_results(db, site_code = NULL, variable_code = NULL,
   result_type = c("sample", "ts", "measurement", "profile"))
@@ -20,7 +20,7 @@ db_get_results(db, site_code = NULL, variable_code = NULL,
 a named list of dataframes corresponding to each result type.
 }
 \description{
-Title
+Retrieve data associated with one or more sites, variables, and result types
 }
 \examples{
 # db_get_results(db, result_type = "ts")

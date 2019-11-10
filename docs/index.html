@@ -163,77 +163,24 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <div id="query" class="section level3">
 <h3 class="hasAnchor">
 <a href="#query" class="anchor"></a>4. Query</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_get_results.html">db_get_results</a></span>(db, <span class="dt">result_type =</span> <span class="st">"ts"</span>)
+<p><code><a href="reference/db_get_results.html">db_get_results()</a></code> returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/db_get_results.html">db_get_results</a></span>(db, <span class="dt">result_type =</span> <span class="st">"ts"</span>)
 <span class="co">#&gt; Warning: Closing open result set, pending rows</span>
-<span class="co">#&gt; $`Time series data`</span>
-<span class="co">#&gt;          ValueDateTime DataValue        UnitsName  VariableNameCV</span>
-<span class="co">#&gt; 1  2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
-<span class="co">#&gt; 2  2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
-<span class="co">#&gt; 3  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 4  2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 5  2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 6  2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 7  2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
-<span class="co">#&gt; 8  2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
-<span class="co">#&gt; 9  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 10 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 11 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 12 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 13 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
-<span class="co">#&gt; 14 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
-<span class="co">#&gt; 15 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 16 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 17 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 18 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 19 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
-<span class="co">#&gt; 20 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
-<span class="co">#&gt; 21 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 22 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 23 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 24 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 25 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
-<span class="co">#&gt; 26 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
-<span class="co">#&gt; 27 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 28 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
-<span class="co">#&gt; 29 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
-<span class="co">#&gt; 30 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
-<span class="co">#&gt;    SamplingFeatureCode ProcessingLevelCode</span>
-<span class="co">#&gt; 1                501R1            Raw data</span>
-<span class="co">#&gt; 2                501R1            Raw data</span>
-<span class="co">#&gt; 3                501R1            Raw data</span>
-<span class="co">#&gt; 4                501R1            Raw data</span>
-<span class="co">#&gt; 5                501R1            Raw data</span>
-<span class="co">#&gt; 6                501R1            Raw data</span>
-<span class="co">#&gt; 7                501R1            Raw data</span>
-<span class="co">#&gt; 8                501R1            Raw data</span>
-<span class="co">#&gt; 9                501R1            Raw data</span>
-<span class="co">#&gt; 10               501R1            Raw data</span>
-<span class="co">#&gt; 11               501R1            Raw data</span>
-<span class="co">#&gt; 12               501R1            Raw data</span>
-<span class="co">#&gt; 13               501R1            Raw data</span>
-<span class="co">#&gt; 14               501R1            Raw data</span>
-<span class="co">#&gt; 15               501R1            Raw data</span>
-<span class="co">#&gt; 16               501R1            Raw data</span>
-<span class="co">#&gt; 17               501R1            Raw data</span>
-<span class="co">#&gt; 18               501R1            Raw data</span>
-<span class="co">#&gt; 19               501R1            Raw data</span>
-<span class="co">#&gt; 20               501R1            Raw data</span>
-<span class="co">#&gt; 21               501R1            Raw data</span>
-<span class="co">#&gt; 22               501R1            Raw data</span>
-<span class="co">#&gt; 23               501R1            Raw data</span>
-<span class="co">#&gt; 24               501R1            Raw data</span>
-<span class="co">#&gt; 25               501R1            Raw data</span>
-<span class="co">#&gt; 26               501R1            Raw data</span>
-<span class="co">#&gt; 27               501R1            Raw data</span>
-<span class="co">#&gt; 28               501R1            Raw data</span>
-<span class="co">#&gt; 29               501R1            Raw data</span>
-<span class="co">#&gt; 30               501R1            Raw data</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $`Sample data`</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $`Measurements data`</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<span class="kw">str</span>(results_data)
+<span class="co">#&gt; List of 3</span>
+<span class="co">#&gt;  $ Time_series_data:'data.frame':    162 obs. of  6 variables:</span>
+<span class="co">#&gt;   ..$ ValueDateTime      : chr [1:162] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...</span>
+<span class="co">#&gt;   ..$ DataValue          : num [1:162] 170 180 1 1.5 2 2.5 170 180 1 1.5 ...</span>
+<span class="co">#&gt;   ..$ UnitsName          : chr [1:162] "Degree" "Degree" "Meter per Second" "Meter per Second" ...</span>
+<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:162] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...</span>
+<span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:162] "501R1" "501R1" "501R1" "501R1" ...</span>
+<span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:162] "Raw data" "Raw data" "Raw data" "Raw data" ...</span>
+<span class="co">#&gt;  $ Sample_data     : NULL</span>
+<span class="co">#&gt;  $ Measurement_data: NULL</span></code></pre></div>
+<p>Use list subsetting to get a data frame with time series (ts) results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ts_data &lt;-<span class="st"> </span>results_data[[<span class="st">"Time_series_data"</span>]]
+<span class="co"># OR</span>
+ts_data &lt;-<span class="st"> </span>results_data<span class="op">$</span>Time_series_data</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RSQLite<span class="op">::</span><span class="kw">dbDisconnect</span>(db)</code></pre></div>
 </div>
 </div>

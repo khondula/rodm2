@@ -29,3 +29,12 @@ Describe a new site
 #db <- rodm2::connect_sqlite()
 #db_describe_site(db, site_code = "new_site")
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

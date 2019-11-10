@@ -80,3 +80,9 @@ determined by using format(as.POSIXct(x), "%z").
  # sampledmedium = "Air")
 
 }
+\seealso{
+Other insert data functions: \code{\link{db_insert_results_m}},
+  \code{\link{db_insert_results_samples_profile}},
+  \code{\link{db_insert_results_samples}}
+}
+\concept{insert data functions}

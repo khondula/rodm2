@@ -33,7 +33,8 @@
 #'
 #' @return true if successful
 #' @export
-#'
+#' @family insert data functions
+
 #' @examples
 #' #db <- rodm2::create_sqlite(connect = TRUE)
 #'

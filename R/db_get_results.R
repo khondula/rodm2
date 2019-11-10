@@ -1,6 +1,6 @@
-# function to query results of a given variable type from a site
-
-#' Title
+#' Query result data
+#'
+#' @description Retrieve data associated with one or more sites, variables, and result types
 #'
 #' @param db database connection object
 #' @param site_code a string vector with codes of sites to get data for. default NULL returns all sites
@@ -243,9 +243,9 @@ db_get_results <- function(db,
                                            params=list(x=result_id_integer))
   }
 
-  results_list <- list("Time series data" = results_data_ts,
-                       "Sample data" = results_data_samples,
-                       "Measurements data" = results_data_measurement)
+  results_list <- list("Time_series_data" = results_data_ts,
+                       "Sample_data" = results_data_samples,
+                       "Measurement_data" = results_data_measurement)
   # remove items from results list that are null
   # may or may not be helpful
   # results_list[sapply(results_list, is.null)] <- NULL

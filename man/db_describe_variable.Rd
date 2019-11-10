@@ -31,3 +31,12 @@ Describe a new variable
 db_describe_variable()
 }
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_person}},
+  \code{\link{db_describe_site}}
+}
+\concept{describe functions}

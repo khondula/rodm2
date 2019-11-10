@@ -31,3 +31,12 @@ Describe a new person in the people and affiliations tables
   #  AffiliationStartDate = "2018-01-01",
    # PrimaryEmail = "wendy 'at' swamps.edu")
 }
+\seealso{
+Other describe functions: \code{\link{db_describe_annotation}},
+  \code{\link{db_describe_equipment}},
+  \code{\link{db_describe_method}},
+  \code{\link{db_describe_organization}},
+  \code{\link{db_describe_site}},
+  \code{\link{db_describe_variable}}
+}
+\concept{describe functions}

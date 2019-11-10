@@ -8,7 +8,8 @@
 #'
 #' @return message that site was added
 #' @export
-#'
+#' @family describe functions
+
 #' @examples
 #' # just add site name
 #' #db <- rodm2::connect_sqlite()

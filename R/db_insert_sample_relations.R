@@ -12,7 +12,6 @@
 #' @param rhc column with sample codes of related features
 #'
 #' @return true if successful
-#' @export
 #'
 #' @examples
 #' \dontrun{

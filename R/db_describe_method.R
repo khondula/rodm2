@@ -8,7 +8,8 @@
 #'
 #' @return TRUE if successful
 #' @export
-#'
+#' @family describe functions
+
 #' @examples
 #' \dontrun{
 #' db_describe_method("new method", "new", "Field Activity", "doing stuf")

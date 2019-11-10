@@ -136,10 +136,21 @@ db_insert_results_ts(db,
 
 ### 4. Query
 
+`db_get_results()` returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables. 
 
 ```{r}
-db_get_results(db, result_type = "ts")
+results_data <- db_get_results(db, result_type = "ts")
+str(results_data)
 ```
+
+Use list subsetting to get a data frame with time series (ts) results.
+
+```{r}
+ts_data <- results_data[["Time_series_data"]]
+# OR
+ts_data <- results_data$Time_series_data
+```
+
 
 ```{r}
 RSQLite::dbDisconnect(db)

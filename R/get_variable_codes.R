@@ -5,7 +5,8 @@
 #'
 #' @return selected variable codes
 #' @export
-#'
+#' @family interactive helpers
+
 #' @examples
 #' # my_vars <- get_variable_codes(db)
 #'

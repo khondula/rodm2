@@ -36,7 +36,7 @@ devtools::install_github("khondula/rodm2")
 Workflow
 --------
 
-1.  Connect
+### 1. Connect
 
 Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R.
 
@@ -45,7 +45,7 @@ library(rodm2)
 db <- rodm2::create_sqlite()
 ```
 
-1.  Describe
+### 2. Describe
 
 Add information about sites, methods, measured variables, etc. using `db_describe_%TABLE%` functions.
 
@@ -56,9 +56,7 @@ db_describe_person(db = db,
                           AffiliationStartDate = "2018-01-01",
                           PrimaryEmail = "wendy 'at' swamps.edu")
 
-db_describe_site(db, 
-                        site_code = "501R1", 
-                        sitetypecv = "Site")
+db_describe_site(db, site_code = "501R1", sitetypecv = "Site")
 
 db_describe_method(db, 
                           methodname = "Sonic anemometer",
@@ -66,7 +64,7 @@ db_describe_method(db,
                           methodtypecv = "dataRetrieval")
 ```
 
-1.  Insert data
+### 3. Insert data
 
 The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
 
@@ -95,56 +93,32 @@ db_insert_results_ts(db,
 #> Warning: Closing open result set, pending rows
 ```
 
-1.  Query
+### 4. Query
+
+`db_get_results()` returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables.
 
 ``` r
-db_get_results(db, result_type = "ts")
+results_data <- db_get_results(db, result_type = "ts")
 #> Warning: Closing open result set, pending rows
-#> $`Time series data`
-#>          ValueDateTime DataValue        UnitsName  VariableNameCV
-#> 1  2018-06-27 13:55:00     170.0           Degree  Wind direction
-#> 2  2018-06-27 13:45:00     180.0           Degree  Wind direction
-#> 3  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed
-#> 4  2018-06-27 13:55:00       1.5 Meter per Second      Wind speed
-#> 5  2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed
-#> 6  2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed
-#> 7  2018-06-27 13:55:00     170.0           Degree  Wind direction
-#> 8  2018-06-27 13:45:00     180.0           Degree  Wind direction
-#> 9  2018-06-27 13:45:00       1.0 Meter per Second      Wind speed
-#> 10 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed
-#> 11 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed
-#> 12 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed
-#> 13 2018-06-27 13:55:00     170.0           Degree  Wind direction
-#> 14 2018-06-27 13:45:00     180.0           Degree  Wind direction
-#> 15 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed
-#> 16 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed
-#> 17 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed
-#> 18 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed
-#>    SamplingFeatureCode ProcessingLevelCode
-#> 1                501R1            Raw data
-#> 2                501R1            Raw data
-#> 3                501R1            Raw data
-#> 4                501R1            Raw data
-#> 5                501R1            Raw data
-#> 6                501R1            Raw data
-#> 7                501R1            Raw data
-#> 8                501R1            Raw data
-#> 9                501R1            Raw data
-#> 10               501R1            Raw data
-#> 11               501R1            Raw data
-#> 12               501R1            Raw data
-#> 13               501R1            Raw data
-#> 14               501R1            Raw data
-#> 15               501R1            Raw data
-#> 16               501R1            Raw data
-#> 17               501R1            Raw data
-#> 18               501R1            Raw data
-#> 
-#> $`Sample data`
-#> NULL
-#> 
-#> $`Measurements data`
-#> NULL
+str(results_data)
+#> List of 3
+#>  $ Time_series_data:'data.frame':    150 obs. of  6 variables:
+#>   ..$ ValueDateTime      : chr [1:150] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...
+#>   ..$ DataValue          : num [1:150] 170 180 1 1.5 2 2.5 170 180 1 1.5 ...
+#>   ..$ UnitsName          : chr [1:150] "Degree" "Degree" "Meter per Second" "Meter per Second" ...
+#>   ..$ VariableNameCV     : chr [1:150] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...
+#>   ..$ SamplingFeatureCode: chr [1:150] "501R1" "501R1" "501R1" "501R1" ...
+#>   ..$ ProcessingLevelCode: chr [1:150] "Raw data" "Raw data" "Raw data" "Raw data" ...
+#>  $ Sample_data     : NULL
+#>  $ Measurement_data: NULL
+```
+
+Use list subsetting to get a data frame with time series (ts) results.
+
+``` r
+ts_data <- results_data[["Time_series_data"]]
+# OR
+ts_data <- results_data$Time_series_data
 ```
 
 ``` r

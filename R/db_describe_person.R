@@ -9,7 +9,8 @@
 #'
 #' @return message that person was entered into database
 #' @export
-#'
+#' @family describe functions
+
 #' @examples
 #' # db <- connect_sqlite(dir = ".")
 #' #db_describe_person(db = db, PersonFirstName = "Wendy",
