@@ -56,7 +56,7 @@
 #'
 db_insert_results_ts <- function(db,
                                  datavalues,
-                                 method,
+                                 methodcode,
                                  methodtypecv = "Instrument deployment",
                                  site_code,
                                  variables,
@@ -75,7 +75,8 @@ db_insert_results_ts <- function(db,
 
   # check for method and add if not in there
   if(!(method %in% rodm2::db_get_methods(db))){
-    rodm2::db_describe_method(db, methodname = method, methodcode = method,
+    rodm2::db_describe_method(db,
+                              methodcode = methodcode,
                               methodtypecv = methodtypecv)
   }
 
