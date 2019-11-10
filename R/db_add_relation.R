@@ -1,6 +1,6 @@
 #' Add relationships to related features table
 #'
-#' @param db database connection object
+#' @param db database connection object.
 #' @param edgelist dataframe with new relationships to add. see details
 #' @param from_column name of first column with feature codes to relate
 #' @param to_column name of second column with feature codes to relate

@@ -9,7 +9,7 @@ db_add_relation(db, edgelist, from_column = "SamplingFeatureCode",
   relationtype = "isChildOf")
 }
 \arguments{
-\item{db}{database connection object}
+\item{db}{database connection object.}
 
 \item{edgelist}{dataframe with new relationships to add. see details}
 

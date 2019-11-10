@@ -4,7 +4,7 @@
 #' @param db database connection
 #' @param datavalues data frame with columns "Timestamp" with
 #'    POSIXct YYYY-MM-DD H:M:S format, and column names corresponding to variable names
-#' @param method code for method used to collect data
+#' @param methodcode code for method used to collect data
 #' @param methodtypecv Instrument deployment or derivation
 #' @param site_code sampling feature code at which data were collected
 #' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
