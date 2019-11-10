@@ -74,7 +74,7 @@ db_insert_results_ts <- function(db,
     stop("sorry, only sqlite and postgres database connections are supported so far")}
 
   # check for method and add if not in there
-  if(!(method %in% rodm2::db_get_methods(db))){
+  if(!(methodcode %in% rodm2::db_get_methods(db))){
     rodm2::db_describe_method(db,
                               methodcode = methodcode,
                               methodtypecv = methodtypecv)
@@ -158,7 +158,7 @@ db_insert_results_ts <- function(db,
 
     sql1 <- RSQLite::dbSendQuery(db, sql1)
     RSQLite::dbBind(sql1, params = list(methodtypecv = methodtypecv,
-                                        method = method,
+                                        method = methodcode,
                                         begindatetime = format(as.POSIXct(datavalues[["Timestamp"]][1]),
                                                                "%Y-%m-%d %H:%M:%S"),
                                         begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
@@ -341,7 +341,7 @@ db_insert_results_ts <- function(db,
                                RETURNING actionid, featureactionid',
 
                                actiontype = methodtypecv,
-                               method = method,
+                               method = methodcode,
                                begindatetime = format(as.POSIXct(
                                  datavalues[["Timestamp"]][1]), "%Y-%m-%d %H:%M:%S"),
                                begindatetimeutcoffset = as.integer(substr(format(as.POSIXct(
