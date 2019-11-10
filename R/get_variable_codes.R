@@ -28,7 +28,7 @@ get_variable_codes <- function(db){
     miniUI::miniContentPanel(
       # Define layout, inputs, outputs
       shiny::fillRow(
-        p("Selected variable codes:"),
+        shiny::p("Selected variable codes:"),
         shiny::textOutput('selected_vars'),
         shiny::uiOutput('selectorsUIvar', inline = FALSE),
         flex = c(1,2,4)
