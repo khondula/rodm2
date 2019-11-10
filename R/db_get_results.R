@@ -194,6 +194,14 @@ db_get_results <- function(db,
                                           WHERE relationshiptypecv = 'Was collected at'")
     samples_id_integer <- intersect(rf_related_ids[[1]], rf_samples_ids[[1]])
 
+    # get table to relate sample and sites
+    site_sample_table <- RSQLite::dbGetQuery(db,"SELECT sf2.samplingfeaturecode AS Sample,
+                                             sf.samplingfeaturecode AS Site
+                                             FROM RelatedFeatures rf
+                                             LEFT JOIN samplingfeatures sf ON sf.samplingfeatureid = rf.relatedfeatureid
+                                             LEFT JOIN samplingfeatures sf2 ON sf2.samplingfeatureid = rf.samplingfeatureid
+                                             WHERE relationshiptypecv = 'Was collected at'")
+
     #Retreive Feature Action ID[s] for site code
     FeatureActionID <- RSQLite::dbGetQuery(db,
                                            "SELECT FeatureActionID
@@ -230,17 +238,21 @@ db_get_results <- function(db,
     #Retreive Result values
 
     results_data_samples <- RSQLite::dbGetQuery(db,
-                                           "SELECT mrv.ValueDateTime, mrv.DataValue, units.unitsname,
-                                           var.variablenamecv, sf.samplingfeaturecode, pl.ProcessingLevelCode
-                                           FROM measurementresultvalues mrv
-                                           LEFT JOIN results res ON res.resultid = mrv.resultid
-                                           LEFT JOIN featureactions fa ON fa.featureactionid = res.featureactionid
-                                           LEFT JOIN samplingfeatures sf ON sf.samplingfeatureid = fa.samplingfeatureid
-                                           LEFT JOIN variables var ON var.variableid = res.variableid
-                                           LEFT JOIN units ON units.unitsid = res.unitsid
-                                           LEFT JOIN processinglevels pl ON pl.processinglevelid = res.processinglevelid
-                                           WHERE mrv.ResultID IN (:x)",
-                                           params=list(x=result_id_integer))
+                                                "SELECT mrv.ValueDateTime, mrv.DataValue, units.unitsname,
+                                                var.variablenamecv, sf.samplingfeaturecode, pl.ProcessingLevelCode
+                                                FROM measurementresultvalues mrv
+                                                LEFT JOIN results res ON res.resultid = mrv.resultid
+                                                LEFT JOIN featureactions fa ON fa.featureactionid = res.featureactionid
+                                                LEFT JOIN samplingfeatures sf ON sf.samplingfeatureid = fa.samplingfeatureid
+                                                LEFT JOIN variables var ON var.variableid = res.variableid
+                                                LEFT JOIN units ON units.unitsid = res.unitsid
+                                                LEFT JOIN processinglevels pl ON pl.processinglevelid = res.processinglevelid
+                                                WHERE mrv.ResultID IN (:x)",
+                                                params=list(x=result_id_integer))
+
+    results_data_samples <- dplyr::left_join(results_data_samples, site_sample_table,
+                                             by = c("SamplingFeatureCode" = "Sample"))
+
   }
 
   results_list <- list("Time_series_data" = results_data_ts,
