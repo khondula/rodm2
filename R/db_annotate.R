@@ -26,32 +26,51 @@ db_annotate <- function(db,
   if (!class(db) %in% c("SQLiteConnection")) {
     stop("sorry, only sqlite database connections are supported so far")}
 
+  all_sfs <- RSQLite::dbGetQuery(db, "SELECT samplingfeaturecode from samplingfeatures")[[1]]
+  while(!object %in% all_sfs){
+    selection_id <- suppressMessages(menu(choices = all_sfs,
+                                             graphics = FALSE,
+                                             title = paste("Please select site in database or type 0 to quit")))
+    object <- all_sfs[selection_id]
+    if(selection_id == 0){stop("See existing site codes using db_get_sites()")}
+  }
+
+  if(!any(!is.null(annotationcode), !is.null(annotationtext))){
+    annotationtext <- readline("Please supply annotation text: ")
+  }
+
+  all_notes <- RSQLite::dbGetQuery(db, "SELECT annotationtext from annotations")[[1]]
+  while(!annotationtext %in% all_notes){
+    selection_id <- suppressMessages(menu(choices = all_notes,
+                                          graphics = FALSE,
+                                          title = paste("Please select annotations in database or type 0 to quit")))
+    annotationtext <- all_notes[selection_id]
+    if(selection_id == 0){stop("See existing annotations using db_get_annotations() or add with db_describe_annotation()")}
+  }
+
   sf_annotation_types <- c("Site group", "Sampling feature annotation",
                            "Site annotation", "Specimen annotation",
                            "Specimen group")
+
+  while(!type %in% sf_annotation_types){
+    type_id <- suppressMessages(menu(choices = sf_annotation_types, graphics = FALSE,
+                                             title = paste("Please select type from CV")))
+    type <- sf_annotation_types[type_id]
+  }
 
   action_annotation_types <- c("Action annotation", "Action group")
 
   if (!type %in% sf_annotation_types) {
     stop("sorry, only sampling feature annotations supported so far")}
 
-  if(!any(!is.null(annotationcode), !is.null(annotationtext))){
-    stop("Please supply either an annotation code or annotation text")
-  }
-
-  # annotation text is required, if null use annotation code
-  if(is.null(annotationtext)){
-    annotationtext <- annotationcode
-  }
-
   # annotation code needs to be not null for sql
   if(is.null(annotationcode)){
     annotationcode <- ""
   }
 
-  if(!type %in% suppressMessages(get_cv_terms("annotationtype"))){
-    stop("Please use an annotation type from the CV.\nPrint options in console using: get_cv_terms(\"annotationtype\", quietly = FALSE)")
-  }
+  # if(!type %in% suppressMessages(get_cv_terms("annotationtype", quietly = TRUE))){
+  #   stop("Please use an annotation type from the CV.\nPrint options in console using: get_cv_terms(\"annotationtype\", quietly = FALSE)")
+  # }
 
   # first get annotation id based on type and code or text
   sql1 <- RSQLite::dbSendQuery(db, 'SELECT annotationid FROM annotations

@@ -27,6 +27,14 @@ db_describe_annotation <- function(db,
     stop("Please supply either an annotation code or annotation text")
   }
 
+  # check if annotationtext already exists in database
+  notes_in_db <- RSQLite::dbGetQuery(db, sprintf("SELECT annotationtext from annotations
+                      where annotationtypecv = \'%s\'", annotationtypecv))[[1]]
+
+  if(annotationtext %in% notes_in_db){
+    stop(paste(annotationtypecv, annotationtext, "already in database."))
+  }
+
   # annotation text is required, if null use annotation code
   if(is.null(annotationtext)){
     annotationtext <- annotationcode
@@ -39,6 +47,15 @@ db_describe_annotation <- function(db,
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
+
+    all_notetypes <- suppressMessages(get_cv_terms("annotationtype", quietly = TRUE))
+    while(!annotationtypecv %in% all_notetypes){
+      selection_id <- suppressMessages(menu(choices = all_notetypes,
+                                            graphics = FALSE,
+                                            title = paste("Please select annotation type from CV or type 0 to quit")))
+      annotationtypecv <- all_notetypes[selection_id]
+      if(selection_id == 0){stop("See existing annotations using db_get_annotations() or add with db_describe_annotation()")}
+    }
 
     sql <- RSQLite::dbSendStatement(db,
   'INSERT OR IGNORE INTO annotations (annotationtypecv, annotationtext, annotationcode)

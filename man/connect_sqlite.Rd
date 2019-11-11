@@ -22,5 +22,5 @@ This function returns a database connection object to be used in subsequent inse
 }
 \examples{
 # create_sqlite(filename = "odm2", dir = tempdir())
-db <- connect_sqlite(filename = "odm2")
+# db <- connect_sqlite(filename = "odm2")
 }
