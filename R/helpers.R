@@ -117,7 +117,7 @@ check_variables_list <- function(db, variables){
       sql <- RSQLite::dbSendQuery(db, sql)
       RSQLite::dbBind(sql, params = list(variabletypecv = "Unknown",
                                          variablecode = newvar,
-                                         variablenamecv = newvar,
+                                         variablenamecv = variables[[newvar]][["name"]],
                                          nodatavalue = '-9999'))
       RSQLite::dbClearResult(res = sql)
 
@@ -159,7 +159,7 @@ check_variables_list <- function(db, variables){
       sql <- DBI::sqlInterpolate(db, sql,
                                  variabletypecv = "Unknown",
                                  variablecode = newvar,
-                                 variablenamecv = newvar,
+                                 variablenamecv = variables[[newvar]][["name"]],
                                  nodatavalue = "-9999")
       RPostgreSQL::dbGetQuery(db, sql)
 

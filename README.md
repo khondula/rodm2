@@ -154,7 +154,7 @@ str(results_data)
 #>   ..$ ValueDateTime      : chr [1:2] "2018-06-27 13:45:00" "2018-07-27 13:55:00"
 #>   ..$ DataValue          : num [1:2] 10 12.3
 #>   ..$ UnitsName          : chr [1:2] "Milligram per Liter" "Milligram per Liter"
-#>   ..$ VariableNameCV     : chr [1:2] "DOC" "DOC"
+#>   ..$ VariableNameCV     : chr [1:2] "Carbon, dissolved organic" "Carbon, dissolved organic"
 #>   ..$ SamplingFeatureCode: chr [1:2] "DOC001" "DOC002"
 #>   ..$ ProcessingLevelCode: chr [1:2] "Raw data" "Raw data"
 #>   ..$ Site               : chr [1:2] "501R1" "501R1"

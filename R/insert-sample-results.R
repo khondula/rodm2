@@ -97,7 +97,8 @@ db_insert_results_samples <- function(db,
     # sampled medium in CV
     sampledmedium <- check_medium_cv(sampledmedium)
     # Potential New site handling
-    site_code <- handle_new_site(site_code)
+    # need to apply to entire column!
+    # site_code <- handle_new_site(site_code)
 
     #######################################
     # for each ROW of samples data frame
@@ -303,7 +304,7 @@ db_insert_results_samples <- function(db,
         RSQLite::dbBind(sql, params = list(uuid = uuid::UUIDgenerate(),
                                            newfaid = newfaid,
                                            resulttypecv = 'Measurement',
-                                           variablenamecv = j,
+                                           variablenamecv = variables[[j]][['name']],
                                            units = variables[[j]][["units"]],
                                            processinglevel = processinglevel,
                                            sampledmedium = sampledmedium,
