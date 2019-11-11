@@ -15,6 +15,7 @@
 #' and [units](http://vocabulary.odm2.org/units/) from the controlled vocabularies. By
 #' default the column name will be used as the variable code.
 #' @family interactive helpers
+#' @importFrom shiny renderUI
 
 #' @examples
 #' \dontrun{
@@ -39,8 +40,11 @@ make_vars_list <- function(data) {
       shiny::fillRow(
         shiny::uiOutput('selectorsUIcode'),
         shiny::uiOutput('selectorsUIvar'),
-        shiny::uiOutput('selectorsUIunits')
-      )))
+        shiny::uiOutput('selectorsUIunits'))
+      ),  shiny::p("code output:"),
+    shiny::verbatimTextOutput('vars_list_code')
+
+    )
 
   server <- function(input, output, session) {
     # Define reactive expressions, outputs, etc.
@@ -77,6 +81,22 @@ make_vars_list <- function(data) {
       })
 
     })
+
+    output$vars_list_code <- shiny::renderText({
+
+      vals <- lapply(1:length(data_colnames), function(i){
+        list('column' = data_colnames[i],
+             'name' = input[[sprintf('var%sname', i)]],
+             'units' = input[[sprintf('var%sunits', i)]])
+      })
+
+  paste("vars_list <- list(",
+    sprintf("%s = list(column = %d, name = %d, units = %d)\n",
+            data_colnames, 1, 2, 3),
+    ")", collapse = ",")
+
+    })
+
     # When the Done button is clicked, return a value
     shiny::observeEvent(input$done, {
       returnValue <- lapply(1:length(data_colnames), function(i){
