@@ -72,7 +72,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rodm2" class="anchor"></a>rodm2</h1></div>
 <p><!-- badges: start --></p>
-<p><a href="https://travis-ci.org/khondula/rodm2"><img src="https://travis-ci.org/khondula/rodm2.svg?branch=master" alt="Travis build status"></a></p>
+<p><a href="https://travis-ci.org/khondula/rodm2"><img src="https://travis-ci.org/khondula/rodm2.svg?branch=master" alt="Travis build status"></a> <a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></p>
 <p><!-- badges: end --></p>
 <p>Organize site, sample, and sensor data all in one place!</p>
 <p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of advanced database principles.</p>
@@ -80,7 +80,6 @@
 <p>How does it work?</p>
 </blockquote>
 <p>Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure.</p>
-<p>This project is just getting started! Get in touch or open an <a href="https://github.com/khondula/rodm2/issues">issue</a> if you have a use case or if you’re interested in collaborating.</p>
 <div id="getting-started" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-started" class="anchor"></a>Getting started</h2>
@@ -125,11 +124,12 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
                    <span class="dt">methodcode =</span> <span class="st">"SA"</span>, 
                    <span class="dt">methodtypecv =</span> <span class="st">"dataRetrieval"</span>)
 <span class="co">#&gt; Sonic anemometer has been added to the Methods table.</span></code></pre></div>
+<p>Optionally, use annotations and relationships with <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/db_add_relations.html">db_add_relations()</a></code> to label site groups and represent sampling designs.</p>
 </div>
 <div id="insert-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#insert-data" class="anchor"></a>3. Insert data</h3>
-<p>The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS. For example:</p>
+<p>Data are uploaded using “insert” functions for specific types of results such as time series, samples, measurements, or a vertical profile. For time series data, the data to upload should have data values for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a “Timestamp column” formatted as YYYY-MM-DD HH:MM:SS. For example:</p>
 <table class="table table">
 <thead><tr class="header">
 <th align="left">Timestamp</th>
@@ -152,7 +152,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 </tr>
 </tbody>
 </table>
-<p>Data are uploaded using “insert” functions for specific types of results, eg. <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> for a data frame of time series results. Data needs to have a column “Timestamp” and can have multiple columns of data. The type of data in each column needs to be described in a “variables list” with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function <code><a href="reference/make_vars_list.html">make_vars_list()</a></code>.</p>
+<p>The type of data in each column needs to be described in a “variables list” with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function <code><a href="reference/make_vars_list.html">make_vars_list()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(ts_data)</code></pre></div>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png" alt="vars list shiny gadget"><p class="caption">vars list shiny gadget</p>
@@ -165,13 +165,56 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
                      <span class="dt">variables =</span> vars_list,
                      <span class="dt">sampledmedium =</span> <span class="st">"air"</span>)
 <span class="co">#&gt; Warning: Closing open result set, pending rows</span></code></pre></div>
+<p>Data associated with samples taken in the field and a property measured in the lab needs to have at least 4 columns corresponding to Timestamp, Site ID, Sample ID, and data value.</p>
+<table class="table table">
+<thead><tr class="header">
+<th align="left">Timestamp</th>
+<th align="left">Site</th>
+<th align="left">Sample</th>
+<th align="right">DOC</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2018-06-27 13:45:00</td>
+<td align="left">501R1</td>
+<td align="left">DOC001</td>
+<td align="right">10.0</td>
+</tr>
+<tr class="even">
+<td align="left">2018-07-27 13:55:00</td>
+<td align="left">501R1</td>
+<td align="left">DOC002</td>
+<td align="right">12.3</td>
+</tr>
+</tbody>
+</table>
+<p>Sample data are inserted with <code><a href="reference/db_insert_results_samples.html">db_insert_results_samples()</a></code> which requires metadata about both the method used to collect samples as well as the method used to analyze the sample. Provide details using <code>db_describe_%METADATA%()</code> functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_describe_method.html">db_describe_method</a></span>(db, <span class="dt">methodname =</span> <span class="st">"Shimadzu"</span>, 
+                   <span class="dt">methodtypecv =</span> <span class="st">"specimenAnalysis"</span>,
+                   <span class="dt">methodcode =</span> <span class="st">"Shimadzu"</span>)
+<span class="co">#&gt; Warning: Closing open result set, pending rows</span>
+<span class="co">#&gt; Shimadzu has been added to the Methods table.</span>
+<span class="kw"><a href="reference/db_describe_method.html">db_describe_method</a></span>(db, <span class="dt">methodname =</span> <span class="st">"Water sample"</span>, 
+                   <span class="dt">methodtypecv =</span> <span class="st">"specimenCollection"</span>,
+                   <span class="dt">methodcode =</span> <span class="st">"watersamp"</span>)
+<span class="co">#&gt; Water sample has been added to the Methods table.</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(sample_data[,<span class="dv">4</span>])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_samples.html">db_insert_results_samples</a></span>(db, 
+                          sample_data, 
+                          <span class="dt">field_method =</span> <span class="st">"watersamp"</span>,
+                          <span class="dt">lab_method =</span> <span class="st">"Shimadzu"</span>, 
+                          <span class="dt">variables =</span> vars_list, 
+                          <span class="dt">sampledmedium =</span> <span class="st">"liquidAqueous"</span>)
+<span class="co">#&gt; DOC has been added to the Variables table.</span>
+<span class="co">#&gt; Sample DOC001 and associated data have been entered.</span>
+<span class="co">#&gt; Sample DOC002 and associated data have been entered.</span></code></pre></div>
+<p>The insert function assumes that Site IDs are in a column called “Site” and Sample IDs are in a column called “Sample” but you can specify otherwise with the arguments <code>site_code_col</code> and <code>sample_code_col</code>. See more options for specifying metadata in the documentation for <code><a href="reference/db_insert_results_samples.html">db_insert_results_samples()</a></code></p>
 </div>
 <div id="query" class="section level3">
 <h3 class="hasAnchor">
 <a href="#query" class="anchor"></a>4. Query</h3>
 <p><code><a href="reference/db_get_results.html">db_get_results()</a></code> returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/db_get_results.html">db_get_results</a></span>(db, <span class="dt">result_type =</span> <span class="st">"ts"</span>)
-<span class="co">#&gt; Warning: Closing open result set, pending rows</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/db_get_results.html">db_get_results</a></span>(db, <span class="dt">result_type =</span> <span class="kw">c</span>(<span class="st">"ts"</span>, <span class="st">"sample"</span>))
 <span class="kw">str</span>(results_data)
 <span class="co">#&gt; List of 3</span>
 <span class="co">#&gt;  $ Time_series_data:'data.frame':    6 obs. of  6 variables:</span>
@@ -181,7 +224,14 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <span class="co">#&gt;   ..$ VariableNameCV     : chr [1:6] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...</span>
 <span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:6] "501R1" "501R1" "501R1" "501R1" ...</span>
 <span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:6] "Raw data" "Raw data" "Raw data" "Raw data" ...</span>
-<span class="co">#&gt;  $ Sample_data     : NULL</span>
+<span class="co">#&gt;  $ Sample_data     :'data.frame':    2 obs. of  7 variables:</span>
+<span class="co">#&gt;   ..$ ValueDateTime      : chr [1:2] "2018-06-27 13:45:00" "2018-07-27 13:55:00"</span>
+<span class="co">#&gt;   ..$ DataValue          : num [1:2] 10 12.3</span>
+<span class="co">#&gt;   ..$ UnitsName          : chr [1:2] "Milligram per Liter" "Milligram per Liter"</span>
+<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:2] "DOC" "DOC"</span>
+<span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:2] "DOC001" "DOC002"</span>
+<span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:2] "Raw data" "Raw data"</span>
+<span class="co">#&gt;   ..$ Site               : chr [1:2] "501R1" "501R1"</span>
 <span class="co">#&gt;  $ Measurement_data: NULL</span></code></pre></div>
 <p>Use list subsetting to get a data frame with time series (ts) results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ts_data &lt;-<span class="st"> </span>results_data[[<span class="st">"Time_series_data"</span>]]
@@ -208,7 +258,7 @@ ts_data &lt;-<span class="st"> </span>results_data<span class="op">$</span>Time_
 <div id="more-details" class="section level2">
 <h2 class="hasAnchor">
 <a href="#more-details" class="anchor"></a>More details</h2>
-<p><code>rodm2</code> is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html">here</a> for an overview of the data structure.</p>
+<p><code>rodm2</code> is being designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren’t (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See <a href="http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html">here</a> for an overview of the data structure.</p>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
