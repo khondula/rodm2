@@ -5,7 +5,7 @@ rodm2
 
 <!-- badges: start -->
 
-[![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2)
+[![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2) [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 <!-- badges: end -->
 
@@ -16,8 +16,6 @@ The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/OD
 > How does it work?
 
 Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure.
-
-This project is just getting started! Get in touch or open an [issue](https://github.com/khondula/rodm2/issues) if you have a use case or if you're interested in collaborating.
 
 Getting started
 ---------------
@@ -67,16 +65,18 @@ db_describe_method(db,
 #> Sonic anemometer has been added to the Methods table.
 ```
 
+Optionally, use annotations and relationships with `db_annotate()` and `db_add_relations()` to label site groups and represent sampling designs.
+
 ### 3. Insert data
 
-The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
+Data are uploaded using "insert" functions for specific types of results such as time series, samples, measurements, or a vertical profile. For time series data, the data to upload should have data values for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
 
 | Timestamp           |   wd|   ws|  gustspeed|
 |:--------------------|----:|----:|----------:|
 | 2018-06-27 13:45:00 |  180|  1.0|        2.0|
 | 2018-06-27 13:55:00 |  170|  1.5|        2.5|
 
-Data are uploaded using "insert" functions for specific types of results, eg. `db_insert_results_ts()` for a data frame of time series results. Data needs to have a column "Timestamp" and can have multiple columns of data. The type of data in each column needs to be described in a "variables list" with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function `make_vars_list()`.
+The type of data in each column needs to be described in a "variables list" with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function `make_vars_list()`.
 
 ``` r
 vars_list <- make_vars_list(ts_data)
@@ -96,13 +96,51 @@ db_insert_results_ts(db,
 #> Warning: Closing open result set, pending rows
 ```
 
+Data associated with samples taken in the field and a property measured in the lab needs to have at least 4 columns corresponding to Timestamp, Site ID, Sample ID, and data value.
+
+| Timestamp           | Site  | Sample |   DOC|
+|:--------------------|:------|:-------|-----:|
+| 2018-06-27 13:45:00 | 501R1 | DOC001 |  10.0|
+| 2018-07-27 13:55:00 | 501R1 | DOC002 |  12.3|
+
+Sample data are inserted with `db_insert_results_samples()` which requires metadata about both the method used to collect samples as well as the method used to analyze the sample. Provide details using `db_describe_%METADATA%()` functions.
+
+``` r
+db_describe_method(db, methodname = "Shimadzu", 
+                   methodtypecv = "specimenAnalysis",
+                   methodcode = "Shimadzu")
+#> Warning: Closing open result set, pending rows
+#> Shimadzu has been added to the Methods table.
+db_describe_method(db, methodname = "Water sample", 
+                   methodtypecv = "specimenCollection",
+                   methodcode = "watersamp")
+#> Water sample has been added to the Methods table.
+```
+
+``` r
+vars_list <- make_vars_list(sample_data[,4])
+```
+
+``` r
+db_insert_results_samples(db, 
+                          sample_data, 
+                          field_method = "watersamp",
+                          lab_method = "Shimadzu", 
+                          variables = vars_list, 
+                          sampledmedium = "liquidAqueous")
+#> DOC has been added to the Variables table.
+#> Sample DOC001 and associated data have been entered.
+#> Sample DOC002 and associated data have been entered.
+```
+
+The insert function assumes that Site IDs are in a column called "Site" and Sample IDs are in a column called "Sample" but you can specify otherwise with the arguments `site_code_col` and `sample_code_col`. See more options for specifying metadata in the documentation for `db_insert_results_samples()`
+
 ### 4. Query
 
 `db_get_results()` returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables.
 
 ``` r
-results_data <- db_get_results(db, result_type = "ts")
-#> Warning: Closing open result set, pending rows
+results_data <- db_get_results(db, result_type = c("ts", "sample"))
 str(results_data)
 #> List of 3
 #>  $ Time_series_data:'data.frame':    6 obs. of  6 variables:
@@ -112,7 +150,14 @@ str(results_data)
 #>   ..$ VariableNameCV     : chr [1:6] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...
 #>   ..$ SamplingFeatureCode: chr [1:6] "501R1" "501R1" "501R1" "501R1" ...
 #>   ..$ ProcessingLevelCode: chr [1:6] "Raw data" "Raw data" "Raw data" "Raw data" ...
-#>  $ Sample_data     : NULL
+#>  $ Sample_data     :'data.frame':    2 obs. of  7 variables:
+#>   ..$ ValueDateTime      : chr [1:2] "2018-06-27 13:45:00" "2018-07-27 13:55:00"
+#>   ..$ DataValue          : num [1:2] 10 12.3
+#>   ..$ UnitsName          : chr [1:2] "Milligram per Liter" "Milligram per Liter"
+#>   ..$ VariableNameCV     : chr [1:2] "DOC" "DOC"
+#>   ..$ SamplingFeatureCode: chr [1:2] "DOC001" "DOC002"
+#>   ..$ ProcessingLevelCode: chr [1:2] "Raw data" "Raw data"
+#>   ..$ Site               : chr [1:2] "501R1" "501R1"
 #>  $ Measurement_data: NULL
 ```
 
@@ -143,7 +188,7 @@ head(ts_data)
 More details
 ------------
 
-`rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure.
+`rodm2` is being designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure.
 
 Acknowledgements
 ----------------

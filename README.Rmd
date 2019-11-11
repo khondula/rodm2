@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
   <!-- badges: start -->
   
   [![Travis build status](https://travis-ci.org/khondula/rodm2.svg?branch=master)](https://travis-ci.org/khondula/rodm2)
+  [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
   
   <!-- badges: end -->
   
@@ -29,8 +31,6 @@ The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/OD
 > How does it work? 
 
 Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure. 
-
-This project is just getting started! Get in touch or open an [issue](https://github.com/khondula/rodm2/issues) if you have a use case or if you're interested in collaborating. 
 
 ## Getting started 
 
@@ -76,9 +76,11 @@ db_describe_method(db,
                    methodtypecv = "dataRetrieval")
 ```
 
+Optionally, use annotations and relationships with `db_annotate()` and `db_add_relations()` to label site groups and represent sampling designs. 
+
 ### 3. Insert data 
 
-The data to upload should have time series data for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
+Data are uploaded using "insert" functions for specific types of results such as time series, samples, measurements, or a vertical profile. For time series data, the data to upload should have data values for one or more variables collected at one site using the same instrument. It needs at least 2 timepoints, and a "Timestamp column" formatted as YYYY-MM-DD HH:MM:SS. For example:
 
 ```{r, echo = FALSE}
 ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55:00"),
@@ -88,7 +90,7 @@ ts_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-06-27 13:55
 knitr::kable(ts_data)
 ```
 
-Data are uploaded using "insert" functions for specific types of results, eg. `db_insert_results_ts()` for a data frame of time series results. Data needs to have a column "Timestamp" and can have multiple columns of data. The type of data in each column needs to be described in a "variables list" with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function `make_vars_list()`. 
+The type of data in each column needs to be described in a "variables list" with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function `make_vars_list()`. 
 
 ```{r, eval=FALSE}
 vars_list <- make_vars_list(ts_data)
@@ -126,12 +128,57 @@ db_insert_results_ts(db,
                      sampledmedium = "air")
 ```
 
+Data associated with samples taken in the field and a property measured in the lab needs to have at least 4 columns corresponding to Timestamp, Site ID, Sample ID, and data value. 
+
+```{r, echo = FALSE}
+sample_data <- tibble::tibble(Timestamp = c("2018-06-27 13:45:00", "2018-07-27 13:55:00"),
+                              Site = c("501R1", "501R1"),
+                              Sample = c("DOC001", "DOC002"),
+                              DOC = c(10, 12.3))
+knitr::kable(sample_data)
+```
+
+Sample data are inserted with `db_insert_results_samples()` which requires metadata about both the method used to collect samples as well as the method used to analyze the sample. Provide details using `db_describe_%METADATA%()` functions.
+
+```{r}
+db_describe_method(db, methodname = "Shimadzu", 
+                   methodtypecv = "specimenAnalysis",
+                   methodcode = "Shimadzu")
+db_describe_method(db, methodname = "Water sample", 
+                   methodtypecv = "specimenCollection",
+                   methodcode = "watersamp")
+```
+
+```{r, eval = FALSE}
+vars_list <- make_vars_list(sample_data[,4])
+```
+
+```{r, echo = FALSE}
+vars_list <- list(
+  'DOC' = list(
+    column = 'DOC', 
+    name = 'Carbon, dissolved organic', 
+    units = 'Milligram per Liter')
+)
+```
+
+```{r}
+db_insert_results_samples(db, 
+                          sample_data, 
+                          field_method = "watersamp",
+                          lab_method = "Shimadzu", 
+                          variables = vars_list, 
+                          sampledmedium = "liquidAqueous")
+```
+
+The insert function assumes that Site IDs are in a column called "Site" and Sample IDs are in a column called "Sample" but you can specify otherwise with the arguments `site_code_col` and `sample_code_col`. See more options for specifying metadata in the documentation for `db_insert_results_samples()`
+
 ### 4. Query
 
 `db_get_results()` returns a list of dataframes with each type of result requested. By default retrieves data associated with all site codes and variables. 
 
 ```{r}
-results_data <- db_get_results(db, result_type = "ts")
+results_data <- db_get_results(db, result_type = c("ts", "sample"))
 str(results_data)
 ```
 
@@ -152,7 +199,7 @@ RSQLite::dbDisconnect(db)
 
 ## More details 
 
-`rodm2` is designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure. 
+`rodm2` is being designed to work either with an existing ODM2 database on a server (e.g. PostgreSQL), or with spreadsheet files that aren't (yet!) in a relational database. This package is intended to help populate, query, and visualize data that is organized with the ODM2 structure. It should not be necessary to understand ODM2 or SQL but it may help! See [here](http://odm2.github.io/ODM2/schemas/ODM2_Current/diagrams/ODM2OverviewSimplified.html) for an overview of the data structure. 
 
 ## Acknowledgements
 

@@ -80,12 +80,12 @@ db_insert_results_samples <- function(db,
                               methodtypecv = 'Specimen analysis')
   }
 
-  # make sure all sites in sampling features table
-  for(site_code in datavalues[[site_code_col]]){
-    if(!site_code %in% rodm2::db_get_sites(db)){
-      rodm2::db_describe_site(db, site_code)
-    }
-  }
+  # # make sure all sites in sampling features table
+  # for(site_code in datavalues[[site_code_col]]){
+  #   if(!site_code %in% rodm2::db_get_sites(db)){
+  #     rodm2::db_describe_site(db, site_code)
+  #   }
+  # }
   # make sure processinglevels in database
   rodm2::insert_processinglevel(db, processinglevel)
   # check that all variables are in variables table
@@ -95,7 +95,9 @@ db_insert_results_samples <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     # sampled medium in CV
-    sampledmedium <- check_medium_cv()
+    sampledmedium <- check_medium_cv(sampledmedium)
+    # Potential New site handling
+    site_code <- handle_new_site(site_code)
 
     #######################################
     # for each ROW of samples data frame
