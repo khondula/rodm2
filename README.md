@@ -118,7 +118,7 @@ db_describe_method(db, methodname = "Water sample",
 ```
 
 ``` r
-vars_list <- make_vars_list(sample_data[,4])
+vars_list <- make_vars_list(sample_data)
 ```
 
 ``` r

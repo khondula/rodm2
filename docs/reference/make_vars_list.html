@@ -107,14 +107,20 @@
     <p>Make variables list</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_vars_list</span>(<span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>make_vars_list</span>(<span class='no'>data</span>, <span class='kw'>data_colnames</span> <span class='kw'>=</span> <span class='fu'>setdiff</span>(<span class='fu'>names</span>(<span class='no'>data</span>), <span class='fu'>c</span>(<span class='st'>"Timestamp"</span>,
+  <span class='st'>"Sample"</span>, <span class='st'>"Site"</span>)))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>data frame wtih Timestamp column and other data</p></td>
+      <td><p>data frame with columns of data to describe</p></td>
+    </tr>
+    <tr>
+      <th>data_colnames</th>
+      <td><p>a string vector of column names with data values.
+by default all columns except "Timestamp", "Sample", and "Site" if they are included.</p></td>
     </tr>
     </table>
 

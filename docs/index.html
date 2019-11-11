@@ -198,7 +198,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
                    <span class="dt">methodtypecv =</span> <span class="st">"specimenCollection"</span>,
                    <span class="dt">methodcode =</span> <span class="st">"watersamp"</span>)
 <span class="co">#&gt; Water sample has been added to the Methods table.</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(sample_data[,<span class="dv">4</span>])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(sample_data)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_samples.html">db_insert_results_samples</a></span>(db, 
                           sample_data, 
                           <span class="dt">field_method =</span> <span class="st">"watersamp"</span>,
@@ -228,7 +228,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <span class="co">#&gt;   ..$ ValueDateTime      : chr [1:2] "2018-06-27 13:45:00" "2018-07-27 13:55:00"</span>
 <span class="co">#&gt;   ..$ DataValue          : num [1:2] 10 12.3</span>
 <span class="co">#&gt;   ..$ UnitsName          : chr [1:2] "Milligram per Liter" "Milligram per Liter"</span>
-<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:2] "DOC" "DOC"</span>
+<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:2] "Carbon, dissolved organic" "Carbon, dissolved organic"</span>
 <span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:2] "DOC001" "DOC002"</span>
 <span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:2] "Raw data" "Raw data"</span>
 <span class="co">#&gt;   ..$ Site               : chr [1:2] "501R1" "501R1"</span>
