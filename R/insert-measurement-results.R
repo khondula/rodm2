@@ -5,7 +5,7 @@
 #' @param db database connection
 #' @param datavalues data frame with columns "Timestamp" with
 #'    YYYY-MM-DD H:M:S format, and column names corresponding to variable names
-#' @param method code for method used to collect data
+#' @param methodcode code for method used to collect data
 #' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
 #'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
 #' @param sampledmedium term from controlled vocabulary for medium sampled eg. Air, Water, Soil
@@ -33,14 +33,14 @@
 #' "vwc" = 68.3, site = "BB2")
 #'
 #' db_insert_results_m(db = db, datavalues = mrv,
-#'     method = "soilmoisture", site_code_col = "site",
+#'     methodcode = "soilmoisture", site_code_col = "site",
 #'     variables = list("Volumetric water content" = list("vwc"," Percent")),
 #'     sampledmedium = "Soil")
 #' }
 #'
 db_insert_results_m <- function(db,
                                 datavalues,
-                                method,
+                                methodcode,
                                 site_code_col = "site",
                                 variables,
                                 sampledmedium,
@@ -52,33 +52,27 @@ db_insert_results_m <- function(db,
                                 equipment_name = NULL,
                                 zlocation = NULL,
                                 zlocationunits = NULL, ...){
-  # if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-  #   stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgres database connections are supported so far")}
 
-  # check for method and add if not in there
-  if(!(method %in% rodm2::db_get_methods(db))){
-    rodm2::db_describe_method(db, methodname = method, methodcode = method,
-                              methodtypecv = 'Instrument deployment')
-  }
-
-  # make sure all sites in sampling features table
-  for(site_code in datavalues[[site_code_col]]){
-    if(!site_code %in% rodm2::db_get_sites(db)){
-      rodm2::db_describe_site(db, site_code)
-    }
-  }
-
-  # check that all variables are in variables table
-  vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)[[1]])
-  for(newvar in vars_to_add){
-    rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
-  }
+  # # check that all variables are in variables table
+  # vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db)[[1]])
+  # for(newvar in vars_to_add){
+  #   rodm2::db_describe_variable(db, "Unknown", newvar, newvar)
+  # }
 
   # check type of database object
   if (class(db) == "SQLiteConnection"){
+
+    # sampled medium in CV
+    sampledmedium <- check_medium_cv()
+    # methodtype in CV
+    methodtypecv <- check_methodtype_cv(methodcode)
+    # Potential New method handling
+    methodcode <- handle_new_method(methodcode, methodtypecv)
+    # Potential New site handling
+    site_code <- handle_new_site(site_code)
 
     sql <- "INSERT or IGNORE into processinglevels (processinglevelcode) VALUES (:processinglevel)"
     sql <- RSQLite::dbSendQuery(db, sql)
@@ -136,7 +130,7 @@ db_insert_results_m <- function(db,
                                    (SELECT methodid from methods WHERE methodcode = :method),
                                    DATETIME(:begindatetime), :begindatetimeutcoffset)')
 
-      RSQLite::dbBind(sql1, params = list(method = method,
+      RSQLite::dbBind(sql1, params = list(method = methodcode,
                                           begindatetime = format(as.POSIXct(
                                             datavalues[["Timestamp"]][mrv_id]), "%Y-%m-%d %H:%M:%S"),
                                           begindatetimeutcoffset = as.integer(substr(
@@ -195,12 +189,6 @@ db_insert_results_m <- function(db,
       #################################
 
       # add result! new result for each variable
-      # for variables list, if no 'column', make col = name
-      for(j in names(variables)){
-        if(!"column" %in% names(variables[[j]])){
-          variables[[j]][["column"]] <- j
-        }
-      }
 
       newresultids <- c()
 
@@ -372,7 +360,7 @@ db_insert_results_m <- function(db,
                                   RETURNING actionid, featureactionid',
 
                                   actiontype = "Instrument deployment",
-                                  method = method,
+                                  method = methodcode,
                                   begindatetime = format(as.POSIXct(
                                     datavalues[["Timestamp"]][mrv_id]), "%Y-%m-%d %H:%M:%S"),
                                   begindatetimeutcoffset = as.integer(substr(

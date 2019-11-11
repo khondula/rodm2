@@ -28,17 +28,11 @@ db_describe_method <- function(db,
     if(methodcode == 0){stop("See existing method codes using db_get_methods()")}
   }
 
-
   # check type of database object
   if (class(db) == "SQLiteConnection"){
 
-    all_methodtypes <- RSQLite::dbGetQuery(db, "SELECT term from cv_methodtype")[["Term"]]
-    while(!methodtypecv %in% all_methodtypes){
-      methodtypecv_id <- suppressMessages(menu(choices = all_methodtypes,
-                              graphics = FALSE,
-                              title = paste("Please select method type for", methodcode, "from CV")))
-      methodtypecv <- all_methodtypes[methodtypecv_id]
-    }
+    # methodtype in CV
+    methodtypecv <- check_methodtype_cv(methodtypecv)
 
     sql1 <- RSQLite::dbSendStatement(db,
               'INSERT INTO methods

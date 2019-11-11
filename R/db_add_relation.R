@@ -21,7 +21,7 @@
 #' # "SamplingFeatureCode" = "subsite1",
 #' # "RelatedFeatureCode" = "site1")
 #' # db_add_relation(db, edgelist = df)
-db_add_relation <- function(db,
+db_add_relations <- function(db,
                             edgelist,
                             from_column = "SamplingFeatureCode",
                             to_column = "RelatedFeatureCode",

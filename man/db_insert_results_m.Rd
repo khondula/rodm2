@@ -4,7 +4,7 @@
 \alias{db_insert_results_m}
 \title{Insert measurement data values to ODM2 database}
 \usage{
-db_insert_results_m(db, datavalues, method, site_code_col = "site",
+db_insert_results_m(db, datavalues, methodcode, site_code_col = "site",
   variables, sampledmedium, processinglevel = "Raw data",
   aggregationstatistic = "Unknown", time_aggregation_interval = list(1,
   "Minute"), methodtypecv = "Instrument deployment", actionby = NULL,
@@ -17,7 +17,7 @@ db_insert_results_m(db, datavalues, method, site_code_col = "site",
 \item{datavalues}{data frame with columns "Timestamp" with
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
-\item{method}{code for method used to collect data}
+\item{methodcode}{code for method used to collect data}
 
 \item{site_code_col}{name of column with site codes. defaults to "site"}
 
@@ -59,7 +59,7 @@ mrv <- data.frame(Timestamp = "2018-06-27 13:55:00",
 "vwc" = 68.3, site = "BB2")
 
 db_insert_results_m(db = db, datavalues = mrv,
-    method = "soilmoisture", site_code_col = "site",
+    methodcode = "soilmoisture", site_code_col = "site",
     variables = list("Volumetric water content" = list("vwc"," Percent")),
     sampledmedium = "Soil")
 }

@@ -57,7 +57,7 @@
 db_insert_results_ts <- function(db,
                                  datavalues,
                                  methodcode,
-                                 methodtypecv = "Instrument deployment",
+                                 methodtypecv = "instrumentDeployment",
                                  site_code,
                                  variables,
                                  sampledmedium,
@@ -67,80 +67,21 @@ db_insert_results_ts <- function(db,
                                  aggregationstatisticcv = NULL,
                                  zlocation = NULL,
                                  zlocationunits = NULL, ...){
-  # if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-  #   stop("sorry, only sqlite and postgresql database connections are supported so far")}
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgres database connections are supported so far")}
 
-
-
-
-
-  # check that all variables are in variables table
-  # vars_to_add <- setdiff(names(variables), rodm2::db_get_variables(db))
-  # for(newvar in vars_to_add){
-  #   rodm2::db_describe_variable(db,
-  #                               variabletypecv = 'Unknown',
-  #                               variablecode = newvar,
-  #                               variablenamecv = variables[[newvar]][["name"]])
-  # }
-
   # check type of database object
   if (class(db) == "SQLiteConnection"){
 
-    all_methodtypes <- RSQLite::dbGetQuery(db, "SELECT term from cv_methodtype")[["Term"]]
-    while(!methodtypecv %in% all_methodtypes){
-      methodtypecv_id <- suppressMessages(menu(choices = all_methodtypes,
-                                               graphics = FALSE,
-                                               title = paste("Please select method type for", methodcode, "from CV")))
-      methodtypecv <- all_methodtypes[methodtypecv_id]
-    }
-
-    # New method handling
-    all_methods <- RSQLite::dbGetQuery(db, "SELECT methodcode from methods")[[1]]
-    if(!methodcode %in% all_methods){
-      selection_id <- suppressMessages(menu(choices = c(all_methods, paste("Add", methodcode,"as new method")),
-                                            graphics = FALSE,
-                                            title = paste("Method code not in database. Select option below or type 0 to quit: ")))
-      if (selection_id == 0) {
-        stop("See existing method codes using db_get_methods()")
-        } else if (selection_id == length(all_methods)+1) {
-          rodm2::db_describe_method(db,
-                                    methodcode = methodcode,
-                                    methodname = readline("Supply new method name: "),
-                                    methodtypecv = methodtypecv)
-      } else {
-        methodcode <- all_methods[selection_id]
-      }
-
-    }
-
-    # New site handling
-    all_site <- RSQLite::dbGetQuery(db, "SELECT samplingfeaturecode from samplingfeatures")[[1]]
-    if(!site_code %in% all_site){
-      selection_id <- suppressMessages(menu(choices = c(all_site, paste("Add", site_code,"as new site")),
-                                            graphics = FALSE,
-                                            title = paste("Site code not in database. Select option below or type 0 to quit: ")))
-      if (selection_id == 0) {
-        stop("See existing method codes using db_get_sites()")
-      } else if (selection_id == length(all_site)+1) {
-        if(!exists("sitetypecv")){
-          all_sftypes <- RSQLite::dbGetQuery(db, "SELECT term from cv_samplingfeaturetype")[["Term"]]
-            selection_id <- suppressMessages(menu(choices = all_sftypes,
-                                                  graphics = FALSE,
-                                                  title = paste("Please select site type for", site_code, "from CV")))
-            sitetypecv <- all_sftypes[selection_id]
-        }
-        rodm2::db_describe_site(db,
-                                  site_code = site_code,
-                                  site_name = readline(paste("Supply site name for new site code", site_code,": ")),
-                                  sitetypecv = sitetypecv)
-      } else {
-        site_code <- all_site[selection_id]
-      }
-
-    }
+    # sampled medium in CV
+    sampledmedium <- check_medium_cv(sampledmedium)
+    # methodtype in CV
+    methodtypecv <- check_methodtype_cv(methodtypecv)
+    # Potential New method handling
+    methodcode <- handle_new_method(methodcode, methodtypecv)
+    # Potential New site handling
+    site_code <- handle_new_site(site_code)
 
     RSQLite::dbSendStatement(db, 'BEGIN TRANSACTION')
 
@@ -260,12 +201,6 @@ db_insert_results_ts <- function(db,
     newfaid <- as.integer(DBI::dbGetQuery(db, "SELECT LAST_INSERT_ROWID()"))
 
     # # add result! new result for each
-    # # for variables list, if no 'column', make col = name
-    # for(i in names(variables)){
-    #   if(!"column" %in% names(variables[[i]])){
-    #     variables[[i]][["column"]] <- i
-    #   }
-    # }
 
     newresultids <- c()
     # newresultids <- vector(mode = "integer", length = length(variables))

@@ -11,7 +11,9 @@ rodm2
 
 Organize site, sample, and sensor data all in one place!
 
-The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of database principles.
+The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of advanced database principles.
+
+> How does it work?
 
 Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure.
 
@@ -27,14 +29,16 @@ You can install this package from GitHub with:
 devtools::install_github("khondula/rodm2")
 ```
 
--   Set up or connect to an sqlite ODM2 database with create\_sql() or connect\_sqlite()
--   Insert metadata about sites, methods, measured variables using `db_describe_*()` functions
--   Optionally, label sites with annotations and describe hierarchical site designs as related features
--   Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field
+-   Set up or connect to an ODM2 database file on your computer with `create_sqlite()` or `connect_sqlite()`
+-   Insert metadata about sites, methods, measured variables using `db_describe_%METADATA TYPE%()` functions
+-   Optionally, label sites with annotations and describe hierarchical site designs as related features using `db_annotate()` and `db_add_relations()`
+-   Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field using `db_insert_results_%RESULT TYPE%()`
 -   Query results based on site, variable, and data type (e.g. time series, samples) using `db_get_results()`
 
 Workflow
 --------
+
+The basic steps of using rodm2 are:
 
 ### 1. Connect
 
@@ -42,26 +46,25 @@ Load rodm2 and create a connection to your database. If you don't have an existi
 
 ``` r
 library(rodm2)
-db <- rodm2::create_sqlite()
+db <- rodm2::create_sqlite(connect = TRUE)
 ```
 
-### 2. Describe
+### 2. Describe metadata
 
 Add information about sites, methods, measured variables, etc. using `db_describe_%TABLE%` functions.
 
 ``` r
-db_describe_person(db = db, 
-                          PersonFirstName = "Wendy",
-                          PersonLastName = "Wetland",
-                          AffiliationStartDate = "2018-01-01",
-                          PrimaryEmail = "wendy 'at' swamps.edu")
 
-db_describe_site(db, site_code = "501R1", sitetypecv = "Site")
+db_describe_site(db, 
+                 site_code = "501R1", 
+                 sitetypecv = "Site")
+#> Site 501R1 has been entered into the samplingfeatures table.
 
-db_describe_method(db, 
-                          methodname = "Sonic anemometer",
-                          methodcode = "SA",
-                          methodtypecv = "dataRetrieval")
+db_describe_method(db,
+                   methodname = "Sonic anemometer", 
+                   methodcode = "SA", 
+                   methodtypecv = "dataRetrieval")
+#> Sonic anemometer has been added to the Methods table.
 ```
 
 ### 3. Insert data
@@ -86,10 +89,10 @@ Once the `vars_list` is created, use it in the `db_insert_results_ts()` function
 ``` r
 db_insert_results_ts(db, 
                      datavalues = ts_data,
-                     method = "SA",
+                     methodcode = "SA",
                      site_code = "501R1",
                      variables = vars_list,
-                     sampledmedium = "Air")
+                     sampledmedium = "air")
 #> Warning: Closing open result set, pending rows
 ```
 
@@ -102,13 +105,13 @@ results_data <- db_get_results(db, result_type = "ts")
 #> Warning: Closing open result set, pending rows
 str(results_data)
 #> List of 3
-#>  $ Time_series_data:'data.frame':    150 obs. of  6 variables:
-#>   ..$ ValueDateTime      : chr [1:150] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...
-#>   ..$ DataValue          : num [1:150] 170 180 1 1.5 2 2.5 170 180 1 1.5 ...
-#>   ..$ UnitsName          : chr [1:150] "Degree" "Degree" "Meter per Second" "Meter per Second" ...
-#>   ..$ VariableNameCV     : chr [1:150] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...
-#>   ..$ SamplingFeatureCode: chr [1:150] "501R1" "501R1" "501R1" "501R1" ...
-#>   ..$ ProcessingLevelCode: chr [1:150] "Raw data" "Raw data" "Raw data" "Raw data" ...
+#>  $ Time_series_data:'data.frame':    6 obs. of  6 variables:
+#>   ..$ ValueDateTime      : chr [1:6] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...
+#>   ..$ DataValue          : num [1:6] 170 180 1 1.5 2 2.5
+#>   ..$ UnitsName          : chr [1:6] "Degree" "Degree" "Meter per Second" "Meter per Second" ...
+#>   ..$ VariableNameCV     : chr [1:6] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...
+#>   ..$ SamplingFeatureCode: chr [1:6] "501R1" "501R1" "501R1" "501R1" ...
+#>   ..$ ProcessingLevelCode: chr [1:6] "Raw data" "Raw data" "Raw data" "Raw data" ...
 #>  $ Sample_data     : NULL
 #>  $ Measurement_data: NULL
 ```
@@ -119,10 +122,22 @@ Use list subsetting to get a data frame with time series (ts) results.
 ts_data <- results_data[["Time_series_data"]]
 # OR
 ts_data <- results_data$Time_series_data
-```
 
-``` r
-RSQLite::dbDisconnect(db)
+head(ts_data)
+#>         ValueDateTime DataValue        UnitsName  VariableNameCV
+#> 1 2018-06-27 13:55:00     170.0           Degree  Wind direction
+#> 2 2018-06-27 13:45:00     180.0           Degree  Wind direction
+#> 3 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed
+#> 4 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed
+#> 5 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed
+#> 6 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed
+#>   SamplingFeatureCode ProcessingLevelCode
+#> 1               501R1            Raw data
+#> 2               501R1            Raw data
+#> 3               501R1            Raw data
+#> 4               501R1            Raw data
+#> 5               501R1            Raw data
+#> 6               501R1            Raw data
 ```
 
 More details

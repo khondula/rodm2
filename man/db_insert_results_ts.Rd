@@ -5,7 +5,7 @@
 \title{Insert time series data values to ODM2 database}
 \usage{
 db_insert_results_ts(db, datavalues, methodcode,
-  methodtypecv = "Instrument deployment", site_code, variables,
+  methodtypecv = "instrumentDeployment", site_code, variables,
   sampledmedium, processinglevel = "Raw data", actionby = NULL,
   equipment_name = NULL, aggregationstatisticcv = NULL,
   zlocation = NULL, zlocationunits = NULL, ...)

@@ -24,7 +24,9 @@ knitr::opts_chunk$set(
   
 Organize site, sample, and sensor data all in one place!
 
-The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of database principles. 
+The goal of **rodm2** is to make it easy to use the [ODM2](https://github.com/ODM2/ODM2) data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of advanced database principles. 
+
+> How does it work? 
 
 Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure. 
 
@@ -39,50 +41,39 @@ You can install this package from GitHub with:
 devtools::install_github("khondula/rodm2")
 ```
 
-* Set up or connect to an sqlite ODM2 database with create_sql() or connect_sqlite()
-* Insert metadata about sites, methods, measured variables using `db_describe_*()` functions
-* Optionally, label sites with annotations and describe hierarchical site designs as related features
-* Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field
+* Set up or connect to an ODM2 database file on your computer with `create_sqlite()` or `connect_sqlite()`
+* Insert metadata about sites, methods, measured variables using `db_describe_%METADATA TYPE%()` functions
+* Optionally, label sites with annotations and describe hierarchical site designs as related features using `db_annotate()` and `db_add_relations()`
+* Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field using `db_insert_results_%RESULT TYPE%()`
 * Query results based on site, variable, and data type (e.g. time series, samples) using `db_get_results()`
 
 ## Workflow 
+
+The basic steps of using rodm2 are: 
 
 ### 1. Connect 
 
 Load rodm2 and create a connection to your database. If you don't have an existing database, create an empty ODM2 sqlite database and connection using `create_sqlite(connect = TRUE)` or if you are starting from an existing database use `connect_sqlite()`. You can view and edit this database using [DB Browser for SQLite](https://sqlitebrowser.org/) outside of R. 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(rodm2)
-db <- rodm2::create_sqlite()
+db <- rodm2::create_sqlite(connect = TRUE)
 ```
 
-```{r, echo=FALSE}
-library(rodm2)
-
-if(file.exists("odm2.sqlite")){
- db <- rodm2::connect_sqlite() 
-} else {
-  db <- rodm2::create_sqlite()
-}
-```
-
-### 2. Describe 
+### 2. Describe metadata
 
 Add information about sites, methods, measured variables, etc. using `db_describe_%TABLE%` functions. 
 
-```{r, eval = FALSE}
-db_describe_person(db = db, 
-                          PersonFirstName = "Wendy",
-                          PersonLastName = "Wetland",
-                          AffiliationStartDate = "2018-01-01",
-                          PrimaryEmail = "wendy 'at' swamps.edu")
+```{r, eval = TRUE}
 
-db_describe_site(db, site_code = "501R1", sitetypecv = "Site")
+db_describe_site(db, 
+                 site_code = "501R1", 
+                 sitetypecv = "Site")
 
-db_describe_method(db, 
-                          methodname = "Sonic anemometer",
-                          methodcode = "SA",
-                          methodtypecv = "dataRetrieval")
+db_describe_method(db,
+                   methodname = "Sonic anemometer", 
+                   methodcode = "SA", 
+                   methodtypecv = "dataRetrieval")
 ```
 
 ### 3. Insert data 
@@ -119,6 +110,7 @@ vars_list <- list(
     name = 'Wind gust speed', 
     units = 'Meter per Second')
 )
+
 ```
 
 ![vars list shiny gadget](https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png)
@@ -128,10 +120,10 @@ Once the `vars_list` is created, use it in the `db_insert_results_ts()` function
 ```{r}
 db_insert_results_ts(db, 
                      datavalues = ts_data,
-                     method = "SA",
+                     methodcode = "SA",
                      site_code = "501R1",
                      variables = vars_list,
-                     sampledmedium = "Air")
+                     sampledmedium = "air")
 ```
 
 ### 4. Query
@@ -149,10 +141,12 @@ Use list subsetting to get a data frame with time series (ts) results.
 ts_data <- results_data[["Time_series_data"]]
 # OR
 ts_data <- results_data$Time_series_data
+
+head(ts_data)
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 RSQLite::dbDisconnect(db)
 ```
 

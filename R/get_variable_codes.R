@@ -6,7 +6,6 @@
 #' @return selected variable codes
 #' @export
 #' @family interactive helpers
-
 #' @examples
 #' # my_vars <- get_variable_codes(db)
 #'
@@ -18,7 +17,6 @@ get_variable_codes <- function(db){
                                    left join variables var ON var.variableid = results.variableid
                                    ORDER BY resulttypecv ")
 
-  vars_used
   resulttypes_used <- unique(vars_used[["ResultTypeCV"]])
   n_resulttypes <- length(resulttypes_used)
 

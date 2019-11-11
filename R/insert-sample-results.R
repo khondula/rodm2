@@ -94,6 +94,8 @@ db_insert_results_samples <- function(db,
   # check type of database object
   if (class(db) == "SQLiteConnection"){
 
+    # sampled medium in CV
+    sampledmedium <- check_medium_cv()
 
     #######################################
     # for each ROW of samples data frame

@@ -15,8 +15,13 @@
 #' represented in the database structure.
 #' Either an annotation code or annotation text must be provided to identify the annotation
 #'
+#' @importFrom utils menu
+#' @importFrom RSQLite dbGetQuery
 #' @examples
-#' # db_annotate(db, object = "Site 001", annotationtext = "Riparian wells")
+#' db <- rodm2::create_sqlite(connect = TRUE)
+#' db_describe_annotation(db, annotationtypecv = "Site group", annotationtext = "Riparian wells")
+#' db_describe_site(db, site_code = "Site 001")
+#' db_annotate(db, object = "Site 001", annotationtext = "Riparian wells")
 db_annotate <- function(db,
                         object,
                         annotationtext = NULL,
