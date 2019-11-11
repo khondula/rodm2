@@ -75,7 +75,10 @@
 <p><a href="https://travis-ci.org/khondula/rodm2"><img src="https://travis-ci.org/khondula/rodm2.svg?branch=master" alt="Travis build status"></a></p>
 <p><!-- badges: end --></p>
 <p>Organize site, sample, and sensor data all in one place!</p>
-<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of database principles.</p>
+<p>The goal of <strong>rodm2</strong> is to make it easy to use the <a href="https://github.com/ODM2/ODM2">ODM2</a> data model in R, in order to promote collaboration between ecologists, hydrologists, and soil scientists. It is intended to help manage complex field data using a sophisticated relational data model without requiring prior knowledge of advanced database principles.</p>
+<blockquote>
+<p>How does it work?</p>
+</blockquote>
 <p>Package functions create parameterized SQL statements to populate and query a flat file (sqlite) database using inputs such as site names, variables, and date ranges. Interactive features (shiny gadgets) are included to facilitate the use of a controlled vocabulary and represent complex hierarchical site and sampling designs within the database structure.</p>
 <p>This project is just getting started! Get in touch or open an <a href="https://github.com/khondula/rodm2/issues">issue</a> if you have a use case or if you’re interested in collaborating.</p>
 <div id="getting-started" class="section level2">
@@ -85,10 +88,13 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"khondula/rodm2"</span>)</code></pre></div>
 <ul>
-<li>Set up or connect to an sqlite ODM2 database with create_sql() or connect_sqlite()</li>
-<li>Insert metadata about sites, methods, measured variables using <code>db_describe_*()</code> functions</li>
-<li>Optionally, label sites with annotations and describe hierarchical site designs as related features</li>
-<li>Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field</li>
+<li>Set up or connect to an ODM2 database file on your computer with <code><a href="reference/create_sqlite.html">create_sqlite()</a></code> or <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>
+</li>
+<li>Insert metadata about sites, methods, measured variables using <code>db_describe_%METADATA TYPE%()</code> functions</li>
+<li>Optionally, label sites with annotations and describe hierarchical site designs as related features using <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/db_add_relations.html">db_add_relations()</a></code>
+</li>
+<li>Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field using <code>db_insert_results_%RESULT TYPE%()</code>
+</li>
 <li>Query results based on site, variable, and data type (e.g. time series, samples) using <code><a href="reference/db_get_results.html">db_get_results()</a></code>
 </li>
 </ul>
@@ -96,29 +102,29 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="workflow" class="section level2">
 <h2 class="hasAnchor">
 <a href="#workflow" class="anchor"></a>Workflow</h2>
+<p>The basic steps of using rodm2 are:</p>
 <div id="connect" class="section level3">
 <h3 class="hasAnchor">
 <a href="#connect" class="anchor"></a>1. Connect</h3>
 <p>Load rodm2 and create a connection to your database. If you don’t have an existing database, create an empty ODM2 sqlite database and connection using <code><a href="reference/create_sqlite.html">create_sqlite(connect = TRUE)</a></code> or if you are starting from an existing database use <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>. You can view and edit this database using <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a> outside of R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rodm2)
-db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>()</code></pre></div>
+db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite">create_sqlite</a></span>(<span class="dt">connect =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
-<div id="describe" class="section level3">
+<div id="describe-metadata" class="section level3">
 <h3 class="hasAnchor">
-<a href="#describe" class="anchor"></a>2. Describe</h3>
+<a href="#describe-metadata" class="anchor"></a>2. Describe metadata</h3>
 <p>Add information about sites, methods, measured variables, etc. using <code>db_describe_%TABLE%</code> functions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_describe_person.html">db_describe_person</a></span>(<span class="dt">db =</span> db, 
-                          <span class="dt">PersonFirstName =</span> <span class="st">"Wendy"</span>,
-                          <span class="dt">PersonLastName =</span> <span class="st">"Wetland"</span>,
-                          <span class="dt">AffiliationStartDate =</span> <span class="st">"2018-01-01"</span>,
-                          <span class="dt">PrimaryEmail =</span> <span class="st">"wendy 'at' swamps.edu"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw"><a href="reference/db_describe_site.html">db_describe_site</a></span>(db, 
+                 <span class="dt">site_code =</span> <span class="st">"501R1"</span>, 
+                 <span class="dt">sitetypecv =</span> <span class="st">"Site"</span>)
+<span class="co">#&gt; Site 501R1 has been entered into the samplingfeatures table.</span>
 
-<span class="kw"><a href="reference/db_describe_site.html">db_describe_site</a></span>(db, <span class="dt">site_code =</span> <span class="st">"501R1"</span>, <span class="dt">sitetypecv =</span> <span class="st">"Site"</span>)
-
-<span class="kw"><a href="reference/db_describe_method.html">db_describe_method</a></span>(db, 
-                          <span class="dt">methodname =</span> <span class="st">"Sonic anemometer"</span>,
-                          <span class="dt">methodcode =</span> <span class="st">"SA"</span>,
-                          <span class="dt">methodtypecv =</span> <span class="st">"dataRetrieval"</span>)</code></pre></div>
+<span class="kw"><a href="reference/db_describe_method.html">db_describe_method</a></span>(db,
+                   <span class="dt">methodname =</span> <span class="st">"Sonic anemometer"</span>, 
+                   <span class="dt">methodcode =</span> <span class="st">"SA"</span>, 
+                   <span class="dt">methodtypecv =</span> <span class="st">"dataRetrieval"</span>)
+<span class="co">#&gt; Sonic anemometer has been added to the Methods table.</span></code></pre></div>
 </div>
 <div id="insert-data" class="section level3">
 <h3 class="hasAnchor">
@@ -154,10 +160,10 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <p>Once the <code>vars_list</code> is created, use it in the <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> function to upload data along with its associated metadata</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(db, 
                      <span class="dt">datavalues =</span> ts_data,
-                     <span class="dt">method =</span> <span class="st">"SA"</span>,
+                     <span class="dt">methodcode =</span> <span class="st">"SA"</span>,
                      <span class="dt">site_code =</span> <span class="st">"501R1"</span>,
                      <span class="dt">variables =</span> vars_list,
-                     <span class="dt">sampledmedium =</span> <span class="st">"Air"</span>)
+                     <span class="dt">sampledmedium =</span> <span class="st">"air"</span>)
 <span class="co">#&gt; Warning: Closing open result set, pending rows</span></code></pre></div>
 </div>
 <div id="query" class="section level3">
@@ -168,20 +174,35 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <span class="co">#&gt; Warning: Closing open result set, pending rows</span>
 <span class="kw">str</span>(results_data)
 <span class="co">#&gt; List of 3</span>
-<span class="co">#&gt;  $ Time_series_data:'data.frame':    162 obs. of  6 variables:</span>
-<span class="co">#&gt;   ..$ ValueDateTime      : chr [1:162] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...</span>
-<span class="co">#&gt;   ..$ DataValue          : num [1:162] 170 180 1 1.5 2 2.5 170 180 1 1.5 ...</span>
-<span class="co">#&gt;   ..$ UnitsName          : chr [1:162] "Degree" "Degree" "Meter per Second" "Meter per Second" ...</span>
-<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:162] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...</span>
-<span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:162] "501R1" "501R1" "501R1" "501R1" ...</span>
-<span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:162] "Raw data" "Raw data" "Raw data" "Raw data" ...</span>
+<span class="co">#&gt;  $ Time_series_data:'data.frame':    6 obs. of  6 variables:</span>
+<span class="co">#&gt;   ..$ ValueDateTime      : chr [1:6] "2018-06-27 13:55:00" "2018-06-27 13:45:00" "2018-06-27 13:45:00" "2018-06-27 13:55:00" ...</span>
+<span class="co">#&gt;   ..$ DataValue          : num [1:6] 170 180 1 1.5 2 2.5</span>
+<span class="co">#&gt;   ..$ UnitsName          : chr [1:6] "Degree" "Degree" "Meter per Second" "Meter per Second" ...</span>
+<span class="co">#&gt;   ..$ VariableNameCV     : chr [1:6] "Wind direction" "Wind direction" "Wind speed" "Wind speed" ...</span>
+<span class="co">#&gt;   ..$ SamplingFeatureCode: chr [1:6] "501R1" "501R1" "501R1" "501R1" ...</span>
+<span class="co">#&gt;   ..$ ProcessingLevelCode: chr [1:6] "Raw data" "Raw data" "Raw data" "Raw data" ...</span>
 <span class="co">#&gt;  $ Sample_data     : NULL</span>
 <span class="co">#&gt;  $ Measurement_data: NULL</span></code></pre></div>
 <p>Use list subsetting to get a data frame with time series (ts) results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ts_data &lt;-<span class="st"> </span>results_data[[<span class="st">"Time_series_data"</span>]]
 <span class="co"># OR</span>
-ts_data &lt;-<span class="st"> </span>results_data<span class="op">$</span>Time_series_data</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RSQLite<span class="op">::</span><span class="kw">dbDisconnect</span>(db)</code></pre></div>
+ts_data &lt;-<span class="st"> </span>results_data<span class="op">$</span>Time_series_data
+
+<span class="kw">head</span>(ts_data)
+<span class="co">#&gt;         ValueDateTime DataValue        UnitsName  VariableNameCV</span>
+<span class="co">#&gt; 1 2018-06-27 13:55:00     170.0           Degree  Wind direction</span>
+<span class="co">#&gt; 2 2018-06-27 13:45:00     180.0           Degree  Wind direction</span>
+<span class="co">#&gt; 3 2018-06-27 13:45:00       1.0 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 4 2018-06-27 13:55:00       1.5 Meter per Second      Wind speed</span>
+<span class="co">#&gt; 5 2018-06-27 13:45:00       2.0 Meter per Second Wind gust speed</span>
+<span class="co">#&gt; 6 2018-06-27 13:55:00       2.5 Meter per Second Wind gust speed</span>
+<span class="co">#&gt;   SamplingFeatureCode ProcessingLevelCode</span>
+<span class="co">#&gt; 1               501R1            Raw data</span>
+<span class="co">#&gt; 2               501R1            Raw data</span>
+<span class="co">#&gt; 3               501R1            Raw data</span>
+<span class="co">#&gt; 4               501R1            Raw data</span>
+<span class="co">#&gt; 5               501R1            Raw data</span>
+<span class="co">#&gt; 6               501R1            Raw data</span></code></pre></div>
 </div>
 </div>
 <div id="more-details" class="section level2">

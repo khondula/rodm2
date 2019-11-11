@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insert new annotation — db_annotate • rodm2</title>
+<title>Check that sampled medium term is in cv — check_medium_cv • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Insert new annotation — db_annotate" />
-<meta property="og:description" content="Insert new annotation" />
+<meta property="og:title" content="Check that sampled medium term is in cv — check_medium_cv" />
+<meta property="og:description" content="Check that sampled medium term is in cv" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,65 +98,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Insert new annotation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_annotate.R'><code>R/db_annotate.R</code></a></small>
-    <div class="hidden name"><code>db_annotate.Rd</code></div>
+    <h1>Check that sampled medium term is in cv</h1>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/cv_checkers.R'><code>R/cv_checkers.R</code></a></small>
+    <div class="hidden name"><code>check_medium_cv.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Insert new annotation</p>
+    <p>Check that sampled medium term is in cv</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_annotate</span>(<span class='no'>db</span>, <span class='no'>object</span>, <span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Site group"</span>,
-  <span class='kw'>annotationcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>check_medium_cv</span>(<span class='no'>sampledmedium</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>db</th>
-      <td><p>database connecton object</p></td>
-    </tr>
-    <tr>
-      <th>object</th>
-      <td><p>An existing object in the database to annotate such as a site or specimen code.</p></td>
-    </tr>
-    <tr>
-      <th>annotationtext</th>
-      <td><p>Text of annotation</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>annotation type from <a href='http://vocabulary.odm2.org/annotationtype/'>controlled vocab</a></p></td>
-    </tr>
-    <tr>
-      <th>annotationcode</th>
-      <td><p>annotation codename</p></td>
+      <th>sampledmedium</th>
+      <td><p>medium to check</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TRUE if successful</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function adds an existing annotation to an existing feature in the database
-such as a site code, sampling feature, or action. Once objects are annotated, they can be
-more easily queried as a group based on these labels or tags that are not otherwise
-represented in the database structure.
-Either an annotation code or annotation text must be provided to identify the annotation</p>
+    <p>sampled medium</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='db_describe_annotation.html'>db_describe_annotation</a></span>(<span class='no'>db</span>, <span class='kw'>annotationtypecv</span> <span class='kw'>=</span> <span class='st'>"Site group"</span>, <span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='st'>"Riparian wells"</span>)</div><div class='output co'>#&gt; <span class='message'>Riparian wells has been entered into the Annotations table.</span>
-#&gt; <span class='message'>Use db_annotate to tag items with annotations.</span></div><div class='input'><span class='fu'><a href='db_describe_site.html'>db_describe_site</a></span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"Site 001"</span>)</div><div class='output co'>#&gt; <span class='message'>Site Site 001 has been entered into the samplingfeatures table.</span></div><div class='input'><span class='fu'>db_annotate</span>(<span class='no'>db</span>, <span class='kw'>object</span> <span class='kw'>=</span> <span class='st'>"Site 001"</span>, <span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='st'>"Riparian wells"</span>)</div><div class='output co'>#&gt; <span class='message'>Site 001 has been labeled with annotation text Riparian wells</span></div></pre>
+    <pre class="examples"><div class='input'># medium <- check_medium_cv()
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

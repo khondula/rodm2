@@ -107,7 +107,7 @@
     <p>Insert measurement data values to ODM2 database</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_insert_results_m</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>method</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
+    <pre class="usage"><span class='fu'>db_insert_results_m</span>(<span class='no'>db</span>, <span class='no'>datavalues</span>, <span class='no'>methodcode</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
   <span class='no'>variables</span>, <span class='no'>sampledmedium</span>, <span class='kw'>processinglevel</span> <span class='kw'>=</span> <span class='st'>"Raw data"</span>,
   <span class='kw'>aggregationstatistic</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>time_aggregation_interval</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>1</span>,
   <span class='st'>"Minute"</span>), <span class='kw'>methodtypecv</span> <span class='kw'>=</span> <span class='st'>"Instrument deployment"</span>, <span class='kw'>actionby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -127,7 +127,7 @@
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></td>
     </tr>
     <tr>
-      <th>method</th>
+      <th>methodcode</th>
       <td><p>code for method used to collect data</p></td>
     </tr>
     <tr>
@@ -199,7 +199,7 @@ defaults to "Raw data'.</p></td>
 <span class='st'>"vwc"</span> <span class='kw'>=</span> <span class='fl'>68.3</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='st'>"BB2"</span>)
 
 <span class='fu'>db_insert_results_m</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>datavalues</span> <span class='kw'>=</span> <span class='no'>mrv</span>,
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"soilmoisture"</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
+    <span class='kw'>methodcode</span> <span class='kw'>=</span> <span class='st'>"soilmoisture"</span>, <span class='kw'>site_code_col</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
     <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"Volumetric water content"</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"vwc"</span>,<span class='st'>" Percent"</span>)),
     <span class='kw'>sampledmedium</span> <span class='kw'>=</span> <span class='st'>"Soil"</span>)
 <span class='co'># }</span><div class='input'>
