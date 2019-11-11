@@ -2,7 +2,10 @@
 
 #' Make variables list
 #'
-#' @param data data frame wtih Timestamp column and other data
+#' @param data data frame with columns of data to describe
+#' @param data_colnames
+#' a string vector of column names with data values.
+#' by default all columns except "Timestamp", "Sample", and "Site" if they are included.
 #'
 #' @return nested list for each column in data describing variable name and units
 #' @export
@@ -16,7 +19,12 @@
 #' default the column name will be used as the variable code.
 #' @family interactive helpers
 #' @importFrom shiny renderUI
-
+#' @importFrom glue glue_collapse
+#' @importFrom glue glue
+#' @importFrom glue glue_data
+#' @importFrom dplyr bind_rows
+#'
+#'
 #' @examples
 #' \dontrun{
 #' ts <- data.frame(
@@ -27,9 +35,9 @@
 #' vars_list <- make_vars_list(ts)
 #' }
 #'
-make_vars_list <- function(data) {
+make_vars_list <- function(data, data_colnames = setdiff(names(data), c("Timestamp", "Sample", "Site"))) {
 
-  data_colnames <- setdiff(names(data), "Timestamp")
+  # data_colnames <- setdiff(names(data), c("Timestamp", "Sample", "Site"))
   suppressMessages(variablenamescv <- rodm2::get_cv_terms("variablename", quietly = TRUE))
   suppressMessages(unitscv <- rodm2::get_cv_terms("units", quietly = TRUE))
 
@@ -41,8 +49,8 @@ make_vars_list <- function(data) {
         shiny::uiOutput('selectorsUIcode'),
         shiny::uiOutput('selectorsUIvar'),
         shiny::uiOutput('selectorsUIunits'))
-      ),  shiny::p("code output:"),
-    shiny::verbatimTextOutput('vars_list_code')
+      ),  shiny::p("Code to recreate this output:"),
+    shiny::verbatimTextOutput('vars_list_code_text')
 
     )
 
@@ -82,18 +90,33 @@ make_vars_list <- function(data) {
 
     })
 
-    output$vars_list_code <- shiny::renderText({
-
+    vars_list_code <- shiny::reactive({
       vals <- lapply(1:length(data_colnames), function(i){
         list('column' = data_colnames[i],
              'name' = input[[sprintf('var%sname', i)]],
              'units' = input[[sprintf('var%sunits', i)]])
       })
 
-  paste("vars_list <- list(",
-    sprintf("%s = list(column = %d, name = %d, units = %d)\n",
-            data_colnames, 1, 2, 3),
-    ")", collapse = ",")
+      vars_list_df <- vals %>%
+        lapply(as.data.frame, stringsAsFactors = FALSE) %>%
+        dplyr::bind_rows()
+
+      glue_out <- glue::glue_data(vars_list_df,
+                                  "'{column}' = list(column = '{column}',\n name = '{name}',\n units = '{units}')")
+      glue_out <- glue::glue_collapse(glue_out, sep = ",\n")
+
+      glue::glue("vars_list <- list({glue_out})")
+    })
+
+    output$vars_list_code_text <- shiny::renderText({
+      vars_list_code()
+
+
+
+  # paste("vars_list <- list(",
+  #   sprintf("\'%s\' = list(column = %d, name = %d, units = %d)\n",
+  #           data_colnames, 1, 2, 3),
+  #   ")", collapse = ",")
 
     })
 

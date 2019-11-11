@@ -4,10 +4,14 @@
 \alias{make_vars_list}
 \title{Make variables list}
 \usage{
-make_vars_list(data)
+make_vars_list(data, data_colnames = setdiff(names(data), c("Timestamp",
+  "Sample", "Site")))
 }
 \arguments{
-\item{data}{data frame wtih Timestamp column and other data}
+\item{data}{data frame with columns of data to describe}
+
+\item{data_colnames}{a string vector of column names with data values.
+by default all columns except "Timestamp", "Sample", and "Site" if they are included.}
 }
 \value{
 nested list for each column in data describing variable name and units
