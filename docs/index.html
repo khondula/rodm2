@@ -155,7 +155,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
 <p>The type of data in each column needs to be described in a “variables list” with terms and units from a controlled vocabulary. Create this list for a dataset using a shiny gadget (opens in the Viewer pane of RStudio) with the function <code><a href="reference/make_vars_list.html">make_vars_list()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vars_list &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_vars_list.html">make_vars_list</a></span>(ts_data)</code></pre></div>
 <div class="figure">
-<img src="https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png" alt="vars list shiny gadget"><p class="caption">vars list shiny gadget</p>
+<img src="https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png">
 </div>
 <p>Once the <code>vars_list</code> is created, use it in the <code><a href="reference/db_insert_results_ts.html">db_insert_results_ts()</a></code> function to upload data along with its associated metadata</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/db_insert_results_ts.html">db_insert_results_ts</a></span>(db, 

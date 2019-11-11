@@ -115,7 +115,7 @@ vars_list <- list(
 
 ```
 
-![vars list shiny gadget](https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png)
+![](https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png)
 
 Once the `vars_list` is created, use it in the `db_insert_results_ts()` function to upload data along with its associated metadata
 

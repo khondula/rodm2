@@ -11,7 +11,7 @@ reference:
 - title: Add details
   contents:
   - db_annotate
-  - db_add_relation
+  - db_add_relations
 - title: Insert data
   desc: Add different types of results to the database
   contents:

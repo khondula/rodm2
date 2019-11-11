@@ -82,7 +82,7 @@ The type of data in each column needs to be described in a "variables list" with
 vars_list <- make_vars_list(ts_data)
 ```
 
-![vars list shiny gadget](https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png)
+![](https://raw.githubusercontent.com/khondula/rodm2/master/man/figures/vars-gadget.png)
 
 Once the `vars_list` is created, use it in the `db_insert_results_ts()` function to upload data along with its associated metadata
 
