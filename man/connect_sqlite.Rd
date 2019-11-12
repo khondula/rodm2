@@ -4,7 +4,7 @@
 \alias{connect_sqlite}
 \title{Connect to an existing ODM2 sqlite database}
 \usage{
-connect_sqlite(filename = "odm2", dir = ".")
+connect_sqlite(filename = "odm2.sqlite", dir = ".")
 }
 \arguments{
 \item{filename}{Filename for sqlite database file. Defaults to "odm2"}
@@ -22,5 +22,5 @@ This function returns a database connection object to be used in subsequent inse
 }
 \examples{
 # create_sqlite(filename = "odm2", dir = tempdir())
-# db <- connect_sqlite(filename = "odm2")
+# db <- connect_sqlite(filename = "odm2.sqlite")
 }
