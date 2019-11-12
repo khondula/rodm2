@@ -91,6 +91,9 @@ make_vars_list <- function(data, data_colnames = setdiff(names(data), c("Timesta
     })
 
     vars_list_code <- shiny::reactive({
+
+      # if(exists(input[[sprintf('var%sname', data_colnames[1])]])){
+
       vals <- lapply(1:length(data_colnames), function(i){
         list('column' = data_colnames[i],
              'name' = input[[sprintf('var%sname', i)]],
@@ -102,22 +105,14 @@ make_vars_list <- function(data, data_colnames = setdiff(names(data), c("Timesta
         dplyr::bind_rows()
 
       glue_out <- glue::glue_data(vars_list_df,
-                                  "'{column}' = list(column = '{column}',\n name = '{name}',\n units = '{units}')")
+                                  "'{column}' = list(column = '{column}', name = '{name}', units = '{units}')")
       glue_out <- glue::glue_collapse(glue_out, sep = ",\n")
 
       glue::glue("vars_list <- list({glue_out})")
     })
 
     output$vars_list_code_text <- shiny::renderText({
-      vars_list_code()
-
-
-
-  # paste("vars_list <- list(",
-  #   sprintf("\'%s\' = list(column = %d, name = %d, units = %d)\n",
-  #           data_colnames, 1, 2, 3),
-  #   ")", collapse = ",")
-
+        vars_list_code()
     })
 
     # When the Done button is clicked, return a value
