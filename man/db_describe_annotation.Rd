@@ -4,26 +4,28 @@
 \alias{db_describe_annotation}
 \title{Add a new annotation text}
 \usage{
-db_describe_annotation(db, annotationtypecv, annotationtext = NULL,
-  annotationcode = NULL)
+db_describe_annotation(db, annotationtext = NULL,
+  annotationtypecv = NULL, annotationcode = NULL)
 }
 \arguments{
 \item{db}{database connection object}
 
-\item{annotationtypecv}{annotation type from [controlled vocab](http://vocabulary.odm2.org/annotationtype/)}
+\item{annotationtext}{text string of annotation.}
 
-\item{annotationtext}{text string of annotation}
+\item{annotationtypecv}{annotation type from \href{http://vocabulary.odm2.org/annotationtype/}{controlled vocab}}
 
 \item{annotationcode}{Optional short codename for annotation}
 }
 \value{
-TRUE if successful
+message if successful
 }
 \description{
 Add a new annotation text
 }
 \details{
 Use this function to add new annotations such as the name of a Site group.
+Annotation text is required but if an annotation code is provided then that
+will be used as the annotation text as well.
 }
 \examples{
 #db <- create_sqlite(dir = tempdir())

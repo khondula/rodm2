@@ -51,3 +51,22 @@ connect_sqlite <- function(filename = "odm2.sqlite", dir = "."){
   return(conn_obj)
 }
 
+#' Disconnect from connect ODM2 sqlite database
+#'
+#' @param db database connection object
+#'
+#' @details This function is a simple wrapper around dbDisconnect
+#' @return A message about how to reconnect
+#' @export
+#'
+#' @examples
+#' db <- create_sqlite(filename = "odm2.sqlite", dir = tempdir(), connect = TRUE)
+#' disconnect_sqlite(db)
+#'
+disconnect_sqlite <- function(db = db){
+  db_filename <- basename(db@dbname)
+  DBI::dbDisconnect(db)
+
+  message(glue::glue("Database connection closed.\nReconnect using connect_sqlite(\"{db_filename}\") or create a new database with create_sqlite()."))
+}
+

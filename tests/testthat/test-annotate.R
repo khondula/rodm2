@@ -3,7 +3,7 @@ test_that("db_annotate adds site group", {
   myannotationtext = "test site group"
   mysitecode = "testsite"
 
-  suppressMessages(db_describe_annotation(db, "Site group", myannotationtext))
+  suppressMessages(db_describe_annotation(db, annotationtext = myannotationtext, annotationtypecv = "Site group"))
   suppressMessages(db_describe_site(db, site_code = mysitecode))
 
   suppressMessages(db_annotate(db,
@@ -18,6 +18,7 @@ test_that("db_annotate adds site group", {
                                   WHERE sf.SamplingFeatureCode = :x
                                   AND ann.annotationtext = :y",
                                   params=list(x=mysitecode, y = myannotationtext))
+  DBI::dbDisconnect(db)
 
   expect_true(all(myannotationtext %in% bridge_query[["AnnotationText"]],
                   mysitecode %in% bridge_query[["SamplingFeatureCode"]]))
