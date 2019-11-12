@@ -1,13 +1,16 @@
 #' Add a new annotation text
 #'
-#' @param annotationtypecv annotation type from [controlled vocab](http://vocabulary.odm2.org/annotationtype/)
-#' @param annotationtext text string of annotation
 #' @param db database connection object
+#' @param annotationtext text string of annotation.
+#' @param annotationtypecv annotation type from \href{http://vocabulary.odm2.org/annotationtype/}{controlled vocab}
 #' @param annotationcode Optional short codename for annotation
 #'
-#' @return TRUE if successful
+#' @return message if successful
 #' @export
-#' @details Use this function to add new annotations such as the name of a Site group.
+#' @details
+#' Use this function to add new annotations such as the name of a Site group.
+#' Annotation text is required but if an annotation code is provided then that
+#' will be used as the annotation text as well.
 #'
 #' @family describe functions
 #' @examples
@@ -16,8 +19,8 @@
 #' #db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
 #'
 db_describe_annotation <- function(db,
-                                  annotationtypecv,
                                   annotationtext = NULL,
+                                  annotationtypecv = NULL,
                                   annotationcode = NULL){
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
@@ -49,7 +52,7 @@ db_describe_annotation <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     all_notetypes <- suppressMessages(get_cv_terms("annotationtype", quietly = TRUE))
-    while(!annotationtypecv %in% all_notetypes){
+    if(any(is.null(annotationtypecv), !annotationtypecv %in% all_notetypes)){
       selection_id <- suppressMessages(menu(choices = all_notetypes,
                                             graphics = FALSE,
                                             title = paste("Please select annotation type from CV or type 0 to quit")))

@@ -44,29 +44,40 @@ db_annotate <- function(db,
     annotationtext <- readline("Please supply annotation text: ")
   }
 
-  all_notes <- RSQLite::dbGetQuery(db, "SELECT annotationtext from annotations")[[1]]
-  while(!annotationtext %in% all_notes){
-    selection_id <- suppressMessages(menu(choices = all_notes,
-                                          graphics = FALSE,
-                                          title = paste("Please select annotations in database or type 0 to quit")))
-    annotationtext <- all_notes[selection_id]
-    if(selection_id == 0){stop("See existing annotations using db_get_annotations() or add with db_describe_annotation()")}
-  }
-
   sf_annotation_types <- c("Site group", "Sampling feature annotation",
                            "Site annotation", "Specimen annotation",
                            "Specimen group")
 
   while(!type %in% sf_annotation_types){
     type_id <- suppressMessages(menu(choices = sf_annotation_types, graphics = FALSE,
-                                             title = paste("Please select type from CV")))
+                                     title = paste("Please select note type from CV or type 0 to quit")))
+    if (type_id == 0) {stop("See existing annotations using db_get_annotations()")}
     type <- sf_annotation_types[type_id]
   }
 
+  # if annotation text is in the database, get ID
+  # otherwise add it and ask for annotation type
+  all_notes <- RSQLite::dbGetQuery(db, "SELECT annotationtext from annotations")[[1]]
+  if(!annotationtext %in% all_notes){
+
+    selection_id <- suppressMessages(menu(choices = c(all_notes, paste("Add", annotationtext,"as new note")),
+                                          graphics = FALSE,
+                                          title = paste("Please select annotations in database or type 0 to quit")))
+
+    if (selection_id == 0) {
+      stop("See existing annotations using db_get_annotations()")
+    } else if (selection_id == length(all_notes)+1) {
+      rodm2::db_describe_annotation(db,
+                                annotationtext = annotationtext,
+                                annotationcode = annotationcode,
+                                annotationtypecv = type)
+    } else {
+    annotationtext <- all_notes[selection_id]
+  }}
+
+
   action_annotation_types <- c("Action annotation", "Action group")
 
-  if (!type %in% sf_annotation_types) {
-    stop("sorry, only sampling feature annotations supported so far")}
 
   # annotation code needs to be not null for sql
   if(is.null(annotationcode)){
