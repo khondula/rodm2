@@ -15,15 +15,15 @@
 db_get_results <- function(db,
                            site_code = NULL,
                            variable_code = NULL,
-                           result_type = c("sample", "ts", "measurement", "profile")){
+                           result_type = c("sample", "ts", "measurement")){
 
   # # Check if db is compatable
-  # if (!class(db) %in% c("SQLiteConnection")) {
-  #   stop("sorry, only sqlite database connections are supported so far")}
+  if (!class(db) %in% c("SQLiteConnection")) {
+    stop("sorry, only sqlite database connections are supported so far")}
 
 
   if("profile" %in% result_type){
-    stop("to be implemented after lunch")
+    stop("profile result type not supported yet")
   }
 
   # if site code is provided, check to make sure it is in the database
@@ -32,7 +32,7 @@ db_get_results <- function(db,
   }
   # if variable code is provided, check to make sure it is in the database
   if (!is.null(variable_code) & any(!variable_code %in% rodm2::db_get_variables(db))) {
-    stop("provided variable_code not in database. Check variable names with db_get_variables")
+    stop("provided variable_code not in database. Try get_variable_codes()")
   }
   # if site code is not provided, assume data for all sites
   if(is.null(site_code)) {
