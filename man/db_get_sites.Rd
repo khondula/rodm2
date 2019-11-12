@@ -2,7 +2,7 @@
 % Please edit documentation in R/db_describe_site.R
 \name{db_get_sites}
 \alias{db_get_sites}
-\title{Get list of site codes currently in database}
+\title{Get list of sampling feature codes currently in database}
 \usage{
 db_get_sites(db)
 }
@@ -10,10 +10,10 @@ db_get_sites(db)
 \item{db}{database connection object}
 }
 \value{
-the current values in the samplingfeaturecode column
+Sampling feature codes for everything that is not sampling feature type 'Specimen'
 }
 \description{
-Get list of site codes currently in database
+Get list of sampling feature codes currently in database
 }
 \examples{
 #db_get_sites(db)

@@ -4,7 +4,8 @@
 #' @param site_code unique short code name (required)
 #' @param site_name optional longer site name
 #' @param site_description optional longer site description
-#' @param sitetypecv samplingfeature type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"
+#' @param sitetypecv samplingfeature type from
+#'  \href{http://vocabulary.odm2.org/samplingfeaturetype/}{controlled vocab}, defaults to "Site"
 #'
 #' @return message that site was added
 #' @export
@@ -91,11 +92,11 @@ db_describe_site <- function(db, site_code, sitetypecv = 'Site',
 
 
 
-#' Get list of site codes currently in database
+#' Get list of sampling feature codes currently in database
 #'
 #' @param db database connection object
 #'
-#' @return the current values in the samplingfeaturecode column
+#' @return Sampling feature codes for everything that is not sampling feature type 'Specimen'
 #' @export
 #'
 #' @examples
@@ -106,12 +107,12 @@ db_get_sites <- function(db){
   current_sites <- c()
   if (class(db) == "SQLiteConnection"){
     current_sites <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures
-                                     WHERE samplingfeaturetypecv = 'Site'")[[1]]
+                                     WHERE samplingfeaturetypecv != 'Specimen'")[[1]]
     # RSQLite::dbClearResult()
   }
   if (class(db) == "PostgreSQLConnection"){
     current_sites <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures
-                                     WHERE samplingfeaturetypecv = 'Site'")[[1]]
+                                     WHERE samplingfeaturetypecv != 'Specimen'")[[1]]
   }
   return(current_sites)
 }
