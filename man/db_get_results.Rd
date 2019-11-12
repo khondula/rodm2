@@ -5,7 +5,7 @@
 \title{Query result data}
 \usage{
 db_get_results(db, site_code = NULL, variable_code = NULL,
-  result_type = c("sample", "ts", "measurement", "profile"))
+  result_type = c("sample", "ts", "measurement"))
 }
 \arguments{
 \item{db}{database connection object}
