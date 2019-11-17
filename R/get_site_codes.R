@@ -52,20 +52,23 @@ get_site_codes <- function(db){
   parent_nodes <- unique(current_site_network[["PARENT"]])
 
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Identify site codes that meet any of the following conditions:"),
+    miniUI::gadgetTitleBar("Find site codes that meet any of the following conditions:"),
+
     miniUI::miniContentPanel(
       # Define layout, inputs, outputs
       # shiny::p("Selected site codes:"),
-      shiny::fillPage(
-        # shiny::textOutput('selected_vars'),
+      shiny::fillRow(
         shiny::uiOutput('selectorsUI_types'),
         shiny::uiOutput('selectorsUI_groups'),
+        shiny::fillPage(
+        shiny::div(style="width: 150px;",style = "font-size: 10px;",
         shiny::selectizeInput(inputId = "selected_parents",
-                              label = "Select subsites from:",
+                              label = list(shiny::icon('sitemap'),
+                                           "Select subsites from:"),
                               choices = parent_nodes,
-                              multiple = TRUE),
-        shiny::uiOutput('selectorsUI_network'))
-    ))
+                              multiple = TRUE)),
+        shiny::uiOutput('selectorsUI_network')))
+  ))
 
   server <- function(input, output, session) {
     # Define reactive expressions, outputs, etc.
@@ -76,41 +79,46 @@ get_site_codes <- function(db){
                       v = input[['selected_parents']], mode = c( "in"))
       child_codes <- purrr::map(child_nodes, ~names(.x)) %>% unlist()
       child_codes <- unique(child_codes)
+      shiny::div(style="width: 150px;",style = "font-size: 10px;",
       shiny::selectizeInput(inputId = "selected_children",
-                            label = "Select subsites:",
+                            label = list(shiny::icon('sitemap'),
+                                         "Select subsites:"),
                             choices = child_codes,
-                            multiple = TRUE)
+                            multiple = TRUE))
     })
 
-    output$selectorsUI_types <- shiny::renderUI({
 
+    output$selectorsUI_types <- shiny::renderUI({
       lapply(1:n_sitetypes, function(i){
+        shiny::div(style="width: 150px;",style = "font-size: 10px;",
         shiny::selectizeInput(inputId = sprintf("var%scode",i),
-                              sprintf('Site type: %s', site_types_used[i]),
+                              label = list(shiny::icon('flag'),
+                                           sprintf('Site type: %s', site_types_used[i])),
             choices = dplyr::filter(current_sites,
                       SamplingFeatureTypeCV == site_types_used[i])[["SamplingFeatureCode"]],
-            multiple = TRUE)
+            multiple = TRUE))
       })
-
     })
 
     output$selectorsUI_groups <- shiny::renderUI({
 
       lapply(1:n_annotations, function(i){
+        shiny::div(style="width: 150px;",style = "font-size: 10px;",
         shiny::selectizeInput(inputId = sprintf("var%sgroup",i),
-                              label = sprintf('Site group: %s', annotationtext_used[i]),
+                              label = list(shiny::icon('tags'),
+                                sprintf('Site group: %s', annotationtext_used[i])),
                               choices = dplyr::filter(current_site_annotations,
                                                       AnnotationText == annotationtext_used[i])[["SamplingFeatureCode"]],
-                              multiple = TRUE)
+                              multiple = TRUE))
       })
 
     })
 
-    output$selected_vars <- shiny::renderText({
-      unlist(lapply(1:n_sitetypes, function(i){
-        input[[sprintf("var%scode", i)]]
-      }))
-    }, sep = ", ")
+    # output$selected_vars <- shiny::renderText({
+    #   unlist(lapply(1:n_sitetypes, function(i){
+    #     input[[sprintf("var%scode", i)]]
+    #   }))
+    # }, sep = ", ")
 
     # When the Done button is clicked, return a value
     shiny::observeEvent(input$done, {

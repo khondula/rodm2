@@ -27,7 +27,8 @@ Imports:
     miniUI,
     shiny,
     utils,
-    glue
+    glue,
+    igraph
 RoxygenNote: 6.1.1
 URL: https://github.com/khondula/rodm2
 BugReports: https://github.com/khondula/rodm2/issues

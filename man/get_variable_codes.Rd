@@ -20,6 +20,7 @@ Shiny gadget to get variable codes of interest
 
 }
 \seealso{
-Other interactive helpers: \code{\link{make_vars_list}}
+Other interactive helpers: \code{\link{get_site_codes}},
+  \code{\link{make_vars_list}}
 }
 \concept{interactive helpers}

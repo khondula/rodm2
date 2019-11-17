@@ -41,6 +41,7 @@ vars_list <- make_vars_list(ts)
 
 }
 \seealso{
-Other interactive helpers: \code{\link{get_variable_codes}}
+Other interactive helpers: \code{\link{get_site_codes}},
+  \code{\link{get_variable_codes}}
 }
 \concept{interactive helpers}
