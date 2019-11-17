@@ -11,9 +11,12 @@
 #' @family describe functions
 
 #' @examples
-#' \dontrun{
-#' db_describe_method("new method", "new", "Field Activity", "doing stuf")
-#' }
+#' db <- create_sqlite(connect = TRUE)
+#'
+#' db_describe_method(db,
+#' methodname = "new method",
+#' methodcode = "method1",
+#' methodtypecv =  "fieldActivity")
 db_describe_method <- function(db,
                                methodname,
                                methodcode,
@@ -32,7 +35,7 @@ db_describe_method <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     # methodtype in CV
-    methodtypecv <- check_methodtype_cv(methodtypecv)
+    methodtypecv <- check_methodtype_cv(db = db, methodtypecv)
 
     sql1 <- RSQLite::dbSendStatement(db,
               'INSERT INTO methods
@@ -89,7 +92,14 @@ db_describe_method <- function(db,
 #' @export
 #'
 #' @examples
-#' #db_get_methods(db)
+#' db <- create_sqlite(connect = TRUE)
+#'
+#' db_describe_method(db,
+#' methodname = "new method",
+#' methodcode = "method1",
+#' methodtypecv =  "fieldActivity")
+#'
+#' db_get_methods(db)
 db_get_methods <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}

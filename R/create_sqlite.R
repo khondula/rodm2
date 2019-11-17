@@ -11,24 +11,26 @@
 #' @export
 #'
 #' @examples
-#' # create_sqlite()
-#' # db <- connect_sqlite()
+#' db <- create_sqlite(dir = tempdir(), connect = TRUE)
+#'
 
 create_sqlite <- function(dir = ".", filename = "odm2.sqlite", connect = FALSE){
+
   path <- file.path(dir)
 
-  # if(file.exists(file.path(dir, paste0(filename, ".sqlite")))){
-  #   message("File already exists. Use connect_sqlite() to connect to existing sqlite database.")
-  # }
+  template_file <- system.file("odm2-template.sqlite",
+                               package = "rodm2")
 
-  template_file <- system.file("odm2-template.sqlite", package = "rodm2")
   file.copy(template_file, path)
-  file.rename(file.path(dir, "odm2-template.sqlite"), file.path(dir, filename))
+  file.rename(file.path(dir, "odm2-template.sqlite"),
+              file.path(dir, filename))
+
   invisible(template_file)
+
   if(connect){
     return(DBI::dbConnect(RSQLite::SQLite(),
                           dbname = file.path(dir, filename)))
-}
+    }
 }
 
 #' Connect to an existing ODM2 sqlite database
@@ -41,8 +43,9 @@ create_sqlite <- function(dir = ".", filename = "odm2.sqlite", connect = FALSE){
 #' @export
 #'
 #' @examples
-#' # create_sqlite(filename = "odm2", dir = tempdir())
-#' # db <- connect_sqlite(filename = "odm2.sqlite")
+#' create_sqlite(dir = tempdir())
+#' db <- connect_sqlite(filename = "odm2.sqlite")
+#'
 connect_sqlite <- function(filename = "odm2.sqlite", dir = "."){
 
   path <- file.path(dir, filename)
@@ -60,7 +63,7 @@ connect_sqlite <- function(filename = "odm2.sqlite", dir = "."){
 #' @export
 #'
 #' @examples
-#' db <- create_sqlite(filename = "odm2.sqlite", dir = tempdir(), connect = TRUE)
+#' db <- create_sqlite(dir = tempdir(), connect = TRUE)
 #' disconnect_sqlite(db)
 #'
 disconnect_sqlite <- function(db = db){

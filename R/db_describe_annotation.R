@@ -14,9 +14,16 @@
 #'
 #' @family describe functions
 #' @examples
-#' #db <- create_sqlite(dir = tempdir())
-#' #db_describe_annotaion(db, "Site group", "Riparian wells")
-#' #db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
+#' db <- create_sqlite(connect = TRUE)
+#'
+#' db_describe_annotation(db,
+#' annotationtext = "Riparian wells",
+#' annotationtypecv = "Site group")
+#'
+#' db_describe_annotation(db,
+#' annotationtext = "January sampling campaign",
+#' annotationtypecv = "Specimen group",
+#' annotationcode = "Jan")
 #'
 db_describe_annotation <- function(db,
                                   annotationtext = NULL,
@@ -97,7 +104,13 @@ db_describe_annotation <- function(db,
 #' @export
 #'
 #' @examples
-#' #db_get_annotations(db)
+#' db <- create_sqlite(connect = TRUE)
+#'
+#' db_describe_annotation(db,
+#' annotationtext = "Riparian wells",
+#' annotationtypecv = "Site group")
+#'
+#' db_get_annotations(db)
 db_get_annotations <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
