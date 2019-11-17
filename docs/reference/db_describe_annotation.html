@@ -107,8 +107,8 @@
     <p>Add a new annotation text</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_describe_annotation</span>(<span class='no'>db</span>, <span class='no'>annotationtypecv</span>, <span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>annotationcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>db_describe_annotation</span>(<span class='no'>db</span>, <span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>annotationtypecv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>annotationcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -118,12 +118,12 @@
       <td><p>database connection object</p></td>
     </tr>
     <tr>
-      <th>annotationtypecv</th>
-      <td><p>annotation type from [controlled vocab](http://vocabulary.odm2.org/annotationtype/)</p></td>
+      <th>annotationtext</th>
+      <td><p>text string of annotation.</p></td>
     </tr>
     <tr>
-      <th>annotationtext</th>
-      <td><p>text string of annotation</p></td>
+      <th>annotationtypecv</th>
+      <td><p>annotation type from <a href='http://vocabulary.odm2.org/annotationtype/'>controlled vocab</a></p></td>
     </tr>
     <tr>
       <th>annotationcode</th>
@@ -133,10 +133,12 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TRUE if successful</p>
+    <p>message if successful</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Use this function to add new annotations such as the name of a Site group.</p>
+    <p>Use this function to add new annotations such as the name of a Site group.
+Annotation text is required but if an annotation code is provided then that
+will be used as the annotation text as well.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other describe functions: <code><a href='db_describe_equipment.html'>db_describe_equipment</a></code>,
@@ -147,10 +149,17 @@
   <code><a href='db_describe_variable.html'>db_describe_variable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>#db <- create_sqlite(dir = tempdir())
-#db_describe_annotaion(db, "Site group", "Riparian wells")
-#db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
+<span class='fu'>db_describe_annotation</span>(<span class='no'>db</span>,
+<span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='st'>"Riparian wells"</span>,
+<span class='kw'>annotationtypecv</span> <span class='kw'>=</span> <span class='st'>"Site group"</span>)</div><div class='output co'>#&gt; <span class='message'>Riparian wells has been entered into the Annotations table.</span>
+#&gt; <span class='message'>Use db_annotate to tag items with annotations.</span></div><div class='input'>
+<span class='fu'>db_describe_annotation</span>(<span class='no'>db</span>,
+<span class='kw'>annotationtext</span> <span class='kw'>=</span> <span class='st'>"January sampling campaign"</span>,
+<span class='kw'>annotationtypecv</span> <span class='kw'>=</span> <span class='st'>"Specimen group"</span>,
+<span class='kw'>annotationcode</span> <span class='kw'>=</span> <span class='st'>"Jan"</span>)</div><div class='output co'>#&gt; <span class='message'>January sampling campaign has been entered into the Annotations table.</span>
+#&gt; <span class='message'>Use db_annotate to tag items with annotations.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

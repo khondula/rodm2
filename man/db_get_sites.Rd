@@ -16,5 +16,8 @@ Sampling feature codes for everything that is not sampling feature type 'Specime
 Get list of sampling feature codes currently in database
 }
 \examples{
-#db_get_sites(db)
+db <- create_sqlite(connect = TRUE)
+db_describe_site(db, site_code = "site1")
+db_get_sites(db)
+
 }

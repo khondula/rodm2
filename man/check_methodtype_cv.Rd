@@ -4,9 +4,11 @@
 \alias{check_methodtype_cv}
 \title{Check that method type is in cv}
 \usage{
-check_methodtype_cv(methodtypecv)
+check_methodtype_cv(db, methodtypecv)
 }
 \arguments{
+\item{db}{database connection}
+
 \item{methodtypecv}{method type to check}
 }
 \value{

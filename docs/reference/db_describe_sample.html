@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get list of sample codes currently in database — db_get_samples • rodm2</title>
+<title>Add details about a new sample — db_describe_sample • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Get list of sample codes currently in database — db_get_samples" />
-<meta property="og:description" content="Get list of sample codes currently in database" />
+<meta property="og:title" content="Add details about a new sample — db_describe_sample" />
+<meta property="og:description" content="Add details about a new sample" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,33 +98,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get list of sample codes currently in database</h1>
+    <h1>Add details about a new sample</h1>
     <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/db_describe_sample.R'><code>R/db_describe_sample.R</code></a></small>
-    <div class="hidden name"><code>db_get_samples.Rd</code></div>
+    <div class="hidden name"><code>db_describe_sample.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get list of sample codes currently in database</p>
+    <p>Add details about a new sample</p>
     </div>
 
-    <pre class="usage"><span class='fu'>db_get_samples</span>(<span class='no'>db</span>)</pre>
+    <pre class="usage"><span class='fu'>db_describe_sample</span>(<span class='no'>db</span>, <span class='no'>sample_code</span>, <span class='no'>site_code</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>db</th>
-      <td><p>database connection object</p></td>
+      <td><p>database connection</p></td>
+    </tr>
+    <tr>
+      <th>sample_code</th>
+      <td><p>sampling feature code for sample</p></td>
+    </tr>
+    <tr>
+      <th>site_code</th>
+      <td><p>sampling feature code for where sample was collected from</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the current values in the samplingfeaturecode column</p>
+    <p>message that sample was added to sampling feature table</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='db_describe_site.html'>db_describe_site</a></span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"site1"</span>)</div><div class='output co'>#&gt; <span class='message'>Site site1 has been entered into the samplingfeatures table.</span></div><div class='input'><span class='fu'><a href='db_describe_sample.html'>db_describe_sample</a></span>(<span class='no'>db</span>, <span class='kw'>sample_code</span> <span class='kw'>=</span> <span class='st'>"samp01"</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"site1"</span>)</div><div class='output co'>#&gt; <span class='message'>Sample samp01 has been entered into the samplingfeatures table.</span></div><div class='input'><span class='fu'>db_get_samples</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] "samp01"</div><div class='input'>
+    <pre class="examples"><div class='input'>
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='db_describe_site.html'>db_describe_site</a></span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"site1"</span>)</div><div class='output co'>#&gt; <span class='message'>Site site1 has been entered into the samplingfeatures table.</span></div><div class='input'>
+<span class='fu'>db_describe_sample</span>(<span class='no'>db</span>,
+<span class='kw'>sample_code</span> <span class='kw'>=</span> <span class='st'>"sample001"</span>,
+<span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"site1"</span>)</div><div class='output co'>#&gt; <span class='message'>Sample sample001 has been entered into the samplingfeatures table.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

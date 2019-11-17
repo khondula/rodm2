@@ -25,9 +25,12 @@ TRUE if successful
 Describe a new method
 }
 \examples{
-\dontrun{
-db_describe_method("new method", "new", "Field Activity", "doing stuf")
-}
+db <- create_sqlite(connect = TRUE)
+
+db_describe_method(db,
+methodname = "new method",
+methodcode = "method1",
+methodtypecv =  "fieldActivity")
 }
 \seealso{
 Other describe functions: \code{\link{db_describe_annotation}},

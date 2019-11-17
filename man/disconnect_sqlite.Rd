@@ -19,7 +19,7 @@ Disconnect from connect ODM2 sqlite database
 This function is a simple wrapper around dbDisconnect
 }
 \examples{
-db <- create_sqlite(filename = "odm2.sqlite", dir = tempdir(), connect = TRUE)
+db <- create_sqlite(dir = tempdir(), connect = TRUE)
 disconnect_sqlite(db)
 
 }

@@ -148,9 +148,12 @@
   <code><a href='db_describe_variable.html'>db_describe_variable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>db_describe_method</span>(<span class='st'>"new method"</span>, <span class='st'>"new"</span>, <span class='st'>"Field Activity"</span>, <span class='st'>"doing stuf"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>db_describe_method</span>(<span class='no'>db</span>,
+<span class='kw'>methodname</span> <span class='kw'>=</span> <span class='st'>"new method"</span>,
+<span class='kw'>methodcode</span> <span class='kw'>=</span> <span class='st'>"method1"</span>,
+<span class='kw'>methodtypecv</span> <span class='kw'>=</span>  <span class='st'>"fieldActivity"</span>)</div><div class='output co'>#&gt; <span class='message'>new method has been added to the Methods table.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -123,8 +123,13 @@
     <p>the current values in the methodname column of the methods table</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>#db_get_methods(db)
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'><a href='db_describe_method.html'>db_describe_method</a></span>(<span class='no'>db</span>,
+<span class='kw'>methodname</span> <span class='kw'>=</span> <span class='st'>"new method"</span>,
+<span class='kw'>methodcode</span> <span class='kw'>=</span> <span class='st'>"method1"</span>,
+<span class='kw'>methodtypecv</span> <span class='kw'>=</span>  <span class='st'>"fieldActivity"</span>)</div><div class='output co'>#&gt; <span class='message'>new method has been added to the Methods table.</span></div><div class='input'>
+<span class='fu'>db_get_methods</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] "method1"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

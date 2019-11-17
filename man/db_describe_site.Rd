@@ -26,9 +26,8 @@ message that site was added
 Describe a new site
 }
 \examples{
-# just add site name
-#db <- rodm2::connect_sqlite()
-#db_describe_site(db, site_code = "new_site")
+db <- create_sqlite(connect = TRUE)
+db_describe_site(db, site_code = "site1")
 }
 \seealso{
 Other describe functions: \code{\link{db_describe_annotation}},

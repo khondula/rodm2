@@ -90,7 +90,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <li>Set up or connect to an ODM2 database file on your computer with <code><a href="reference/create_sqlite.html">create_sqlite()</a></code> or <code><a href="reference/connect_sqlite.html">connect_sqlite()</a></code>
 </li>
 <li>Insert metadata about sites, methods, measured variables using <code>db_describe_%METADATA TYPE%()</code> functions</li>
-<li>Optionally, label sites with annotations and describe hierarchical site designs as related features using <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/db_add_relations.html">db_add_relations()</a></code>
+<li>Optionally, label sites with annotations and describe hierarchical site designs as related features using <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/pipe.html">db_add_relations()</a></code>
 </li>
 <li>Insert data from time series, in situ point or profile measurements, or ex situ data from samples collected in the field using <code>db_insert_results_%RESULT TYPE%()</code>
 </li>
@@ -124,7 +124,7 @@ db &lt;-<span class="st"> </span>rodm2<span class="op">::</span><span class="kw"
                    <span class="dt">methodcode =</span> <span class="st">"SA"</span>, 
                    <span class="dt">methodtypecv =</span> <span class="st">"dataRetrieval"</span>)
 <span class="co">#&gt; Sonic anemometer has been added to the Methods table.</span></code></pre></div>
-<p>Optionally, use annotations and relationships with <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/db_add_relations.html">db_add_relations()</a></code> to label site groups and represent sampling designs.</p>
+<p>Optionally, use annotations and relationships with <code><a href="reference/db_annotate.html">db_annotate()</a></code> and <code><a href="reference/pipe.html">db_add_relations()</a></code> to label site groups and represent sampling designs.</p>
 </div>
 <div id="insert-data" class="section level3">
 <h3 class="hasAnchor">

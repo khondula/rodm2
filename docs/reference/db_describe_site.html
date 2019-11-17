@@ -123,7 +123,8 @@
     </tr>
     <tr>
       <th>sitetypecv</th>
-      <td><p>samplingfeature type from [controlled vocab](http://vocabulary.odm2.org/samplingfeaturetype/) such as "Site" or "Weather station"</p></td>
+      <td><p>samplingfeature type from
+<a href='http://vocabulary.odm2.org/samplingfeaturetype/'>controlled vocab</a>, defaults to "Site"</p></td>
     </tr>
     <tr>
       <th>site_name</th>
@@ -148,10 +149,8 @@
   <code><a href='db_describe_variable.html'>db_describe_variable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># just add site name
-#db <- rodm2::connect_sqlite()
-#db_describe_site(db, site_code = "new_site")
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_sqlite.html'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>db_describe_site</span>(<span class='no'>db</span>, <span class='kw'>site_code</span> <span class='kw'>=</span> <span class='st'>"site1"</span>)</div><div class='output co'>#&gt; <span class='message'>Site site1 has been entered into the samplingfeatures table.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

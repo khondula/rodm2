@@ -4,9 +4,11 @@
 \alias{check_medium_cv}
 \title{Check that sampled medium term is in cv}
 \usage{
-check_medium_cv(sampledmedium)
+check_medium_cv(db, sampledmedium)
 }
 \arguments{
+\item{db}{database connection}
+
 \item{sampledmedium}{medium to check}
 }
 \value{

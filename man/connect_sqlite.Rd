@@ -21,6 +21,7 @@ Connect to an existing ODM2 sqlite database
 This function returns a database connection object to be used in subsequent inserts and queries.
 }
 \examples{
-# create_sqlite(filename = "odm2", dir = tempdir())
-# db <- connect_sqlite(filename = "odm2.sqlite")
+create_sqlite(dir = tempdir())
+db <- connect_sqlite(filename = "odm2.sqlite")
+
 }

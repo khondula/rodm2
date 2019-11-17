@@ -28,9 +28,16 @@ Annotation text is required but if an annotation code is provided then that
 will be used as the annotation text as well.
 }
 \examples{
-#db <- create_sqlite(dir = tempdir())
-#db_describe_annotaion(db, "Site group", "Riparian wells")
-#db_describe_annotaion(db, "Specimen group", "January sampling campaign", annotationcode = "Jan")
+db <- create_sqlite(connect = TRUE)
+
+db_describe_annotation(db,
+annotationtext = "Riparian wells",
+annotationtypecv = "Site group")
+
+db_describe_annotation(db,
+annotationtext = "January sampling campaign",
+annotationtypecv = "Specimen group",
+annotationcode = "Jan")
 
 }
 \seealso{

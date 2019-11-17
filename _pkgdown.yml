@@ -4,6 +4,7 @@ reference:
   contents:
   - create_sqlite
   - connect_sqlite
+  - disconnect_sqlite
 - title: Describe functions
   desc: Add descriptive metadata about sites, methods, variables, etc.
   contents:
@@ -19,10 +20,11 @@ reference:
 - title: Get data
   desc: Query results in the database
   contents:
-  - db_get_results
+  - starts_with("db_get")
 - title: Helpers
   contents:
   - make_vars_list
+  - get_site_codes
   - get_variable_codes
   - get_cv_terms
 

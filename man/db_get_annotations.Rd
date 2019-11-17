@@ -16,5 +16,11 @@ a dataframe with the current values in the annotation code and annotation text c
 Get list of annotations currently in database
 }
 \examples{
-#db_get_annotations(db)
+db <- create_sqlite(connect = TRUE)
+
+db_describe_annotation(db,
+annotationtext = "Riparian wells",
+annotationtypecv = "Site group")
+
+db_get_annotations(db)
 }

@@ -16,5 +16,12 @@ the current values in the methodname column of the methods table
 Get list of methods currently in database
 }
 \examples{
-#db_get_methods(db)
+db <- create_sqlite(connect = TRUE)
+
+db_describe_method(db,
+methodname = "new method",
+methodcode = "method1",
+methodtypecv =  "fieldActivity")
+
+db_get_methods(db)
 }
