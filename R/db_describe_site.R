@@ -12,11 +12,13 @@
 #' @family describe functions
 
 #' @examples
-#' # just add site name
-#' #db <- rodm2::connect_sqlite()
-#' #db_describe_site(db, site_code = "new_site")
-db_describe_site <- function(db, site_code, sitetypecv = 'Site',
-                             site_name = NULL, site_description = NULL){
+#' db <- create_sqlite(connect = TRUE)
+#' db_describe_site(db, site_code = "site1")
+db_describe_site <- function(db,
+                             site_code,
+                             sitetypecv = 'Site',
+                             site_name = NULL,
+                             site_description = NULL){
 
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
@@ -51,7 +53,7 @@ db_describe_site <- function(db, site_code, sitetypecv = 'Site',
                                          samplingfeaturecode = site_code))
       RSQLite::dbClearResult(res = sql3)
     }
-    message(paste("Site", site_code, "has been entered into the samplingfeatures table."))
+    message(glue::glue("Site {site_code} has been entered into the samplingfeatures table."))
   }
 
   # check type of database object
@@ -100,7 +102,10 @@ db_describe_site <- function(db, site_code, sitetypecv = 'Site',
 #' @export
 #'
 #' @examples
-#' #db_get_sites(db)
+#' db <- create_sqlite(connect = TRUE)
+#' db_describe_site(db, site_code = "site1")
+#' db_get_sites(db)
+#'
 db_get_sites <- function(db){
   if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
     stop("sorry, only sqlite and postgresql database connections are supported so far")}
@@ -115,30 +120,5 @@ db_get_sites <- function(db){
                                      WHERE samplingfeaturetypecv != 'Specimen'")[[1]]
   }
   return(current_sites)
-}
-
-#' Get list of sample codes currently in database
-#'
-#' @param db database connection object
-#'
-#' @return the current values in the samplingfeaturecode column
-#' @export
-#'
-#' @examples
-#' #db_get_samples(db)
-db_get_samples <- function(db){
-  if (!class(db) %in% c("SQLiteConnection", "PostgreSQLConnection")) {
-    stop("sorry, only sqlite and postgresql database connections are supported so far")}
-  current_samples <- c()
-  if (class(db) == "SQLiteConnection"){
-    current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM samplingfeatures
-                                     WHERE samplingfeaturetypecv = 'Specimen'")[[1]]
-    # RSQLite::dbClearResult()
-  }
-  if (class(db) == "PostgreSQLConnection"){
-    current_samples <- DBI::dbGetQuery(db, "SELECT samplingfeaturecode FROM odm2.samplingfeatures
-                                     WHERE samplingfeaturetypecv = 'Specimen'")[[1]]
-  }
-  return(current_samples)
 }
 
