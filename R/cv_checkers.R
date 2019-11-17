@@ -3,12 +3,13 @@
 #' Check that sampled medium term is in cv
 #'
 #' @param sampledmedium medium to check
+#' @param db database connection
 #'
 #' @return sampled medium
 #'
 #' @examples
 #' # medium <- check_medium_cv()
-check_medium_cv <- function(sampledmedium){
+check_medium_cv <- function(db, sampledmedium){
   all_mediums <- RSQLite::dbGetQuery(db, "SELECT term from cv_medium")[["Term"]]
   if(!sampledmedium %in% all_mediums){
     selection_id <- suppressMessages(utils::menu(choices = all_mediums,
@@ -22,13 +23,15 @@ check_medium_cv <- function(sampledmedium){
 #' Check that method type is in cv
 #'
 #' @param methodtypecv method type to check
-#'
+#' @param db database connection
+
 #' @return method type
 #'
 #' @examples
 #' # methodcode <- check_methodtype_cv()
-check_methodtype_cv <- function(methodtypecv){
-  all_methodtypes <- RSQLite::dbGetQuery(db, "SELECT term from cv_methodtype")[["Term"]]
+check_methodtype_cv <- function(db, methodtypecv){
+  all_methodtypes <- RSQLite::dbGetQuery(db,
+          "SELECT term from cv_methodtype")[["Term"]]
   while(!methodtypecv %in% all_methodtypes){
     methodtypecv_id <- suppressMessages(menu(choices = all_methodtypes,
                                              graphics = FALSE,

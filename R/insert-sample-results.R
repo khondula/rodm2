@@ -81,12 +81,13 @@ db_insert_results_samples <- function(db,
   }
 
   # # make sure all sites in sampling features table
-  # for(site_code in datavalues[[site_code_col]]){
-  #   if(!site_code %in% rodm2::db_get_sites(db)){
-  #     rodm2::db_describe_site(db, site_code)
-  #   }
-  # }
-  # make sure processinglevels in database
+  for(site_code in datavalues[[site_code_col]]){
+    if(!site_code %in% rodm2::db_get_sites(db)){
+      rodm2::db_describe_site(db, site_code)
+    }
+  }
+
+ # make sure processinglevels in database
   rodm2::insert_processinglevel(db, processinglevel)
   # check that all variables are in variables table
   rodm2::check_variables_list(db = db, variables = variables)
@@ -95,7 +96,7 @@ db_insert_results_samples <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     # sampled medium in CV
-    sampledmedium <- check_medium_cv(sampledmedium)
+    sampledmedium <- check_medium_cv(db, sampledmedium)
     # Potential New site handling
     # need to apply to entire column!
     # site_code <- handle_new_site(site_code)
@@ -185,6 +186,7 @@ db_insert_results_samples <- function(db,
         (SELECT samplingfeatureid FROM samplingfeatures WHERE
         samplingfeaturecode = :site_code))'
         sql <- RSQLite::dbSendQuery(db, sql)
+
         RSQLite::dbBind(sql, params = list(
           samplingfeatureid = sample_sf_id,
           relationshiptypecv = "Was collected at",

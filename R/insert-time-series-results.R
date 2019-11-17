@@ -75,13 +75,13 @@ db_insert_results_ts <- function(db,
   if (class(db) == "SQLiteConnection"){
 
     # sampled medium in CV
-    sampledmedium <- check_medium_cv(sampledmedium)
+    sampledmedium <- check_medium_cv(db = db, sampledmedium)
     # methodtype in CV
-    methodtypecv <- check_methodtype_cv(methodtypecv)
+    methodtypecv <- check_methodtype_cv(db = db, methodtypecv)
     # Potential New method handling
-    methodcode <- handle_new_method(methodcode, methodtypecv)
+    methodcode <- handle_new_method(db = db, methodcode, methodtypecv)
     # Potential New site handling
-    site_code <- handle_new_site(site_code)
+    site_code <- handle_new_site(db = db, site_code)
 
     RSQLite::dbSendStatement(db, 'BEGIN TRANSACTION')
 

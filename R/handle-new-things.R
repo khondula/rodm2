@@ -1,6 +1,6 @@
 # new site and method and variable handling
 
-handle_new_method <- function(methodcode, methodtypecv){
+handle_new_method <- function(db, methodcode, methodtypecv){
 
   all_methods <- RSQLite::dbGetQuery(db, "SELECT methodcode from methods")[[1]]
   if(!methodcode %in% all_methods){
@@ -22,7 +22,7 @@ handle_new_method <- function(methodcode, methodtypecv){
   return(methodcode)
 }
 
-handle_new_site <- function(site_code){
+handle_new_site <- function(db, site_code){
   all_site <- RSQLite::dbGetQuery(db, "SELECT samplingfeaturecode from samplingfeatures")[[1]]
   if(!site_code %in% all_site){
     selection_id <- suppressMessages(menu(choices = c(all_site, paste("Add", site_code,"as new site")),
