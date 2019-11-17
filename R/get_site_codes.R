@@ -2,8 +2,9 @@
 #' Shiny gadget to get site codes of interest
 #'
 #' @details
-#' Use site group annotations and site types to
-#' identify site codes to use in db_get_results()
+#' Use site group annotations, site types, and
+#' site relations to identify site codes to
+#' use in db_get_results()
 #'
 #' @param db database connection object
 #'
