@@ -7,6 +7,10 @@
 #' @param relationtype_column name of column with relationship type from [controlled vocabulary](http://vocabulary.odm2.org/relationshiptype/)
 #' @param relationtype relationship type to use if no relationship type column. defaults to "is child of"
 #'
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @rdname pipe
+#'
 #' @return message with how many rows added
 #' @details Edgelist should be a data frame with 3 columns and one row for each new
 #' relationship to establish with the features to connect and the type of relationship.
@@ -15,6 +19,7 @@
 #' 'relationtype_column'. A two column data frame can be supplied along with a relationtype
 #' to use for all of the new relationships.
 #' @export
+#'
 #'
 #' @examples
 #' # df <- data.frame(
