@@ -115,7 +115,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>db</th>
-      <td><p>Database connection object (must be postgresql or sqlite)</p></td>
+      <td><p>Database connection object</p></td>
     </tr>
     <tr>
       <th>PersonFirstName</th>
@@ -127,7 +127,8 @@
     </tr>
     <tr>
       <th>AffiliationStartDate</th>
-      <td><p>The date (YYYY-MM-DD) on which the person became affiliated with the organization. Default is todays date</p></td>
+      <td><p>The date (YYYY-MM-DD) on which the person became affiliated with the
+organization. Default is todays date</p></td>
     </tr>
     <tr>
       <th>PrimaryEmail</th>
@@ -148,11 +149,11 @@
   <code><a href='db_describe_variable.html'>db_describe_variable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># db <- connect_sqlite(dir = ".")
-#db_describe_person(db = db, PersonFirstName = "Wendy",
- #   PersonLastName = "Wetland",
-  #  AffiliationStartDate = "2018-01-01",
-   # PrimaryEmail = "wendy 'at' swamps.edu")
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>db_describe_person</span>(<span class='kw'>db</span> <span class='kw'>=</span> <span class='no'>db</span>, <span class='kw'>PersonFirstName</span> <span class='kw'>=</span> <span class='st'>"Wendy"</span>,
+   <span class='kw'>PersonLastName</span> <span class='kw'>=</span> <span class='st'>"Wetland"</span>,
+    <span class='kw'>AffiliationStartDate</span> <span class='kw'>=</span> <span class='st'>"2018-01-01"</span>,
+    <span class='kw'>PrimaryEmail</span> <span class='kw'>=</span> <span class='st'>"wendy 'at' swamps.edu"</span>)</div><div class='output co'>#&gt; <span class='message'>Wendy Wetland has been entered into the People table.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

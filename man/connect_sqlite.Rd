@@ -9,7 +9,8 @@ connect_sqlite(filename = "odm2.sqlite", dir = ".")
 \arguments{
 \item{filename}{Filename for sqlite database file. Defaults to "odm2"}
 
-\item{dir}{Name of existing directory where database file is stored. Defaults to current working directory}
+\item{dir}{Name of existing directory where database file is stored. Defaults
+to current working directory}
 }
 \value{
 A database connection object
@@ -18,7 +19,8 @@ A database connection object
 Connect to an existing ODM2 sqlite database
 }
 \details{
-This function returns a database connection object to be used in subsequent inserts and queries.
+This function returns a database connection object to be used in
+  subsequent inserts and queries.
 }
 \examples{
 create_sqlite(dir = tempdir())

@@ -21,19 +21,22 @@ YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
 \item{site_code_col}{name of column with site codes. defaults to "site"}
 
-\item{variables}{a named list of lists defining variable names, units, and columns in datavalues data frame
-with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))}
+\item{variables}{a named list of lists defining variable names, units, and columns in
+datavalues data frame. Create with \code{\link{make_vars_list}} or see Details.}
 
-\item{sampledmedium}{term from controlled vocabulary for medium sampled eg. Air, Water, Soil}
+\item{sampledmedium}{term from \href{http://vocabulary.odm2.org/medium}{
+controlled vocabulary} for medium sampled eg. air or soil}
 
 \item{processinglevel}{code for processing level. will be added to processinglevels table if new.
 defaults to "Raw data'.}
 
-\item{aggregationstatistic}{defaults to unknown}
+\item{aggregationstatistic}{\href{http://vocabulary.odm2.org/aggregationstatistic}{
+controlled vocabulary}, defaults to unknown}
 
 \item{time_aggregation_interval}{defaults to unknown}
 
-\item{methodtypecv}{defaults to instrument deployment}
+\item{methodtypecv}{term from \href{http://vocabulary.odm2.org/methodtype}{
+controlled vocabulary}, defaults to instrument deployment}
 
 \item{actionby}{(optional) the person who performed the action}
 

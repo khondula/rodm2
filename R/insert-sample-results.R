@@ -5,9 +5,11 @@
 #' @param db database connection
 #' @param datavalues data frame with data to upload columns "Timestamp" with
 #'    YYYY-MM-DD H:M:S format, and column names corresponding to variable names
-#' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
-#'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
-#' @param sampledmedium term from controlled vocabulary for medium sampled eg. Air, Water, Soil
+#' @param variables
+#' a named list of lists defining variable names, units, and columns in
+#' datavalues data frame. Create with \code{\link{make_vars_list}} or see Details.
+#' @param sampledmedium term from \href{http://vocabulary.odm2.org/medium}{
+#' controlled vocabulary} for medium sampled eg. air or soil
 #' @param processinglevel code for processing level. will be added to processinglevels table if new.
 #'   defaults to "Raw data'.
 #' @param zlocation (optional) z location offset
@@ -18,7 +20,8 @@
 #' @param field_method short description of field method to collect new samples. Dont include for new data about existing samples.
 #' @param lab_method short description of lab method
 #' @param sample_code_col name of column in input data frame with sample ID. defeaults to "Sample"
-#' @param aggregationstatistic defaults to unknown
+#' @param aggregationstatistic \href{http://vocabulary.odm2.org/aggregationstatistic}{
+#' controlled vocabulary}, defaults to unknown
 #' @param field_actionby optional first name of lead for field action, must already be in people table
 #' @param field_equipment_name optional code name of equipment used for field action, must already be in equipment table
 #' @param lab_actionby optional first name of lead for lab action, must already be in people table

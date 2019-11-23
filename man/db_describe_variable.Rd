@@ -12,9 +12,9 @@ db_describe_variable(db, variablecode, variabletypecv, variablenamecv,
 
 \item{variablecode}{short codename for variable}
 
-\item{variabletypecv}{variable type from controlled vocab}
+\item{variabletypecv}{variable type from \href{http://vocabulary.odm2.org/variabletype}{controlled vocabulary}}
 
-\item{variablenamecv}{variable name from controlled vocab}
+\item{variablenamecv}{variable name from \href{http://vocabulary.odm2.org/variablename}{controlled vocabulary}}
 
 \item{variabledefinition}{optional longer definition}
 

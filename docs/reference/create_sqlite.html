@@ -114,11 +114,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dir</th>
-      <td><p>Name of existing directory for the sqlite database file to be created in. Defaults to current directory</p></td>
+      <td><p>Name of existing directory for the sqlite database file to be
+created in. Defaults to current directory</p></td>
     </tr>
     <tr>
       <th>filename</th>
-      <td><p>Filename for sqlite database file. Defaults to "odm2", making a file called odm2.sqlite</p></td>
+      <td><p>Filename for sqlite database file. Defaults to "odm2",
+making a file called odm2.sqlite</p></td>
     </tr>
     <tr>
       <th>connect</th>
@@ -128,11 +130,13 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns database connecton object if connect = TRUE, otherwise just creates file.</p>
+    <p>Returns database connecton object if connect = TRUE, otherwise just
+  creates file.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function copies a template sqlite file with the ODM2 schema, controlled vocabularies,
-and units to the specified location.</p>
+    <p>This function copies a template sqlite file with the ODM2 schema,
+<a href='http://vocabulary.odm2.org/'>controlled vocabularies</a>, and units to
+the specified location.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>create_sqlite</span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='fu'>tempdir</span>(), <span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>

@@ -6,7 +6,8 @@
 #' @param model_name model name of equipment
 #' @param vendor organization that sold the product
 #' @param owner_first first name of person who owns equipment
-#' @param equipment_type type of equipment, defaults to sensor
+#' @param equipment_type
+#' type of equipment from \href{http://vocabulary.odm2.org/equipmenttype/}{controlled vocabulary} defaults to sensor
 #' @param owner_last last name of person who owns equipment,
 #'    required if the person is not in the people table already
 #' @param owner_email email of person who owns equipment,

@@ -107,7 +107,14 @@
     <p>Print a list of controlled vocabulary terms</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='no'>cvtype</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_cv_terms</span>(<span class='kw'>cvtype</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"units"</span>, <span class='st'>"variablename"</span>, <span class='st'>"samplingfeaturetype"</span>,
+  <span class='st'>"medium"</span>, <span class='st'>"methodtype"</span>, <span class='st'>"actiontype"</span>, <span class='st'>"annotationtype"</span>,
+  <span class='st'>"relationshiptype"</span>, <span class='st'>"censorcode"</span>, <span class='st'>"dataqualitytype"</span>, <span class='st'>"datasettype"</span>,
+  <span class='st'>"directivetype"</span>, <span class='st'>"elevationdatum"</span>, <span class='st'>"equipmenttype"</span>, <span class='st'>"organizationtype"</span>,
+  <span class='st'>"aggregationstatistic"</span>, <span class='st'>"propertydatatype"</span>, <span class='st'>"qualitycode"</span>, <span class='st'>"resulttype"</span>,
+  <span class='st'>"samplingfeaturegeotype"</span>, <span class='st'>"sitetype"</span>, <span class='st'>"spatialoffsettype"</span>, <span class='st'>"speciation"</span>,
+  <span class='st'>"specimentype"</span>, <span class='st'>"status"</span>, <span class='st'>"taxonomicclassifiertype"</span>, <span class='st'>"unitstype"</span>,
+  <span class='st'>"variabletype"</span>), <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -125,6 +132,14 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a vector of the Names column from the controlled vocab table</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function returns a character vector of terms from a selected
+controlled vocabularly and, optionally, prints those names in the R console.
+Controlled vocabularies are hosted at <a href='http://vocabulary.odm2.org/'>
+http://vocabulary.odm2.org/</a> as well as pre-populated in the database
+template in rodm2. This function relies on the CV terms in the
+pre-populated ODM2 database template.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div><div class='input'><span class='no'>resultterms</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cv_terms</span>(<span class='st'>"resulttype"</span>)</div><div class='output co'>#&gt; resulttype controlled vocabulary terms: "Category observation", "Count observation", "Measurement", "Point coverage", "Profile coverage", "Section coverage", "Spectra coverage", "Temporal observation", "Time series coverage", "Trajectory coverage", "Transect coverage", "Truth observation"</div><div class='output co'>#&gt; <span class='message'>use quietly = FALSE to print out all controlled vocabulary terms</span></div></pre>
@@ -134,6 +149,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

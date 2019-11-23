@@ -10,7 +10,8 @@ db_get_annotations(db)
 \item{db}{database connection object}
 }
 \value{
-a dataframe with the current values in the annotation code and annotation text columns
+a dataframe with the current values in the annotation code and
+annotation text columns
 }
 \description{
 Get list of annotations currently in database

@@ -1,8 +1,8 @@
 #' Describe a new variable
 #'
-#' @param variabletypecv variable type from controlled vocab
+#' @param variabletypecv variable type from \href{http://vocabulary.odm2.org/variabletype}{controlled vocabulary}
 #' @param variablecode short codename for variable
-#' @param variablenamecv variable name from controlled vocab
+#' @param variablenamecv variable name from \href{http://vocabulary.odm2.org/variablename}{controlled vocabulary}
 #' @param variabledefinition optional longer definition
 #' @param nodatavalue no data value
 #' @param db database connection object

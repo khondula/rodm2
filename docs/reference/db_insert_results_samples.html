@@ -137,12 +137,13 @@ YYYY-MM-DD H:M:S format, and column names corresponding to variable names</p></t
     </tr>
     <tr>
       <th>variables</th>
-      <td><p>a named list of lists defining variable names, units, and columns in datavalues data frame
-with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))</p></td>
+      <td><p>a named list of lists defining variable names, units, and columns in
+datavalues data frame. Create with <code><a href='make_vars_list.html'>make_vars_list</a></code> or see Details.</p></td>
     </tr>
     <tr>
       <th>sampledmedium</th>
-      <td><p>term from controlled vocabulary for medium sampled eg. Air, Water, Soil</p></td>
+      <td><p>term from <a href='http://vocabulary.odm2.org/medium'>
+controlled vocabulary</a> for medium sampled eg. air or soil</p></td>
     </tr>
     <tr>
       <th>site_code_col</th>
@@ -159,7 +160,8 @@ defaults to "Raw data'.</p></td>
     </tr>
     <tr>
       <th>aggregationstatistic</th>
-      <td><p>defaults to unknown</p></td>
+      <td><p><a href='http://vocabulary.odm2.org/aggregationstatistic'>
+controlled vocabulary</a>, defaults to unknown</p></td>
     </tr>
     <tr>
       <th>time_aggregation_interval</th>

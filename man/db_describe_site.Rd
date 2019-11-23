@@ -13,7 +13,8 @@ db_describe_site(db, site_code, sitetypecv = "Site", site_name = NULL,
 \item{site_code}{unique short code name (required)}
 
 \item{sitetypecv}{samplingfeature type from
-\href{http://vocabulary.odm2.org/samplingfeaturetype/}{controlled vocab}, defaults to "Site"}
+\href{http://vocabulary.odm2.org/samplingfeaturetype/}{controlled vocab},
+defaults to "Site"}
 
 \item{site_name}{optional longer site name}
 

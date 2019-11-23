@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny gadget to get variable codes of interest — get_variable_codes • rodm2</title>
+<title>Shiny gadget to get site codes of interest — get_site_codes • rodm2</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,8 +32,8 @@
 
 
 
-<meta property="og:title" content="Shiny gadget to get variable codes of interest — get_variable_codes" />
-<meta property="og:description" content="Shiny gadget to get variable codes of interest" />
+<meta property="og:title" content="Shiny gadget to get site codes of interest — get_site_codes" />
+<meta property="og:description" content="Shiny gadget to get site codes of interest" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,16 +98,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny gadget to get variable codes of interest</h1>
-    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/get_variable_codes.R'><code>R/get_variable_codes.R</code></a></small>
-    <div class="hidden name"><code>get_variable_codes.Rd</code></div>
+    <h1>Shiny gadget to get site codes of interest</h1>
+    <small class="dont-index">Source: <a href='https://github.com/khondula/rodm2/blob/master/R/get_site_codes.R'><code>R/get_site_codes.R</code></a></small>
+    <div class="hidden name"><code>get_site_codes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Shiny gadget to get variable codes of interest</p>
+    <p>Shiny gadget to get site codes of interest</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_variable_codes</span>(<span class='no'>db</span>)</pre>
+    <pre class="usage"><span class='fu'>get_site_codes</span>(<span class='no'>db</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -120,14 +120,19 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>selected variable codes</p>
+    <p>selected site codes</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Use site group annotations, site types, and
+site relations to identify site codes to
+use in db_get_results()</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other interactive helpers: <code><a href='get_site_codes.html'>get_site_codes</a></code>,
+    <div class='dont-index'><p>Other interactive helpers: <code><a href='get_variable_codes.html'>get_variable_codes</a></code>,
   <code><a href='make_vars_list.html'>make_vars_list</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># my_vars <- get_variable_codes(db)
+    <pre class="examples"><div class='input'># my_sites <- get_site_codes(db)
 
 </div></pre>
   </div>
@@ -136,6 +141,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -4,8 +4,9 @@
 #' @param annotationtext Text of annotation
 #' @param db database connecton object
 #' @param type annotation type from \href{http://vocabulary.odm2.org/annotationtype/}{controlled vocab}
-#' @param annotationcode annotation codename
-#' @param object An existing object in the database to annotate such as a site or specimen code.
+#' @param annotationcode Optionally, a unique codename for the annotation
+#' @param object
+#' An existing object in the database to annotate such as a site or specimen code.
 #'
 #' @return TRUE if successful
 #' @export

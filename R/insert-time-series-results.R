@@ -7,14 +7,17 @@
 #' @param methodcode code for method used to collect data
 #' @param methodtypecv Instrument deployment or derivation
 #' @param site_code sampling feature code at which data were collected
-#' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
-#'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
-#' @param sampledmedium term from controlled vocabulary for medium sampled eg. Air, Water, Soil
+#' @param variables
+#' a named list of lists defining variable names, units, and columns in
+#' datavalues data frame. Create with \code{\link{make_vars_list}} or see Details.
+#' @param sampledmedium term from \href{http://vocabulary.odm2.org/medium}{
+#' controlled vocabulary} for medium sampled eg. air or soil
 #' @param processinglevel code for processing level. will be added to processinglevels table if new.
 #'   defaults to "Raw data'.
 #' @param actionby (optional) the person who performed the action
 #' @param equipment_name (optional) the equipment used to collect the data
-#' @param aggregationstatisticcv term from controlled vocabulary
+#' @param aggregationstatisticcv \href{http://vocabulary.odm2.org/aggregationstatistic}{
+#' controlled vocabulary}, defaults to unknown
 #' @param zlocation (optional) z location offset
 #' @param zlocationunits (optional but required if zlocation is set) name of units of z location offset
 #' @param ... parameters to pass to various db_describe_ functions

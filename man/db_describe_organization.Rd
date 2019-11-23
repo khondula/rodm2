@@ -10,9 +10,9 @@ db_describe_organization(db = db, OrganizationTypeCV, OrganizationCode,
 \arguments{
 \item{db}{database connection object to sqlite or postgresql database with odm2 schema}
 
-\item{OrganizationTypeCV}{Controlled vocab term defining the type of organization (e.g., government agency, university, etc.)}
+\item{OrganizationTypeCV}{Organization type from \href{http://vocabulary.odm2.org/organizationtype}{controlled vocabulary} (e.g., government agency, university, etc.)}
 
-\item{OrganizationCode}{A text code identifying the Organization (e.g., USGS)}
+\item{OrganizationCode}{A unique text code identifying the Organization (e.g., USGS)}
 
 \item{OrganizationName}{The full text name of the organization}
 }
@@ -23,9 +23,8 @@ message that your entry has been added
 Add a new entry to the Organizations table
 }
 \examples{
-# connect_sqlite(dir = ".")
-# db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-# db_describe_organization(db, "Manufacturer", "Onset", "Onset")
+db <- rodm2::create_sqlite(connect = TRUE)
+db_describe_organization(db, "Manufacturer", "Onset", "Onset")
 }
 \seealso{
 Other describe functions: \code{\link{db_describe_annotation}},

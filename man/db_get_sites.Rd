@@ -10,7 +10,8 @@ db_get_sites(db)
 \item{db}{database connection object}
 }
 \value{
-Sampling feature codes for everything that is not sampling feature type 'Specimen'
+Sampling feature codes for everything that is not
+sampling feature type 'Specimen'
 }
 \description{
 Get list of sampling feature codes currently in database

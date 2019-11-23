@@ -14,8 +14,8 @@
 #' db_insert_results_samples_profile, based on a data frame with the data to insert.
 #' The data frame supplied should include only the columns with data and optionally a
 #' column called Timestamp. For each column of data, provide a unique codename for the
-#' variable as well as the [term](http://vocabulary.odm2.org/variablename/)
-#' and [units](http://vocabulary.odm2.org/units/) from the controlled vocabularies. By
+#' variable as well as the \href{http://vocabulary.odm2.org/variablename}{term}
+#' and \href{http://vocabulary.odm2.org/units}{units} from the controlled vocabularies. By
 #' default the column name will be used as the variable code.
 #' @family interactive helpers
 #' @importFrom shiny renderUI

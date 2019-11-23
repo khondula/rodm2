@@ -16,7 +16,7 @@ db_annotate(db, object, annotationtext = NULL, type = "Site group",
 
 \item{type}{annotation type from \href{http://vocabulary.odm2.org/annotationtype/}{controlled vocab}}
 
-\item{annotationcode}{annotation codename}
+\item{annotationcode}{Optionally, a unique codename for the annotation}
 }
 \value{
 TRUE if successful

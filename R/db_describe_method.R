@@ -1,8 +1,8 @@
 #' Describe a new method
 #'
 #' @param methodname full name of method
-#' @param methodcode short codename for method
-#' @param methodtypecv method type from controlled vocabulary
+#' @param methodcode a unique short codename for method
+#' @param methodtypecv method type from \href{http://vocabulary.odm2.org/methodtype}{controlled vocabulary}
 #' @param methoddescription optional longer description
 #' @param db database connection object
 #'

@@ -1,11 +1,19 @@
 #' Query result data
 #'
-#' @description Retrieve data associated with one or more sites, variables, and result types
+#' @description
+#' Retrieve data associated with one or more sites, variables, and result types
 #'
 #' @param db database connection object
-#' @param site_code a string vector with codes of sites to get data for. default NULL returns all sites
-#' @param variable_code a string vector with codes of variables to get data for. default NULL returns all variables
-#' @param result_type a string vector of result types to include: "ts" for time series results, "sample" for sample-based results, "measurement" for measurements
+#' @param site_code
+#' a string vector with codes of sites to get data for.
+#' default NULL returns all sites.
+#' Use \code{\link{get_site_codes}} function to browse codes with shiny gadget
+#' @param variable_code
+#' a string vector with codes of variables to get data for.
+#' default NULL returns all variables.
+#' Use \code{\link{get_variable_codes}} function to browse codes with shiny gadget
+#' @param result_type a string vector of result types to include: "ts" for time
+#' series results, "sample" for sample-based results, "measurement" for measurements
 #'
 #' @return a named list of dataframes corresponding to each result type.
 #' @export

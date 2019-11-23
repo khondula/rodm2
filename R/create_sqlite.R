@@ -1,20 +1,26 @@
 
 #' Make a new ODM2 sqlite database
 #'
-#' @param dir Name of existing directory for the sqlite database file to be created in. Defaults to current directory
-#' @param filename Filename for sqlite database file. Defaults to "odm2", making a file called odm2.sqlite
+#' @param dir Name of existing directory for the sqlite database file to be
+#'   created in. Defaults to current directory
+#' @param filename Filename for sqlite database file. Defaults to "odm2",
+#'   making a file called odm2.sqlite
 #' @param connect Whether or not to return the database connection object
-#' @return Returns database connecton object if connect = TRUE, otherwise just creates file.
+#' @return Returns database connecton object if connect = TRUE, otherwise just
+#'   creates file.
 #'
-#' @details This function copies a template sqlite file with the ODM2 schema, controlled vocabularies,
-#' and units to the specified location.
+#' @details This function copies a template sqlite file with the ODM2 schema,
+#' \href{http://vocabulary.odm2.org/}{controlled vocabularies}, and units to
+#' the specified location.
 #' @export
 #'
 #' @examples
 #' db <- create_sqlite(dir = tempdir(), connect = TRUE)
 #'
 
-create_sqlite <- function(dir = ".", filename = "odm2.sqlite", connect = FALSE){
+create_sqlite <- function(dir = ".",
+                          filename = "odm2.sqlite",
+                          connect = FALSE){
 
   path <- file.path(dir)
 
@@ -36,9 +42,11 @@ create_sqlite <- function(dir = ".", filename = "odm2.sqlite", connect = FALSE){
 #' Connect to an existing ODM2 sqlite database
 #'
 #' @param filename Filename for sqlite database file. Defaults to "odm2"
-#' @param dir Name of existing directory where database file is stored. Defaults to current working directory
+#' @param dir Name of existing directory where database file is stored. Defaults
+#'   to current working directory
 #'
-#' @details This function returns a database connection object to be used in subsequent inserts and queries.
+#' @details This function returns a database connection object to be used in
+#'   subsequent inserts and queries.
 #' @return A database connection object
 #' @export
 #'

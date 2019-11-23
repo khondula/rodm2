@@ -4,7 +4,14 @@
 \alias{get_cv_terms}
 \title{Print a list of controlled vocabulary terms}
 \usage{
-get_cv_terms(cvtype, quietly = FALSE)
+get_cv_terms(cvtype = c("units", "variablename", "samplingfeaturetype",
+  "medium", "methodtype", "actiontype", "annotationtype",
+  "relationshiptype", "censorcode", "dataqualitytype", "datasettype",
+  "directivetype", "elevationdatum", "equipmenttype", "organizationtype",
+  "aggregationstatistic", "propertydatatype", "qualitycode", "resulttype",
+  "samplingfeaturegeotype", "sitetype", "spatialoffsettype", "speciation",
+  "specimentype", "status", "taxonomicclassifiertype", "unitstype",
+  "variabletype"), quietly = FALSE)
 }
 \arguments{
 \item{cvtype}{the name of the controlled vocab eg. "resulttype" or "methodtype"}
@@ -16,6 +23,14 @@ a vector of the Names column from the controlled vocab table
 }
 \description{
 Print a list of controlled vocabulary terms
+}
+\details{
+This function returns a character vector of terms from a selected
+controlled vocabularly and, optionally, prints those names in the R console.
+Controlled vocabularies are hosted at \href{http://vocabulary.odm2.org/}{
+http://vocabulary.odm2.org/} as well as pre-populated in the database
+template in rodm2. This function relies on the CV terms in the
+pre-populated ODM2 database template.
 }
 \examples{
 get_cv_terms("resulttype")

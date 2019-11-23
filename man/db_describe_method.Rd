@@ -12,9 +12,9 @@ db_describe_method(db, methodname, methodcode, methodtypecv,
 
 \item{methodname}{full name of method}
 
-\item{methodcode}{short codename for method}
+\item{methodcode}{a unique short codename for method}
 
-\item{methodtypecv}{method type from controlled vocabulary}
+\item{methodtypecv}{method type from \href{http://vocabulary.odm2.org/methodtype}{controlled vocabulary}}
 
 \item{methoddescription}{optional longer description}
 }

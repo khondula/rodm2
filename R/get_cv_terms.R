@@ -4,6 +4,14 @@
 #' @param quietly whether to print in console or not
 #'
 #' @return a vector of the Names column from the controlled vocab table
+#' @details
+#' This function returns a character vector of terms from a selected
+#' controlled vocabularly and, optionally, prints those names in the R console.
+#' Controlled vocabularies are hosted at \href{http://vocabulary.odm2.org/}{
+#' http://vocabulary.odm2.org/} as well as pre-populated in the database
+#' template in rodm2. This function relies on the CV terms in the
+#' pre-populated ODM2 database template.
+#'
 #' @export
 #'
 #' @examples

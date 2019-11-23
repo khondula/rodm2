@@ -8,13 +8,14 @@ db_describe_person(db = db, PersonFirstName, PersonLastName,
   AffiliationStartDate = Sys.Date(), PrimaryEmail)
 }
 \arguments{
-\item{db}{Database connection object (must be postgresql or sqlite)}
+\item{db}{Database connection object}
 
 \item{PersonFirstName}{First name of the person}
 
 \item{PersonLastName}{Last name of the person}
 
-\item{AffiliationStartDate}{The date (YYYY-MM-DD) on which the person became affiliated with the organization. Default is todays date}
+\item{AffiliationStartDate}{The date (YYYY-MM-DD) on which the person became affiliated with the
+organization. Default is todays date}
 
 \item{PrimaryEmail}{The primary email address of the person}
 }
@@ -25,11 +26,12 @@ message that person was entered into database
 Describe a new person in the people and affiliations tables
 }
 \examples{
-# db <- connect_sqlite(dir = ".")
-#db_describe_person(db = db, PersonFirstName = "Wendy",
- #   PersonLastName = "Wetland",
-  #  AffiliationStartDate = "2018-01-01",
-   # PrimaryEmail = "wendy 'at' swamps.edu")
+db <- rodm2::create_sqlite(connect = TRUE)
+db_describe_person(db = db, PersonFirstName = "Wendy",
+   PersonLastName = "Wetland",
+    AffiliationStartDate = "2018-01-01",
+    PrimaryEmail = "wendy 'at' swamps.edu")
+
 }
 \seealso{
 Other describe functions: \code{\link{db_describe_annotation}},

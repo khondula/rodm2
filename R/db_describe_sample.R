@@ -7,6 +7,10 @@
 #' @param site_code sampling feature code for where sample was collected from
 #'
 #' @return message that sample was added to sampling feature table
+#' @details
+#' Adds entry to samplingfeatures table as type 'Specimen' and entry into
+#' related features table that "sample_code" wasCollectedAt "site_code".
+#' Does not add an action for specimen collection - for that use \code{\link{db_insert_results_samples}}.
 #' @export
 #'
 #' @examples

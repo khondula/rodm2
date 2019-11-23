@@ -4,3 +4,4 @@ inst/doc
 .RData
 .DS_Store
 .sqlite
+odm2.sqlite

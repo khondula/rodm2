@@ -18,9 +18,10 @@ db_add_relations(db, edgelist, from_column = "SamplingFeatureCode",
 
 \item{to_column}{name of second column with feature codes to relate}
 
-\item{relationtype_column}{name of column with relationship type from [controlled vocabulary](http://vocabulary.odm2.org/relationshiptype/)}
+\item{relationtype_column}{name of column with relationship type from
+\href{http://vocabulary.odm2.org/relationshiptype/}{controlled vocabulary}}
 
-\item{relationtype}{relationship type to use if no relationship type column. defaults to "is child of"}
+\item{relationtype}{relationship type to use if no relationship type column. defaults to "isChildOf"}
 }
 \value{
 message with how many rows added
@@ -34,7 +35,7 @@ relationship to establish with the features to connect and the type of relations
 Specify the names of columns corresponding to the features using the 'from_column' and
 'to_column' arguments, and the name of the column with relationship types with
 'relationtype_column'. A two column data frame can be supplied along with a relationtype
-to use for all of the new relationships.
+to use for all of the new relationships. Site codes must already be in database.
 }
 \examples{
 # df <- data.frame(

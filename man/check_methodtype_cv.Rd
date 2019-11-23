@@ -2,7 +2,7 @@
 % Please edit documentation in R/cv_checkers.R
 \name{check_methodtype_cv}
 \alias{check_methodtype_cv}
-\title{Check that method type is in cv}
+\title{Menu function to check that method type is in controlled vocabulary}
 \usage{
 check_methodtype_cv(db, methodtypecv)
 }
@@ -15,7 +15,7 @@ check_methodtype_cv(db, methodtypecv)
 method type
 }
 \description{
-Check that method type is in cv
+Menu function to check that method type is in controlled vocabulary
 }
 \examples{
 # methodcode <- check_methodtype_cv()

@@ -10,11 +10,16 @@ db_get_results(db, site_code = NULL, variable_code = NULL,
 \arguments{
 \item{db}{database connection object}
 
-\item{site_code}{a string vector with codes of sites to get data for. default NULL returns all sites}
+\item{site_code}{a string vector with codes of sites to get data for.
+default NULL returns all sites.
+Use \code{\link{get_site_codes}} function to browse codes with shiny gadget}
 
-\item{variable_code}{a string vector with codes of variables to get data for. default NULL returns all variables}
+\item{variable_code}{a string vector with codes of variables to get data for.
+default NULL returns all variables.
+Use \code{\link{get_variable_codes}} function to browse codes with shiny gadget}
 
-\item{result_type}{a string vector of result types to include: "ts" for time series results, "sample" for sample-based results, "measurement" for measurements}
+\item{result_type}{a string vector of result types to include: "ts" for time
+series results, "sample" for sample-based results, "measurement" for measurements}
 }
 \value{
 a named list of dataframes corresponding to each result type.

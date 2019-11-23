@@ -22,7 +22,7 @@ db_describe_equipment(db, equip_name, serial_no, model_name, vendor,
 
 \item{owner_first}{first name of person who owns equipment}
 
-\item{equipment_type}{type of equipment, defaults to sensor}
+\item{equipment_type}{type of equipment from \href{http://vocabulary.odm2.org/equipmenttype/}{controlled vocabulary} defaults to sensor}
 
 \item{owner_last}{last name of person who owns equipment,
 required if the person is not in the people table already}

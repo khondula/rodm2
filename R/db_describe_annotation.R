@@ -100,7 +100,9 @@ db_describe_annotation <- function(db,
 #'
 #' @param db database connection object
 #'
-#' @return a dataframe with the current values in the annotation code and annotation text columns
+#' @return
+#' a dataframe with the current values in the annotation code and
+#' annotation text columns
 #' @export
 #'
 #' @examples

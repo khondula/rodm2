@@ -1,17 +1,16 @@
 #' Add a new entry to the Organizations table
 #'
 #' @param db database connection object to sqlite or postgresql database with odm2 schema
-#' @param OrganizationTypeCV Controlled vocab term defining the type of organization (e.g., government agency, university, etc.)
-#' @param OrganizationCode A text code identifying the Organization (e.g., USGS)
+#' @param OrganizationTypeCV Organization type from \href{http://vocabulary.odm2.org/organizationtype}{controlled vocabulary} (e.g., government agency, university, etc.)
+#' @param OrganizationCode A unique text code identifying the Organization (e.g., USGS)
 #' @param OrganizationName The full text name of the organization
 #'
 #' @return message that your entry has been added
 #' @export
 #' @family describe functions
 #' @examples
-#' # connect_sqlite(dir = ".")
-#' # db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-#' # db_describe_organization(db, "Manufacturer", "Onset", "Onset")
+#' db <- rodm2::create_sqlite(connect = TRUE)
+#' db_describe_organization(db, "Manufacturer", "Onset", "Onset")
 db_describe_organization <- function(db = db,
                                      OrganizationTypeCV,
                                      OrganizationCode,

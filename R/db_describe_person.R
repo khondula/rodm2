@@ -3,20 +3,23 @@
 #'
 #' @param PersonFirstName First name of the person
 #' @param PersonLastName Last name of the person
-#' @param AffiliationStartDate The date (YYYY-MM-DD) on which the person became affiliated with the organization. Default is todays date
+#' @param AffiliationStartDate
+#' The date (YYYY-MM-DD) on which the person became affiliated with the
+#' organization. Default is todays date
 #' @param PrimaryEmail The primary email address of the person
-#' @param db Database connection object (must be postgresql or sqlite)
+#' @param db Database connection object
 #'
 #' @return message that person was entered into database
 #' @export
 #' @family describe functions
 
 #' @examples
-#' # db <- connect_sqlite(dir = ".")
-#' #db_describe_person(db = db, PersonFirstName = "Wendy",
-#'  #   PersonLastName = "Wetland",
-#'   #  AffiliationStartDate = "2018-01-01",
-#'    # PrimaryEmail = "wendy 'at' swamps.edu")
+#' db <- rodm2::create_sqlite(connect = TRUE)
+#' db_describe_person(db = db, PersonFirstName = "Wendy",
+#'    PersonLastName = "Wetland",
+#'     AffiliationStartDate = "2018-01-01",
+#'     PrimaryEmail = "wendy 'at' swamps.edu")
+#'
 db_describe_person <- function(db = db,
                                PersonFirstName,
                                PersonLastName,

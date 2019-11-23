@@ -19,16 +19,18 @@ db_insert_results_samples_profile(db, datavalues, field_method = NULL,
 \item{datavalues}{data frame with data to upload columns "Timestamp" with
 YYYY-MM-DD H:M:S format, and column names corresponding to variable names}
 
-\item{field_method}{short description of field method to collect new samples. Dont include for new data about existing samples.}
+\item{field_method}{short description of field method to collect new samples.
+Dont include for new data about existing samples.}
 
 \item{lab_method}{short description of lab method. only use if lab_method_col is NULL}
 
 \item{lab_method_col}{specify the column name of the lab method. only use if lab method is NULL}
 
-\item{variables}{a named list of lists defining variable names, units, and columns in datavalues data frame
-with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))}
+\item{variables}{a named list of lists defining variable names, units, and columns in
+datavalues data frame. Create with \code{\link{make_vars_list}} or see Details.}
 
-\item{sampledmedium}{term from controlled vocabulary for medium sampled eg. Air, Water, Soil}
+\item{sampledmedium}{term from \href{http://vocabulary.odm2.org/medium}{
+controlled vocabulary} for medium sampled eg. air or soil}
 
 \item{site_code_col}{name of column with site codes. defaults to "Site"}
 
@@ -37,7 +39,8 @@ with format list("variablen1ame" = list(units = 'unitsname', column = 'colname',
 \item{processinglevel}{code for processing level. will be added to processinglevels table if new.
 defaults to "Raw data'.}
 
-\item{aggregationstatistic}{defaults to unknown}
+\item{aggregationstatistic}{\href{http://vocabulary.odm2.org/aggregationstatistic}{
+controlled vocabulary}, defaults to unknown}
 
 \item{time_aggregation_interval}{defaults to unknown}
 

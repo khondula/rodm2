@@ -119,11 +119,11 @@
     </tr>
     <tr>
       <th>OrganizationTypeCV</th>
-      <td><p>Controlled vocab term defining the type of organization (e.g., government agency, university, etc.)</p></td>
+      <td><p>Organization type from <a href='http://vocabulary.odm2.org/organizationtype'>controlled vocabulary</a> (e.g., government agency, university, etc.)</p></td>
     </tr>
     <tr>
       <th>OrganizationCode</th>
-      <td><p>A text code identifying the Organization (e.g., USGS)</p></td>
+      <td><p>A unique text code identifying the Organization (e.g., USGS)</p></td>
     </tr>
     <tr>
       <th>OrganizationName</th>
@@ -144,10 +144,8 @@
   <code><a href='db_describe_variable.html'>db_describe_variable</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># connect_sqlite(dir = ".")
-# db <- DBI::dbConnect(RSQLite::SQLite(), "odm2.sqlite")
-# db_describe_organization(db, "Manufacturer", "Onset", "Onset")
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rodm2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rodm2/topics/create_sqlite'>create_sqlite</a></span>(<span class='kw'>connect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>db_describe_organization</span>(<span class='no'>db</span>, <span class='st'>"Manufacturer"</span>, <span class='st'>"Onset"</span>, <span class='st'>"Onset"</span>)</div><div class='output co'>#&gt; <span class='message'>Manufacturer Onset has been entered into the Organizations table.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

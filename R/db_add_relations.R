@@ -4,8 +4,11 @@
 #' @param edgelist dataframe with new relationships to add. see details
 #' @param from_column name of first column with feature codes to relate
 #' @param to_column name of second column with feature codes to relate
-#' @param relationtype_column name of column with relationship type from [controlled vocabulary](http://vocabulary.odm2.org/relationshiptype/)
-#' @param relationtype relationship type to use if no relationship type column. defaults to "is child of"
+#' @param relationtype_column
+#' name of column with relationship type from
+#' \href{http://vocabulary.odm2.org/relationshiptype/}{controlled vocabulary}
+#' @param relationtype
+#' relationship type to use if no relationship type column. defaults to "isChildOf"
 #'
 #' @importFrom magrittr %>%
 #' @name %>%
@@ -17,7 +20,7 @@
 #' Specify the names of columns corresponding to the features using the 'from_column' and
 #' 'to_column' arguments, and the name of the column with relationship types with
 #' 'relationtype_column'. A two column data frame can be supplied along with a relationtype
-#' to use for all of the new relationships.
+#' to use for all of the new relationships. Site codes must already be in database.
 #' @export
 #'
 #'

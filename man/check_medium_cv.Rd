@@ -2,21 +2,21 @@
 % Please edit documentation in R/cv_checkers.R
 \name{check_medium_cv}
 \alias{check_medium_cv}
-\title{Check that sampled medium term is in cv}
+\title{Menu functinon to check that sampled medium term is in controlled vocabulary}
 \usage{
 check_medium_cv(db, sampledmedium)
 }
 \arguments{
 \item{db}{database connection}
 
-\item{sampledmedium}{medium to check}
+\item{sampledmedium}{term to check}
 }
 \value{
 sampled medium
 }
 \description{
-Check that sampled medium term is in cv
+Menu functinon to check that sampled medium term is in controlled vocabulary
 }
 \examples{
-# medium <- check_medium_cv()
+# medium <- check_medium_cv(db, "air)
 }

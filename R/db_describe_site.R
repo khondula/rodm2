@@ -4,8 +4,10 @@
 #' @param site_code unique short code name (required)
 #' @param site_name optional longer site name
 #' @param site_description optional longer site description
-#' @param sitetypecv samplingfeature type from
-#'  \href{http://vocabulary.odm2.org/samplingfeaturetype/}{controlled vocab}, defaults to "Site"
+#' @param sitetypecv
+#' samplingfeature type from
+#'  \href{http://vocabulary.odm2.org/samplingfeaturetype/}{controlled vocab},
+#'  defaults to "Site"
 #'
 #' @return message that site was added
 #' @export
@@ -98,7 +100,8 @@ db_describe_site <- function(db,
 #'
 #' @param db database connection object
 #'
-#' @return Sampling feature codes for everything that is not sampling feature type 'Specimen'
+#' @return Sampling feature codes for everything that is not
+#' sampling feature type 'Specimen'
 #' @export
 #'
 #' @examples

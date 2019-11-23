@@ -132,11 +132,12 @@
     </tr>
     <tr>
       <th>relationtype_column</th>
-      <td><p>name of column with relationship type from [controlled vocabulary](http://vocabulary.odm2.org/relationshiptype/)</p></td>
+      <td><p>name of column with relationship type from
+<a href='http://vocabulary.odm2.org/relationshiptype/'>controlled vocabulary</a></p></td>
     </tr>
     <tr>
       <th>relationtype</th>
-      <td><p>relationship type to use if no relationship type column. defaults to "is child of"</p></td>
+      <td><p>relationship type to use if no relationship type column. defaults to "isChildOf"</p></td>
     </tr>
     </table>
 
@@ -150,7 +151,7 @@ relationship to establish with the features to connect and the type of relations
 Specify the names of columns corresponding to the features using the 'from_column' and
 'to_column' arguments, and the name of the column with relationship types with
 'relationtype_column'. A two column data frame can be supplied along with a relationtype
-to use for all of the new relationships.</p>
+to use for all of the new relationships. Site codes must already be in database.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'># df <- data.frame(

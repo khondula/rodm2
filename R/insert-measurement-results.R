@@ -6,9 +6,11 @@
 #' @param datavalues data frame with columns "Timestamp" with
 #'    YYYY-MM-DD H:M:S format, and column names corresponding to variable names
 #' @param methodcode code for method used to collect data
-#' @param variables a named list of lists defining variable names, units, and columns in datavalues data frame
-#'    with format list("variablen1ame" = list(units = 'unitsname', column = 'colname', dataqualitycol = 'qualcode'))
-#' @param sampledmedium term from controlled vocabulary for medium sampled eg. Air, Water, Soil
+#' @param variables
+#' a named list of lists defining variable names, units, and columns in
+#' datavalues data frame. Create with \code{\link{make_vars_list}} or see Details.
+#' @param sampledmedium term from \href{http://vocabulary.odm2.org/medium}{
+#' controlled vocabulary} for medium sampled eg. air or soil
 #' @param processinglevel code for processing level. will be added to processinglevels table if new.
 #'   defaults to "Raw data'.
 #' @param actionby (optional) the person who performed the action
@@ -18,8 +20,10 @@
 #' @param ... parameters to pass to various db_describe_ functions
 #' @param site_code_col name of column with site codes. defaults to "site"
 #' @param time_aggregation_interval defaults to unknown
-#' @param aggregationstatistic defaults to unknown
-#' @param methodtypecv defaults to instrument deployment
+#' @param aggregationstatistic \href{http://vocabulary.odm2.org/aggregationstatistic}{
+#' controlled vocabulary}, defaults to unknown
+#' @param methodtypecv term from \href{http://vocabulary.odm2.org/methodtype}{
+#' controlled vocabulary}, defaults to instrument deployment
 #'
 #' @return true if successful
 #' @export
