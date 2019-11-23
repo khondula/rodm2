@@ -9,7 +9,15 @@
 #' @examples
 #' get_cv_terms("resulttype")
 #' resultterms <- get_cv_terms("resulttype")
-get_cv_terms <- function(cvtype, quietly = FALSE){
+get_cv_terms <- function(cvtype = c("actiontype", "aggregationstatistic", "annotationtype",
+                                    "censorcode", "dataqualitytype", "datasettype",
+                                    "directivetype", "elevationdatum", "equipmenttype",
+                                    "medium", "methodtype", "organizationtype",
+                                    "propertydatatype", "qualitycode", "relationshiptype",
+                                    "resulttype", "samplingfeaturegeotype", "samplingfeaturetype",
+                                    "sitetype", "spatialoffsettype", "speciation", "specimentype",
+                                    "status", "taxonomicclassifiertype", "unitstype",
+                                    "variablename", "variabletype"), quietly = FALSE){
   tmp <- tempdir()
   if(file.exists(file.path(tmp, "odm2.sqlite"))){
     db <- rodm2::connect_sqlite()
