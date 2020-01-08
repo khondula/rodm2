@@ -230,7 +230,7 @@ db_insert_results_samples_profile <- function(db,
       sql <- RSQLite::dbSendQuery(db, sql)
       RSQLite::dbBind(sql, params = list(
         actiontypecv = 'Specimen analysis',
-        lab_method = datavalues[[lab_method_col]],
+        lab_method = lab_method,
         begindatetime = ifelse(
           is.null(datavalues[["Timestamp_analysis"]][sample_id]),
           as.character(Sys.time()),
@@ -324,7 +324,7 @@ db_insert_results_samples_profile <- function(db,
         RSQLite::dbBind(sql, params = list(uuid = uuid::UUIDgenerate(),
                                            newfaid = newfaid,
                                            resulttypecv = 'Profile coverage',
-                                           variablenamecv = j,
+                                           variablenamecv = variables[[j]][["name"]],
                                            units = variables[[j]][["units"]],
                                            processinglevel = processinglevel,
                                            sampledmedium = sampledmedium,
